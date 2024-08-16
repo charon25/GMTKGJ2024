@@ -28,7 +28,8 @@ class Game:
         self.events.set_mouse_button_down_callback(self.click)
         self.events.set_mouse_button_up_callback(self.unclick)
         self.circle = Circle(0, 0, 0)
-        self.current_level = Level(1, 32, [Cell(x, 0, 1, 1) for x in range(5)] + [Cell(0, 1, 2, 1)])
+        self.current_level = Level(1, 32, [Cell(x, 0, 1, 1) for x in range(5)]
+                                   + [Cell(0, 1, 2, 1)] + [Cell(0, 4, 1, 1, co.CellType.FORBIDDEN)])
 
     def click(self, data: dict):
         x, y = data['pos']
@@ -45,7 +46,7 @@ class Game:
         Window.close()
 
     def loop_game(self):
-        self.current_level.widen_temp_circle()
+        self.current_level.update()
 
         self.draw_game()
 
