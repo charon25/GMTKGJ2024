@@ -26,7 +26,7 @@ class Level:
     def reset(self):
         self.temp_selected_cells = list()
         for cell in self.cells:
-            cell.unselecte()
+            cell.unselect()
 
         self.circles = list()
         self.temp_circle = None
@@ -43,13 +43,21 @@ class Level:
         if self.temp_circle is None:
             return
 
+        points = 0
+        multiplier = 1.0
         for cell in self.temp_selected_cells:
             cell.temp_selected = False
             cell.selected_count += 1
+
+            points += cell.get_points()
+            multiplier *= cell.cell_data.points_multiplier
+
         self.temp_selected_cells = []
 
         self.circles.append(self.temp_circle)
         self.temp_circle = None
+
+        self.points += int(points * multiplier)
 
     def destroy_temp_circle(self):
         if self.temp_circle is None:

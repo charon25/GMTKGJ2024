@@ -25,7 +25,7 @@ class Cell:
     def is_full_selected(self):
         return self.selected_count >= self.cell_data.max_select_count
 
-    def unselecte(self):
+    def unselect(self):
         self.selected_count = 0
         self.temp_selected = False
 
@@ -41,3 +41,7 @@ class Cell:
 
     def contains_point(self, x: int, y: int):
         return self.rect.collidepoint(x, y)
+
+    def get_points(self):
+        # todo
+        return int(self.width * self.height * 1.25)
