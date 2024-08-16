@@ -1,0 +1,31 @@
+:: DEFINITIONS (care for blank spaces)
+set PYI_MAIN=main_pyi.py
+
+set PROJECT_FOLDER=GMTKGJ2024
+set PROJECT_NAME=GMTKGameJam2024
+set RESOURCES_FOLDER=resources
+set ICON_PATH=%RESOURCES_FOLDER%/icon.ico
+
+if "%~1"=="--debug" (
+	echo Debug
+) else (
+	:: PY-INSTALLER
+	pyinstaller --onefile -i %ICON_PATH% -n %PROJECT_NAME% %PYI_MAIN%
+	xcopy %RESOURCES_FOLDER% dist\%RESOURCES_FOLDER%\ /e /s /y
+	cd dist
+	tar.exe -c -a -f %PROJECT_NAME%.zip %RESOURCES_FOLDER% %PROJECT_NAME%.exe
+	cd ..
+)
+
+:: PYGBAG
+cd ..
+if "%~1"=="--debug" (
+    pygbag --package PROJECT_NAME --title PROJECT_NAME --icon %PROJECT_FOLDER%/%ICON_PATH% --can_close 1 %PROJECT_FOLDER%
+) else (
+    pygbag --build --archive --package PROJECT_NAME --title PROJECT_NAME --icon %PROJECT_FOLDER%/%ICON_PATH% --can_close 1 %PROJECT_FOLDER%
+)
+cd %PROJECT_FOLDER%/build
+copy web.zip ..\dist\%PROJECT_NAME%-web.zip
+cd ..
+
+echo ==================================================
