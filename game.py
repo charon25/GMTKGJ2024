@@ -20,6 +20,7 @@ class Game:
         self.events = EventManager()
         self.events.set_quit_callback(self.stop)
 
+        self.frame: int = 0
         self.dt: int = 0
 
         self.is_ended = False
@@ -48,6 +49,7 @@ class Game:
     def loop_game(self):
         self.current_level.update()
 
+        textures.CELL_ANIMATOR.play_all(self.dt / 1000)
         self.draw_game()
 
     def draw_game(self):
@@ -59,9 +61,13 @@ class Game:
         self.screen.blit(game_surface, (0, 0))
 
     def loop(self):
+        self.frame += 1
         self.dt = self.clock.tick(60)
         self.events.listen()
 
         self.loop_game()
 
         pyg.display.update()
+
+        if self.frame % 60 == 0:
+            print(self.clock.get_fps())

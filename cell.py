@@ -29,11 +29,11 @@ class Cell:
         self.selected_count = 0
         self.temp_selected = False
 
+    def __get_select_count(self):
+        return self.selected_count + self.temp_selected
+
     def __get_texture(self) -> pyg.Surface:
-        if self.type == CellType.BASE:
-            return textures.BASE_CELL_TX if self.selected_count + self.temp_selected == 0 else textures.SELECTED_BASE_CELL_TX
-        if self.type == CellType.FORBIDDEN:
-            return textures.FORBIDDEN_CELL_TX
+        return textures.CELL_TEXTURES[self.type.value][self.__get_select_count()].get_current_sprite()
 
     def draw(self, surface: pyg.Surface, x_offset: int, y_offset: int, scale: Scale):
         surface.blit(pyg.transform.scale(self.__get_texture(), (self.rect.w, self.rect.h)),

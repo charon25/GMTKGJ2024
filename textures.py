@@ -2,21 +2,42 @@ import pygame as pyg
 from pygame.image import load
 from pygame.transform import scale_by
 
+from animation_manager import Animation, AnimationManager
 from window import Scale
 
-BASE_CELL_TX: pyg.Surface = None
-SELECTED_BASE_CELL_TX: pyg.Surface = None
-FORBIDDEN_CELL_TX: pyg.Surface = None
+CELL_TEXTURES: list[list[Animation]] = []
+CELL_ANIMATOR = AnimationManager()
 
 
-def load_scale(name: str, scale: Scale) -> pyg.Surface:
+def load_scale(filename: str, scale: Scale) -> pyg.Surface:
     if scale.scale == 1:
-        return load(name)
-    return scale_by(load(name), scale.scale)
+        return load(filename)
+    return scale_by(load(filename), scale.scale)
 
 
 def load_all(scale: Scale):
-    global BASE_CELL_TX, SELECTED_BASE_CELL_TX, FORBIDDEN_CELL_TX
-    BASE_CELL_TX = load_scale('resources/base_cell.png', scale)
-    SELECTED_BASE_CELL_TX = load_scale('resources/base_cell_selected.png', scale)
-    FORBIDDEN_CELL_TX = load_scale('resources/forbidden_cell.png', scale)
+    global CELL_TEXTURES, CELL_ANIMATOR
+    base_cell_animations = [
+        Animation(
+            [load_scale("resources/cells/base/0.png", scale), load_scale("resources/cells/base/1.png", scale)],
+            [0.5, 0.5]
+        ),
+        Animation(
+            [load_scale("resources/cells/base/selected_0.png", scale),
+             load_scale("resources/cells/base/selected_1.png", scale)],
+            [0.5, 0.5]
+        )
+    ]
+
+    CELL_TEXTURES.append(base_cell_animations)
+    CELL_ANIMATOR.add_animations(base_cell_animations)
+
+    forbidden_cell_animations = [
+        Animation(
+            [load_scale("resources/cells/forbidden/0.png", scale), load_scale("resources/cells/forbidden/1.png", scale)],
+            [0.5, 0.5]
+        )
+    ]
+
+    CELL_TEXTURES.append(forbidden_cell_animations)
+    CELL_ANIMATOR.add_animations(forbidden_cell_animations)
