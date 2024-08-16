@@ -1,5 +1,7 @@
 import pygame as pyg
 
+from window import Scale
+
 
 class Circle:
     def __init__(self, x: int, y: int, radius: float):
@@ -7,9 +9,9 @@ class Circle:
         self.y = y
         self.radius = radius
 
-    def draw(self, surface: pyg.Surface):
+    def draw(self, surface: pyg.Surface, scale: Scale):
         width = max(1, int(self.radius**0.5 / 2.5))
-        pyg.draw.circle(surface, (0, 0, 0), (self.x, self.y), self.radius, width=width)
+        pyg.draw.circle(surface, (0, 0, 0), scale.to_game_pos(self.x, self.y), self.radius * scale.scale, width=width)
 
     def contains_point(self, x: int, y: int):
         return (x - self.x) ** 2 + (y - self.y) ** 2 <= self.radius ** 2

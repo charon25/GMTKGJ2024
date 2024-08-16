@@ -1,8 +1,11 @@
 import pygame as pyg
 
 import constants as co
+import textures
+from cell import Cell
 from circle import Circle
 from event_manager import EventManager
+from level import Level
 from window import Scale, Window
 
 
@@ -17,54 +20,45 @@ class Game:
         self.events = EventManager()
         self.events.set_quit_callback(self.stop)
 
-        self.events.set_mouse_button_down_callback(self.click)
-        self.events.set_mouse_button_up_callback(self.unclick)
-        self.circle = Circle(0, 0, 0)
-
         self.dt: int = 0
 
         self.is_ended = False
 
+        # Temp
+        self.events.set_mouse_button_down_callback(self.click)
+        self.events.set_mouse_button_up_callback(self.unclick)
+        self.circle = Circle(0, 0, 0)
+        self.current_level = Level(1, 32, [Cell(x, 0, 1, 1) for x in range(5)] + [Cell(0, 1, 2, 1)])
+
     def click(self, data: dict):
         x, y = data['pos']
-        self.circle = Circle(x, y, 1)
+        self.current_level.set_temp_circle_position(x, y)
 
     def unclick(self, data: dict):
-        self.circle.radius = 0
+        self.current_level.validate_temp_circle()
 
     def start(self):
-        pass
+        textures.load_all(self.scale)
 
     def stop(self):
         self.is_ended = True
         Window.close()
 
+    def loop_game(self):
+        self.current_level.widen_temp_circle()
+
+        self.draw_game()
+
     def draw_game(self):
         game_surface = pyg.Surface((co.WIDTH, co.HEIGHT), pyg.SRCALPHA)
         game_surface.fill((100, 100, 100))
 
-        size = 60
-        n_x = co.WIDTH // size
-        n_y = co.HEIGHT // size
-        for x in range(n_x):
-            for y in range(n_y):
-                rect = pyg.Rect(x * size, y * size, size, size)
-                color = (255, 0, 0) if not self.circle.contains_rect(rect) else (0, 0, 255)
-                pyg.draw.rect(game_surface, color, rect)
-
-        if self.circle.radius > 0:
-            self.circle.draw(game_surface)
+        self.current_level.draw(game_surface, self.scale)
 
         self.screen.blit(game_surface, (0, 0))
 
-    def loop_game(self):
-        if self.circle.radius > 0:
-            self.circle.radius += 1
-        self.draw_game()
-
     def loop(self):
         self.dt = self.clock.tick(60)
-        print(self.clock.get_fps())
         self.events.listen()
 
         self.loop_game()

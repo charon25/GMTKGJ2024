@@ -1,0 +1,13 @@
+Terrain constituté de petits carrés (tailles différentes, pas forcément dans un rectangle)
+
+En cliquant, on commence à créer un cercle qui s'agrandit quand on maintient le clic
+Lorsqu'un carré est complètement dans un cercle, il est sélectionné
+
+Lorsqu'on relâche le clic, on valide le cercle, et on gagne autant de points que de carré dedans (à voir avec la taille de chaque carré)
+
+But d'un niveau : atteindre au moins un certain nombre de points avec un nombre limité de cercles
+
+Certaines cases ont des effets :
+- case interdite : détruit le cercle s'il la touche
+- case bloquante : bloque la taille du cercle (?)
+- case x2, x3, /2, /3 : multiple le nombre de points
