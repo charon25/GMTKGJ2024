@@ -17,6 +17,7 @@ def load_scale(filename: str, scale: Scale) -> pyg.Surface:
 
 def load_all(scale: Scale):
     global CELL_TEXTURES, CELL_ANIMATOR
+
     base_cell_animations = [
         Animation(
             [load_scale("resources/cells/base/0.png", scale), load_scale("resources/cells/base/1.png", scale)],
@@ -41,3 +42,18 @@ def load_all(scale: Scale):
 
     CELL_TEXTURES.append(forbidden_cell_animations)
     CELL_ANIMATOR.add_animations(forbidden_cell_animations)
+
+    mult_2_cell_animations = [
+        Animation(
+            [load_scale("resources/cells/mult_2/0.png", scale), load_scale("resources/cells/mult_2/1.png", scale)],
+            [0.5, 0.5]
+        ),
+        Animation(
+            [load_scale("resources/cells/mult_2/selected_0.png", scale),
+             load_scale("resources/cells/mult_2/selected_1.png", scale)],
+            [0.5, 0.5]
+        )
+    ]
+
+    CELL_TEXTURES.append(mult_2_cell_animations)
+    CELL_ANIMATOR.add_animations(mult_2_cell_animations)

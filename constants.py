@@ -19,10 +19,12 @@ class CellData:
 
 CELL_DATA = [
     CellData(True, 1, 1.0),
-    CellData(False, 1, 0.0)
+    CellData(False, 1, 0.0),
+    CellData(True, 1, 2.0)
 ]
 
 
 class CellType(Enum):
     BASE = 0
     FORBIDDEN = 1
+    MULT_2 = 2

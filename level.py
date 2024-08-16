@@ -1,9 +1,9 @@
 import pygame as pyg
 
 import constants
-from constants import CellType
 from cell import Cell
 from circle import Circle
+from constants import CellType
 from window import Scale
 
 
@@ -43,6 +43,10 @@ class Level:
         if self.temp_circle is None:
             return
 
+        if self.temp_circle.radius < self.cell_size * 0.707:  # sqrt(2) / 2
+            self.destroy_temp_circle()
+            return
+
         points = 0
         multiplier = 1.0
         for cell in self.temp_selected_cells:
@@ -57,6 +61,7 @@ class Level:
         self.circles.append(self.temp_circle)
         self.temp_circle = None
 
+        print(int(points * multiplier))
         self.points += int(points * multiplier)
 
     def destroy_temp_circle(self):
