@@ -5,7 +5,7 @@ import textures
 from cell import Cell
 from circle import Circle
 from event_manager import EventManager
-from level import Level
+from level import Level, LevelManager
 from window import Scale, Window
 from screen_shake import SHAKER
 
@@ -27,16 +27,14 @@ class Game:
 
         self.is_ended = False
 
+        self.level_manager: LevelManager = LevelManager()
+        self.current_level: Level = None
+
         # Temp
         self.events.set_mouse_button_down_callback(self.click)
         self.events.set_mouse_button_up_callback(self.unclick)
         self.events.set_mouse_motion_callback(self.mouse_move)
         self.circle = Circle(0, 0, 0)
-        self.current_level = Level(1, 32, 3, [Cell(x, 0, 1, 1) for x in range(8)]
-                                   + [Cell(0, 1, 2, 1)] + [Cell(0, 4, 1, 1, co.CellType.FORBIDDEN)]
-                                   + [Cell(5, 2, 1, 1, co.CellType.CIRCLE_P1)]
-                                   + [Cell(0, -4, 1, 1, co.CellType.BLOCKER)]
-                                   + [Cell(3, 1, 1, 1, co.CellType.MULT_2)])
 
     def click(self, data: dict):
         x, y = self.scale.to_game_pos(*data['pos'])
@@ -52,12 +50,21 @@ class Game:
     def start(self):
         textures.load_all(self.scale)
 
+        self.start_next_level()
+
     def stop(self):
         self.is_ended = True
         Window.close()
 
+    def start_next_level(self):
+        self.level_manager.load_next_level()
+        self.current_level = self.level_manager.current_level
+
     def loop_game(self):
         self.current_level.update(self.dt / 1000)
+
+        if self.current_level.is_finished():
+            self.start_next_level()
 
         textures.CELL_ANIMATOR.play_all(self.dt / 1000)
         self.draw_game()

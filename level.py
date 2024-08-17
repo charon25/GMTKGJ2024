@@ -2,15 +2,33 @@ import math
 
 import pygame as pyg
 
-import constants
+import constants as co
 from cell import Cell
 from circle import Circle
 from constants import CellType
 from window import Scale
 
 
+class LevelManager:
+    def __init__(self):
+        self.number = -1
+        self.current_level: Level = None
+
+    def load_next_level(self):
+        self.load_level(self.number + 1)
+
+    def load_level(self, number: int):
+        self.number = number
+        self.current_level = Level(1, 32, 3, [5], [Cell(x, 0, 1, 1) for x in range(8)]
+                                   + [Cell(0, 1, 2, 1)] + [Cell(0, 4, 1, 1, co.CellType.FORBIDDEN)]
+                                   + [Cell(5, 2, 1, 1, co.CellType.CIRCLE_P1)]
+                                   + [Cell(0, -4, 1, 1, co.CellType.BLOCKER)]
+                                   + [Cell(3, 1, 1, 1, co.CellType.MULT_2)])
+
+
 class Level:
-    def __init__(self, number: int, cell_size: int, max_circles_count: int, cells: list[Cell]):
+    def __init__(self, number: int, cell_size: int, max_circles_count: int, required_points: list[int],
+                 cells: list[Cell]):
         self.number = number
         self.cell_size = cell_size
         self.cells = sorted(cells)
@@ -27,12 +45,13 @@ class Level:
         self.max_circles_count_upgrade = 0
         self.current_circles_count = 0
 
+        self.required_points = sorted(required_points)
         self.points = 0
 
     def __get_limits(self) -> tuple[int, int, int, int]:
-        min_x: int = constants.WIDTH
+        min_x: int = co.WIDTH
         max_x: int = 0
-        min_y: int = constants.HEIGHT
+        min_y: int = co.HEIGHT
         max_y: int = 0
         for k, cell in enumerate(self.cells):
             cell.generate(self.cell_size, k)
@@ -41,8 +60,8 @@ class Level:
             min_y = min(min_y, cell.y * self.cell_size)
             max_y = max(max_y, (cell.y + cell.height) * self.cell_size)
 
-        return ((constants.WIDTH - (max_x - min_x)) / 2,
-                constants.GAME_Y_OFFSET + (constants.HEIGHT - (max_y - min_y)) / 2,
+        return ((co.WIDTH - (max_x - min_x)) / 2,
+                co.GAME_Y_OFFSET + (co.HEIGHT - (max_y - min_y)) / 2,
                 (max_x - min_x), (max_y - min_y))
 
     def reset(self):
@@ -189,6 +208,9 @@ class Level:
             cell.temp_selected = True
             self.temp_selected_cells.append(cell)
             self.temp_multiplier *= cell.cell_data.points_multiplier
+
+    def is_finished(self):
+        return self.points >= self.required_points[0]
 
     def draw(self, surface: pyg.Surface, scale: Scale, dt: float):
         for cell in self.cells:
