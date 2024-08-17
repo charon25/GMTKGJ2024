@@ -29,12 +29,19 @@ class Cell:
     def __get_select_count(self):
         return self.selected + self.temp_selected
 
-    def __get_texture(self) -> pyg.Surface:
-        return textures.CELL_TEXTURES[self.type.value][self.__get_select_count()].get_current_sprite()
+    def __get_main_texture(self) -> pyg.Surface:
+        return textures.CELL_TEXTURES[self.cell_data.main_texture][self.__get_select_count()].get_current_sprite()
+
+    def __get_modifier_texture(self) -> pyg.Surface:
+        return textures.MODIFIERS_TEXTURES[self.cell_data.modifier_texture].get_current_sprite()
 
     def draw(self, surface: pyg.Surface, x_offset: int, y_offset: int, scale: Scale):
-        surface.blit(pyg.transform.scale(self.__get_texture(), (self.rect.w, self.rect.h)),
+        surface.blit(pyg.transform.scale(self.__get_main_texture(), (self.rect.w, self.rect.h)),
                      scale.to_screen_pos(self.rect.x + x_offset, self.rect.y + y_offset))
+
+        if self.cell_data.modifier_texture >= 0:
+            surface.blit(pyg.transform.scale(self.__get_modifier_texture(), (self.rect.w, self.rect.h)),
+                         scale.to_screen_pos(self.rect.x + x_offset, self.rect.y + y_offset))
 
     def contains_point(self, x: int, y: int):
         return self.rect.collidepoint(x, y)
