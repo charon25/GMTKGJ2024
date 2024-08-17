@@ -19,6 +19,11 @@ VOLUMES: list[pyg.Surface] = [
     load("resources/textures/sounds/3.png")
 ]
 
+CHECKBOXES: list[pyg.Surface] = [
+    load("resources/textures/checkbox_0.png"),
+    load("resources/textures/checkbox_1.png")
+]
+
 END_OF_LEVEL_BACKGROUND = load("resources/textures/eol/end_of_level_bg.png")
 END_OF_LEVEL_TITLE = load("resources/textures/eol/end_of_level_title.png")
 MEDALS: list[pyg.Surface] = [
@@ -36,6 +41,10 @@ def load_scale(filename: str, scale: Scale) -> pyg.Surface:
     return scale_by(load(filename), scale.scale)
 
 
+def scale_list(textures: list[pyg.Surface], scale: Scale) -> list[pyg.Surface]:
+    return [scale_by(texture, scale.scale) for texture in textures]
+
+
 def load_all(scale: Scale):
     _load_textures(scale)
     _load_cell_animations(scale)
@@ -43,7 +52,7 @@ def load_all(scale: Scale):
 
 
 def _load_textures(scale: Scale):
-    global END_OF_LEVEL_BACKGROUND, END_OF_LEVEL_TITLE, MEDALS, NEXT_LEVEL_BUTTON, LOGO, PLAY_BUTTON, VOLUMES
+    global END_OF_LEVEL_BACKGROUND, END_OF_LEVEL_TITLE, MEDALS, NEXT_LEVEL_BUTTON, LOGO, PLAY_BUTTON, VOLUMES, CHECKBOXES
 
     if abs(1 - scale.scale) <= 0.03:
         return
@@ -52,12 +61,12 @@ def _load_textures(scale: Scale):
 
     END_OF_LEVEL_BACKGROUND = scale_by(END_OF_LEVEL_BACKGROUND, scale.scale)
     END_OF_LEVEL_TITLE = scale_by(END_OF_LEVEL_TITLE, scale.scale)
-    for i, texture in enumerate(MEDALS):
-        MEDALS[i] = scale_by(texture, scale.scale)
+    MEDALS = scale_list(MEDALS, scale)
     NEXT_LEVEL_BUTTON = scale_by(NEXT_LEVEL_BUTTON, scale.scale)
+
     PLAY_BUTTON = scale_by(PLAY_BUTTON, scale.scale)
-    for i, texture in enumerate(VOLUMES):
-        VOLUMES[i] = scale_by(texture, scale.scale)
+    VOLUMES = scale_list(VOLUMES, scale)
+    CHECKBOXES = scale_list(CHECKBOXES, scale)
 
 
 def _load_cell_animations(scale: Scale):

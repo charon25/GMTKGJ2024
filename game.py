@@ -53,7 +53,10 @@ class Game:
     def click(self, data: dict):
         x, y = self.scale.to_game_pos(*data['pos'])
         if self.state == GameState.PLAYING_LEVEL:
-            self.current_level.click_on_level(int(x), int(y))
+            if self.options.hold_to_grow or self.current_level.temp_circle is None:
+                self.current_level.click_on_level(int(x), int(y))
+            else:
+                self.current_level.validate_temp_circle()
         elif self.state == GameState.END_OF_LEVEL:
             if co.NEXT_LEVEL_BTN_RECT.collidepoint(x, y):
                 self.start_next_level()
@@ -69,9 +72,11 @@ class Game:
                 self.options.cycle_music_volume()
             elif co.SFX_VOLUME_BTN_RECT.collidepoint(x, y):
                 self.options.cycle_sfx_volume()
+            elif co.HOLD_BTN_RECT.collidepoint(x, y):
+                self.options.hold_to_grow = not self.options.hold_to_grow
 
     def unclick(self, data: dict):
-        if self.state == GameState.PLAYING_LEVEL:
+        if self.state == GameState.PLAYING_LEVEL and self.options.hold_to_grow:
             self.current_level.validate_temp_circle()
 
     def mouse_move(self, data: dict):
@@ -124,12 +129,17 @@ class Game:
                         (0, 0, 0))
 
         if self.state != GameState.BROWSER_WAIT_FOR_CLICK:
-            utils.draw_text(game_surface, f'Music:', co.VOLUME_TEXT_SIZE,
-                            self.scale.to_screen_pos(*co.MUSIC_VOLUME_TEXT_POS), co.VOLUME_TEXT_COLOR)
+            utils.draw_text_center_right(game_surface, 'Music', co.OPTION_TEXT_SIZE,
+                                         self.scale.to_screen_rect(co.MUSIC_VOLUME_TEXT_RECT), co.OPTION_TEXT_COLOR)
             game_surface.blit(textures.VOLUMES[self.options.music_volume], co.MUSIC_VOLUME_BTN_POS)
-            utils.draw_text(game_surface, f'SFX:', co.VOLUME_TEXT_SIZE,
-                            self.scale.to_screen_pos(*co.SFX_VOLUME_TEXT_POS), co.VOLUME_TEXT_COLOR)
+            utils.draw_text_center_right(game_surface, 'SFX', co.OPTION_TEXT_SIZE,
+                                         self.scale.to_screen_rect(co.SFX_VOLUME_TEXT_RECT), co.OPTION_TEXT_COLOR)
             game_surface.blit(textures.VOLUMES[self.options.sfx_volume], co.SFX_VOLUME_BTN_POS)
+            utils.draw_text_center_right(game_surface, 'Hold click', co.OPTION_TEXT_SIZE,
+                                         self.scale.to_screen_rect(co.HOLD_TEXT_RECT_1), co.OPTION_TEXT_COLOR)
+            utils.draw_text_center_right(game_surface, 'to grow', co.OPTION_TEXT_SIZE,
+                                         self.scale.to_screen_rect(co.HOLD_TEXT_RECT_2), co.OPTION_TEXT_COLOR)
+            game_surface.blit(textures.CHECKBOXES[self.options.hold_to_grow], co.HOLD_BTN_POS)
 
         if self.state == GameState.PLAYING_LEVEL:
             self.current_level.draw(game_surface, self.scale, self.dt / 1000)

@@ -2,6 +2,7 @@ class Options:
     def __init__(self):
         self.music_volume: int = 2
         self.sfx_volume: int = 2
+        self.hold_to_grow: bool = True
 
     def cycle_music_volume(self):
         if self.music_volume < 3:
