@@ -20,6 +20,9 @@ class LevelManager:
         self.current_level_ended = False
         self.all_level_complete = False
 
+        self.total_gold_medals = 0
+        self.obtained_gold_medals = 0
+
     @classmethod
     def instance(cls) -> 'LevelManager':
         if cls.INSTANCE is None:
@@ -57,6 +60,8 @@ class LevelManager:
 
     def on_level_unloaded(self):
         self.current_level_ended = True
+        self.total_gold_medals += 1
+        self.obtained_gold_medals += self.current_level.got_gold_medal()
 
     def are_all_level_complete(self):
         return self.number == co.LEVEL_COUNT - 1 and self.current_level_ended
@@ -351,7 +356,7 @@ class Level:
 
     # endregion
 
-    # region ===== ANIMATIONS =====
+    # region ===== OTHER =====
 
     def get_medals(self) -> list[int]:
         if len(self.required_points) == 1:
@@ -360,6 +365,9 @@ class Level:
             return [2, 1 if self.points >= self.required_points[1] else 0]
         if len(self.required_points) == 3:
             return [3, 2 if self.points >= self.required_points[1] else 0, 1 if self.points >= self.required_points[2] else 0]
+
+    def got_gold_medal(self):
+        return self.points >= self.required_points[-1]
 
     # endregion
 

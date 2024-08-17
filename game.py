@@ -36,8 +36,8 @@ class Game:
 
         self.current_level: Level = None
 
-        self.eol_up_down: tuple[float, float] = (0.0, 0.0)
-        self.eol_in_out: tuple[float, float] = (0.0, 0.0)
+        self.up_down: tuple[float, float] = (0.0, 0.0)
+        self.in_out: tuple[float, float] = (0.0, 0.0)
 
         # Temp
         self.events.set_mouse_button_down_callback(self.click)
@@ -64,10 +64,13 @@ class Game:
             if co.PLAY_BTN_RECT.collidepoint(x, y):
                 LevelManager.reset()
                 self.start_next_level()
+        elif self.state == GameState.END_OF_GAME:
+            if co.EOG_RESTART_BTN_RECT.collidepoint(x, y):
+                self.open_main_menu()
         elif self.state == GameState.BROWSER_WAIT_FOR_CLICK:
             self.open_main_menu()
 
-        if self.state != GameState.BROWSER_WAIT_FOR_CLICK:
+        if self.state != GameState.BROWSER_WAIT_FOR_CLICK and self.state != GameState.END_OF_GAME:
             if co.MUSIC_VOLUME_BTN_RECT.collidepoint(x, y):
                 self.options.cycle_music_volume()
             elif co.SFX_VOLUME_BTN_RECT.collidepoint(x, y):
@@ -114,9 +117,8 @@ class Game:
             else:
                 self.state = GameState.END_OF_LEVEL
 
-        elif self.state == GameState.END_OF_LEVEL:
-            self.eol_up_down = (self.eol_up_down[0] + self.dt / 1000, 4 * math.sin(2.5 * self.eol_up_down[0]))
-            self.eol_in_out = (self.eol_in_out[0] + self.dt / 1000, 1 + 0.015 * math.sin(2.5 * self.eol_in_out[0]))
+        self.up_down = (self.up_down[0] + self.dt / 1000, 4 * math.sin(2.5 * self.up_down[0]))
+        self.in_out = (self.in_out[0] + self.dt / 1000, 1 + 0.03 * math.sin(2.5 * self.in_out[0]))
 
         textures.CELL_ANIMATOR.play_all(self.dt / 1000)
         self.draw()
@@ -128,7 +130,7 @@ class Game:
         utils.draw_text(game_surface, f'{self.clock.get_fps():.0f} fps', 30, self.scale.to_screen_pos(10, 10),
                         (0, 0, 0))
 
-        if self.state != GameState.BROWSER_WAIT_FOR_CLICK:
+        if self.state != GameState.BROWSER_WAIT_FOR_CLICK and self.state != GameState.END_OF_GAME:
             utils.draw_text_center_right(game_surface, 'Music', co.OPTION_TEXT_SIZE,
                                          self.scale.to_screen_rect(co.MUSIC_VOLUME_TEXT_RECT), co.OPTION_TEXT_COLOR)
             game_surface.blit(textures.VOLUMES[self.options.music_volume], co.MUSIC_VOLUME_BTN_POS)
@@ -152,6 +154,9 @@ class Game:
         elif self.state == GameState.MAIN_MENU:
             self.draw_main_menu(game_surface)
 
+        elif self.state == GameState.END_OF_GAME:
+            self.draw_end_of_game(game_surface)
+
         elif self.state == GameState.BROWSER_WAIT_FOR_CLICK:
             game_surface.fill((0, 0, 0))
             utils.draw_text_center(game_surface, "Click anywhere to start the game", 128,
@@ -162,7 +167,7 @@ class Game:
     def draw_end_of_level(self, game_surface: pyg.Surface):
         game_surface.blit(textures.END_OF_LEVEL_BACKGROUND, self.scale.to_screen_pos(co.EOL_BG_X, 0))
         utils.blit_scaled(game_surface, textures.END_OF_LEVEL_TITLE, co.EOL_TITLE_POS[0], co.EOL_TITLE_POS[1],
-                          self.eol_in_out[1])
+                          self.in_out[1])
 
         utils.draw_text_center(game_surface, f'{self.current_level.points} points', co.POINTS_TEXT_SIZE[1],
                                self.scale.to_screen_rect(pyg.Rect(*co.POINTS_TEXT_POS, *co.POINTS_TEXT_SIZE)),
@@ -172,19 +177,34 @@ class Game:
         medals = self.current_level.get_medals()
 
         for k, (pos, medal) in enumerate(zip(co.MEDAL_POS[medal_count], medals)):
-            game_surface.blit(textures.MEDALS[medal], self.scale.to_screen_pos(pos[0], pos[1] + self.eol_up_down[1]))
+            game_surface.blit(textures.MEDALS[medal], self.scale.to_screen_pos(pos[0], pos[1] + self.up_down[1]))
             utils.draw_text_center(game_surface, f'{self.current_level.required_points[k]} pts',
                                    co.MEDAL_TEXT_FONT_SIZE,
                                    self.scale.to_screen_rect(
                                        pyg.Rect(pos[0], co.MEDAL_TEXT_Y, co.MEDAL_WIDTH, co.MEDAL_TEXT_FONT_SIZE)),
                                    (0, 0, 0), bold=medal > 0)
 
-        game_surface.blit(textures.NEXT_LEVEL_BUTTON,
-                          (co.NEXT_LEVEL_BTN_POS[0], co.NEXT_LEVEL_BTN_POS[1] + self.eol_up_down[1]))
+        utils.blit_scaled(game_surface, textures.NEXT_LEVEL_BUTTON, co.NEXT_LEVEL_BTN_POS[0], co.NEXT_LEVEL_BTN_POS[1],
+                          self.in_out[1])
 
     def draw_main_menu(self, game_surface: pyg.Surface):
-        game_surface.blit(textures.LOGO, co.LOGO_POS)
-        game_surface.blit(textures.PLAY_BUTTON, co.PLAY_BTN_POS)
+        game_surface.blit(textures.LOGO, (co.LOGO_POS[0], co.LOGO_POS[1] + self.up_down[1]))
+        utils.blit_scaled(game_surface, textures.PLAY_BUTTON, co.PLAY_BTN_POS[0], co.PLAY_BTN_POS[1], self.in_out[1])
+
+    def draw_end_of_game(self, game_surface: pyg.Surface):
+        game_surface.blit(textures.LOGO, (co.LOGO_POS[0], co.LOGO_POS[1] + self.up_down[1]))
+        utils.draw_text_center(game_surface, 'CONGRATULATIONS', 180, co.EOG_TEXT1_RECT, co.OPTION_TEXT_COLOR, bold=True)
+        utils.draw_text_center(game_surface, 'You beat the game!', 120, co.EOG_TEXT2_RECT, co.OPTION_TEXT_COLOR)
+        utils.draw_text_center(game_surface, 'Thanks for playing, please rate and comment :)', 60, co.EOG_TEXT3_RECT,
+                               co.OPTION_TEXT_COLOR)
+
+        game_surface.blit(textures.MEDALS[1], self.scale.to_screen_pos(co.EOG_GOLD_MEDAL_POS[0],
+                                                                       co.EOG_GOLD_MEDAL_POS[1] + self.up_down[1]))
+        utils.draw_text(game_surface,
+                        f'{LevelManager.instance().obtained_gold_medals}/{LevelManager.instance().total_gold_medals}',
+                        co.EOG_GOLD_MEDAL_TEXT_SIZE, co.EOG_GOLD_MEDAL_TEXT_POS, co.OPTION_TEXT_COLOR)
+        utils.blit_scaled(game_surface, textures.RESTART_GAME_BUTTON, co.EOG_RESTART_BTN_POS[0],
+                          co.EOG_RESTART_BTN_POS[1], self.in_out[1])
 
     def loop(self):
         self.frame += 1

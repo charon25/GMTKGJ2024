@@ -33,6 +33,7 @@ MEDALS: list[pyg.Surface] = [
     load("resources/textures/eol/bronze_medal.png")
 ]
 NEXT_LEVEL_BUTTON = load("resources/textures/eol/eol_next_level_btn.png")
+RESTART_GAME_BUTTON = load("resources/textures/restart_btn.png")
 
 
 def load_scale(filename: str, scale: Scale) -> pyg.Surface:
@@ -53,6 +54,7 @@ def load_all(scale: Scale):
 
 def _load_textures(scale: Scale):
     global END_OF_LEVEL_BACKGROUND, END_OF_LEVEL_TITLE, MEDALS, NEXT_LEVEL_BUTTON, LOGO, PLAY_BUTTON, VOLUMES, CHECKBOXES
+    global RESTART_GAME_BUTTON
 
     if abs(1 - scale.scale) <= 0.03:
         return
@@ -63,6 +65,7 @@ def _load_textures(scale: Scale):
     END_OF_LEVEL_TITLE = scale_by(END_OF_LEVEL_TITLE, scale.scale)
     MEDALS = scale_list(MEDALS, scale)
     NEXT_LEVEL_BUTTON = scale_by(NEXT_LEVEL_BUTTON, scale.scale)
+    RESTART_GAME_BUTTON = scale_by(RESTART_GAME_BUTTON, scale.scale)
 
     PLAY_BUTTON = scale_by(PLAY_BUTTON, scale.scale)
     VOLUMES = scale_list(VOLUMES, scale)
