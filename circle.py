@@ -22,4 +22,5 @@ class Circle:
 
     def touch_rect(self, rect: pyg.Rect):
         return (self.contains_point(rect.x, rect.y) or self.contains_point(rect.x + rect.w, rect.y)
-                or self.contains_point(rect.x, rect.y + rect.h) or self.contains_point(rect.x + rect.w, rect.y + rect.h))
+                or self.contains_point(rect.x, rect.y + rect.h) or self.contains_point(rect.x + rect.w, rect.y + rect.h)
+                or rect.collidepoint(self.x, self.y))
