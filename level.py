@@ -178,6 +178,8 @@ class Level:
     def __on_cell_touch_temp_circle(self, cell: Cell):
         if cell.type == CellType.FORBIDDEN:
             self.destroy_temp_circle()
+        elif cell.type == CellType.BLOCKER:
+            self.validate_temp_circle()
 
     def __on_cell_in_temp_circle(self, cell: Cell):
         if cell.cell_data.can_be_selected:

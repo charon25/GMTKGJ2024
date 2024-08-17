@@ -34,6 +34,7 @@ class Game:
         self.current_level = Level(1, 32, 3, [Cell(x, 0, 1, 1) for x in range(8)]
                                    + [Cell(0, 1, 2, 1)] + [Cell(0, 4, 1, 1, co.CellType.FORBIDDEN)]
                                    + [Cell(5, 2, 1, 1, co.CellType.CIRCLE_P1)]
+                                   + [Cell(0, -1, 1, 1, co.CellType.BLOCKER)]
                                    + [Cell(3, 1, 1, 1, co.CellType.MULT_2)])
 
     def click(self, data: dict):
@@ -62,7 +63,7 @@ class Game:
 
     def draw_game(self):
         game_surface = pyg.Surface((co.WIDTH, co.HEIGHT), pyg.SRCALPHA)
-        game_surface.fill((100, 100, 100, 255))
+        game_surface.fill((200, 200, 200, 255))
 
         self.current_level.draw(game_surface, self.scale)
 
@@ -70,7 +71,7 @@ class Game:
         text = font.render(f'{self.clock.get_fps():.0f} fps', False, (0, 0, 0))
         game_surface.blit(text, self.scale.to_screen_pos(10, 10))
 
-        text = font.render(f'{self.current_level.points} points', False, (200, 200, 0))
+        text = font.render(f'{self.current_level.points} points', False, (200, 0, 0))
         game_surface.blit(text, self.scale.to_screen_pos(900, 200))
 
         self.screen.blit(game_surface, (0, 0))

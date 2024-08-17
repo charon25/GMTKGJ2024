@@ -50,6 +50,16 @@ def _load_cell_animations(scale: Scale):
     CELL_TEXTURES.append(forbidden_cell_animations)
     CELL_ANIMATOR.add_animations(forbidden_cell_animations)
 
+    blocker_cell_animations = [
+        Animation(
+            [load_scale("resources/textures/blocker/0.png", scale)],
+            [0.5]
+        )
+    ]
+
+    CELL_TEXTURES.append(blocker_cell_animations)
+    CELL_ANIMATOR.add_animations(blocker_cell_animations)
+
 
 def _load_modifiers_animations(scale: Scale):
     global MODIFIERS_TEXTURES, CELL_ANIMATOR

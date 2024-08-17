@@ -24,7 +24,8 @@ CELL_DATA = [
     CellData(0, -1),
     CellData(1, -1, can_be_selected=False),
     CellData(0, 0,  points_multiplier=2.0),
-    CellData(0, 1, bonus_circles=1)
+    CellData(0, 1, bonus_circles=1),
+    CellData(2, 0, can_be_selected=False)
 ]
 
 
@@ -33,3 +34,4 @@ class CellType(Enum):
     FORBIDDEN = 1
     MULT_2 = 2
     CIRCLE_P1 = 3
+    BLOCKER = 4
