@@ -31,8 +31,9 @@ class Game:
         self.events.set_mouse_button_up_callback(self.unclick)
         self.events.set_mouse_motion_callback(self.mouse_move)
         self.circle = Circle(0, 0, 0)
-        self.current_level = Level(1, 32, [Cell(x, 0, 1, 1) for x in range(5)]
+        self.current_level = Level(1, 32, 3, [Cell(x, 0, 1, 1) for x in range(8)]
                                    + [Cell(0, 1, 2, 1)] + [Cell(0, 4, 1, 1, co.CellType.FORBIDDEN)]
+                                   + [Cell(5, 2, 1, 1, co.CellType.CIRCLE_P1)]
                                    + [Cell(3, 1, 1, 1, co.CellType.MULT_2)])
 
     def click(self, data: dict):

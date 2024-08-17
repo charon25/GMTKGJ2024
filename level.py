@@ -10,7 +10,7 @@ from window import Scale
 
 
 class Level:
-    def __init__(self, number: int, cell_size: int, cells: list[Cell]):
+    def __init__(self, number: int, cell_size: int, max_circles_count: int, cells: list[Cell]):
         self.number = number
         self.cell_size = cell_size
         self.cells = cells
@@ -23,6 +23,10 @@ class Level:
         self.temp_circle: Circle | None = None
         self.temp_selected_cells: list[Cell] = list()
         self.circumscribed_circle: Circle = Circle(self.width // 2, self.height // 2, 0)
+
+        self.max_circles_count = max_circles_count
+        self.max_circles_count_upgrade = 0
+        self.current_circles_count = 0
 
         self.points = 0
 
@@ -49,7 +53,10 @@ class Level:
 
         self.circles = list()
         self.temp_circle = None
-        self.max_distance = 0
+        self.circumscribed_circle = Circle(self.width // 2, self.height // 2, 0)
+
+        self.max_circles_count_upgrade = 0
+        self.current_circles_count = 0
 
         self.points = 0
 
@@ -63,6 +70,9 @@ class Level:
             if v_circle.circle.contains_point(x, y):
                 self.remove_circle(v_circle)
                 return
+
+        if self.current_circles_count >= self.max_circles_count + self.max_circles_count_upgrade:
+            return
 
         if not any(cell.contains_point(x, y) for cell in self.cells):
             return
@@ -86,6 +96,8 @@ class Level:
             points += cell.get_points()
             multiplier *= cell.cell_data.points_multiplier
 
+            self.max_circles_count_upgrade += cell.cell_data.bonus_circles
+
         earned_points = int(points * multiplier)
 
         self.circles.append(ValidatedCircle(self.temp_circle, self.temp_selected_cells, earned_points))
@@ -96,6 +108,7 @@ class Level:
         self.temp_circle = None
 
         self.points += earned_points
+        self.current_circles_count += 1
 
     def destroy_temp_circle(self):
         if self.temp_circle is None:
@@ -116,7 +129,10 @@ class Level:
             cell.selected = False
             cell.temp_selected = False
 
+            self.max_circles_count_upgrade -= cell.cell_data.bonus_circles
+
         self.points -= v_circle.points
+        self.current_circles_count -= 1
 
         # todo play sound
 
