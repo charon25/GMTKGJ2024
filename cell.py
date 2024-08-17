@@ -15,15 +15,24 @@ class Cell:
         self.type = _type
         self.cell_data: CellData = constants.CELL_DATA[self.type.value]
         self.rect: pyg.Rect = None
+        self.index: int = -1
 
         self.selected: bool = False
         self.temp_selected: bool = False
 
-    def generate(self, cell_size: int):
+    def __lt__(self, other: 'Cell'):
+        return (self.y, self.x) < (other.y, other.x)
+
+    def generate(self, cell_size: int, index: int):
         self.rect = pyg.Rect(self.x * cell_size, self.y * cell_size, self.width * cell_size, self.height * cell_size)
+        self.index = index
+
+    def select(self):
+        self.selected = True
+        self.temp_selected = False
 
     def unselect(self):
-        self.selected = 0
+        self.selected = False
         self.temp_selected = False
 
     def __get_select_count(self):

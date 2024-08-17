@@ -13,9 +13,7 @@ class Level:
     def __init__(self, number: int, cell_size: int, max_circles_count: int, cells: list[Cell]):
         self.number = number
         self.cell_size = cell_size
-        self.cells = cells
-        for cell in self.cells:
-            cell.generate(cell_size)
+        self.cells = sorted(cells)
 
         self.x_offset, self.y_offset, self.width, self.height = self.__get_limits()
 
@@ -37,8 +35,8 @@ class Level:
         max_x: int = 0
         min_y: int = constants.HEIGHT
         max_y: int = 0
-        for cell in self.cells:
-            cell.generate(self.cell_size)
+        for k, cell in enumerate(self.cells):
+            cell.generate(self.cell_size, k)
             min_x = min(min_x, cell.x * self.cell_size)
             max_x = max(max_x, (cell.x + cell.width) * self.cell_size)
             min_y = min(min_y, cell.y * self.cell_size)
@@ -92,8 +90,7 @@ class Level:
         points = 0
         multiplier = 1.0
         for cell in self.temp_selected_cells:
-            cell.selected = True
-            cell.temp_selected = False
+            cell.select()
 
             points += cell.get_points()
             multiplier *= cell.cell_data.points_multiplier
@@ -104,7 +101,8 @@ class Level:
 
         self.circles.append(ValidatedCircle(self.temp_circle, self.temp_selected_cells, earned_points))
 
-        max_dist = math.dist((self.width / 2, self.height / 2), (self.temp_circle.x, self.temp_circle.y)) + self.temp_circle.radius
+        max_dist = math.dist((self.width / 2, self.height / 2),
+                             (self.temp_circle.x, self.temp_circle.y)) + self.temp_circle.radius
         self.circumscribed_circle.radius = max(self.circumscribed_circle.radius, max_dist)
         self.temp_selected_cells = []
         self.temp_circle = None
@@ -130,8 +128,7 @@ class Level:
         self.circles.remove(v_circle)
 
         for cell in v_circle.contained_cells:
-            cell.selected = False
-            cell.temp_selected = False
+            cell.unselect()
 
             self.max_circles_count_upgrade -= cell.cell_data.bonus_circles
 
