@@ -25,6 +25,32 @@ GAME_Y_OFFSET = 0
 # Levels
 LEVEL_COUNT = 2
 
+# End of level
+EOL_BG_WIDTH = 700
+EOL_BG_X = (WIDTH - EOL_BG_WIDTH) / 2
+EOL_TITLE_WIDTH = 644
+EOL_TITLE_POS = (EOL_BG_X + (EOL_BG_WIDTH - 644) / 2, 100)
+
+MEDAL_WIDTH = 130
+MEDAL_GAP = 50
+MEDAL_X = (EOL_BG_WIDTH - 3 * MEDAL_WIDTH - 2 * MEDAL_GAP) / 2
+MEDAL_X_2 = (EOL_BG_WIDTH - 2 * MEDAL_WIDTH - MEDAL_GAP) / 2
+MEDAL_Y = 450
+MEDAL_POS = [
+    [
+        (EOL_BG_X + MEDAL_X + MEDAL_WIDTH + MEDAL_GAP, MEDAL_Y)
+    ],
+    [
+        (EOL_BG_X + MEDAL_X_2, MEDAL_Y),
+        (EOL_BG_X + MEDAL_X_2 + MEDAL_WIDTH + MEDAL_GAP, MEDAL_Y)
+    ],
+    [
+        (EOL_BG_X + MEDAL_X, MEDAL_Y),
+        (EOL_BG_X + MEDAL_X + MEDAL_WIDTH + MEDAL_GAP, MEDAL_Y),
+        (EOL_BG_X + MEDAL_X + 2 * (MEDAL_WIDTH + MEDAL_GAP), MEDAL_Y)
+    ]
+]
+
 
 # Cells
 class CellData:
@@ -59,3 +85,6 @@ class CellType(IntEnum):
 SCREEN_SHAKE_COUNT = 5
 SCREEN_SHAKE_MAX_INTENSITY = 20
 FREQUENCY = 2 * math.pi / SCREEN_SHAKE_COUNT
+
+# Font
+FONT_PATH = "resources/font/betterpixels.ttf"

@@ -31,7 +31,7 @@ class LevelManager:
 
     def __get_level(self):
         if self.number == 0:
-            return Level(1, 32, 3, [1], [Cell(x, 0, 1, 1) for x in range(8)]
+            return Level(1, 32, 3, [1, 3, 5], [Cell(x, 0, 1, 1) for x in range(8)]
                          + [Cell(0, 1, 2, 1)] + [Cell(0, 4, 1, 1, co.CellType.FORBIDDEN)]
                          + [Cell(5, 2, 1, 1, co.CellType.CIRCLE_P1)]
                          + [Cell(0, -4, 1, 1, co.CellType.BLOCKER)]
@@ -344,6 +344,18 @@ class Level:
 
         if removed_cells_count == len(self.cells):
             LevelManager.instance().on_level_unloaded()
+
+    # endregion
+
+    # region ===== ANIMATIONS =====
+
+    def get_medals(self) -> list[int]:
+        if len(self.required_points) == 1:
+            return [1]
+        if len(self.required_points) == 2:
+            return [2, 1 if self.points >= self.required_points[1] else 0]
+        if len(self.required_points) == 3:
+            return [3, 2 if self.points >= self.required_points[1] else 0, 1 if self.points >= self.required_points[2] else 0]
 
     # endregion
 
