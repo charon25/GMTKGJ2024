@@ -66,7 +66,7 @@ class Game:
         game_surface = pyg.Surface((co.WIDTH, co.HEIGHT), pyg.SRCALPHA)
         game_surface.fill((200, 200, 200, 255))
 
-        self.current_level.draw(game_surface, self.scale)
+        self.current_level.draw(game_surface, self.scale, self.dt / 1000)
 
         font = pyg.font.Font(None, 30)
         text = font.render(f'{self.clock.get_fps():.0f} fps', False, (0, 0, 0))

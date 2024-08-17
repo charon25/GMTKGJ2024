@@ -12,11 +12,11 @@ class CellAnimation:
     def get_scale(self) -> float:
         pass
 
-    def update(self) -> None:
+    def update(self, dt: float) -> None:
         if self.is_finished:
             return
 
-        self.frame += 1
+        self.frame += dt * 60
         if self.frame >= self.phases[self.phase]:
             self.phase += 1
             self.is_finished = (self.phase >= len(self.phases))

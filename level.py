@@ -190,9 +190,9 @@ class Level:
             self.temp_selected_cells.append(cell)
             self.temp_multiplier *= cell.cell_data.points_multiplier
 
-    def draw(self, surface: pyg.Surface, scale: Scale):
+    def draw(self, surface: pyg.Surface, scale: Scale, dt: float):
         for cell in self.cells:
-            cell.draw(surface, self.x_offset, self.y_offset, scale)
+            cell.draw(surface, self.x_offset, self.y_offset, scale, dt)
 
         for v_circle in self.circles:
             v_circle.circle.draw(surface, self.x_offset, self.y_offset, scale)

@@ -1,7 +1,7 @@
 import pygame as pyg
 
 import constants
-import screen_shake
+from screen_shake import SHAKER
 import textures
 from cell_animation import CellAnimation, CellSelectAnimation
 from constants import CellType, CellData
@@ -53,9 +53,9 @@ class Cell:
     def __get_modifier_texture(self) -> pyg.Surface:
         return textures.MODIFIERS_TEXTURES[self.cell_data.modifier_texture].get_current_sprite()
 
-    def draw(self, surface: pyg.Surface, x_offset: int, y_offset: int, scale: Scale):
+    def draw(self, surface: pyg.Surface, x_offset: int, y_offset: int, scale: Scale, dt: float):
         if self.animation is not None:
-            self.animation.update()
+            self.animation.update(dt)
 
             anim_scale = self.animation.get_scale()
             if anim_scale != 1:
@@ -64,7 +64,7 @@ class Cell:
 
             if self.animation.is_finished:
                 self.animation = None
-                screen_shake.SHAKER.shake(1 + self.points + self.cell_data.points_multiplier)
+                SHAKER.shake(1 + self.points + self.cell_data.points_multiplier)
                 print(self.points)
                 # todo ajouter son
         else:
