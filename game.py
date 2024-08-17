@@ -117,12 +117,20 @@ class Game:
         game_surface.blit(textures.END_OF_LEVEL_BACKGROUND, self.scale.to_screen_pos(co.EOL_BG_X, 0))
         game_surface.blit(textures.END_OF_LEVEL_TITLE, self.scale.to_screen_pos(*co.EOL_TITLE_POS))
 
+        utils.draw_text_center(game_surface, f'{self.current_level.points} points', co.POINTS_TEXT_SIZE[1],
+                               self.scale.to_screen_rect(pyg.Rect(*co.POINTS_TEXT_POS, *co.POINTS_TEXT_SIZE)),
+                               (0, 0, 0))
+
         medal_count = len(self.current_level.required_points) - 1
         medals = self.current_level.get_medals()
 
-        for pos, medal in zip(co.MEDAL_POS[medal_count], medals):
-            game_surface.blit(textures.MEDALS[medal], pos)
-
+        for k, (pos, medal) in enumerate(zip(co.MEDAL_POS[medal_count], medals)):
+            game_surface.blit(textures.MEDALS[medal], self.scale.to_screen_pos(*pos))
+            utils.draw_text_center(game_surface, f'{self.current_level.required_points[k]} pts',
+                                   co.MEDAL_TEXT_FONT_SIZE,
+                                   self.scale.to_screen_rect(
+                                       pyg.Rect(pos[0], co.MEDAL_TEXT_Y, co.MEDAL_WIDTH, co.MEDAL_TEXT_FONT_SIZE)),
+                                   (0, 0, 0), bold=medal > 0)
 
     def loop(self):
         self.frame += 1

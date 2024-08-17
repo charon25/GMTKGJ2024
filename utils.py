@@ -21,8 +21,16 @@ def get_font(size, bold=False, italic=False, underline=False):
     return font
 
 
-def draw_text(screen: pyg.Surface, text: str, size: int, pos: tuple[float, float], color: pyg.Color, bold=False,
+def draw_text(screen: pyg.Surface, text: str, size: int, pos: tuple[float, float], color: tuple[int, int, int], bold=False,
               italic=False, underline=False):
     font: pyg.font.Font = get_font(size, bold=bold, italic=italic, underline=underline)
     img = font.render(text, False, color)
     screen.blit(img, pos)
+
+
+def draw_text_center(screen: pyg.Surface, text: str, size: int, rect: pyg.Rect, color: tuple[int, int, int], bold=False,
+                     italic=False, underline=False):
+    font: pyg.font.Font = get_font(size, bold=bold, italic=italic, underline=underline)
+    img = font.render(text, False, color)
+    print(rect, img.get_size())
+    screen.blit(img, (rect.centerx - img.get_width() / 2, rect.centery - img.get_height() / 2))

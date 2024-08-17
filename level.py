@@ -31,7 +31,7 @@ class LevelManager:
 
     def __get_level(self):
         if self.number == 0:
-            return Level(1, 32, 3, [1, 3, 5], [Cell(x, 0, 1, 1) for x in range(8)]
+            return Level(1, 32, 3, [1, 3, 100], [Cell(x, 0, 1, 1) for x in range(8)]
                          + [Cell(0, 1, 2, 1)] + [Cell(0, 4, 1, 1, co.CellType.FORBIDDEN)]
                          + [Cell(5, 2, 1, 1, co.CellType.CIRCLE_P1)]
                          + [Cell(0, -4, 1, 1, co.CellType.BLOCKER)]
