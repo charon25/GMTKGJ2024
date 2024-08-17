@@ -33,3 +33,10 @@ def draw_text_center(screen: pyg.Surface, text: str, size: int, rect: pyg.Rect, 
     font: pyg.font.Font = get_font(size, bold=bold, italic=italic, underline=underline)
     img = font.render(text, False, color)
     screen.blit(img, (rect.centerx - img.get_width() / 2, rect.centery - img.get_height() / 2))
+
+
+def blit_scaled(screen: pyg.Surface, img: pyg.Surface, x: int, y: int, scale: float):
+    scaled_img = pyg.transform.scale_by(img, scale)
+    dx = (scaled_img.get_width() - img.get_width()) / 2
+    dy = (scaled_img.get_height() - img.get_height()) / 2
+    screen.blit(scaled_img, (x - dx, y - dy))

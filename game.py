@@ -33,7 +33,8 @@ class Game:
 
         self.current_level: Level = None
 
-        self.medal_dy: tuple[float, float] = (0.0, 0.0)
+        self.eol_up_down: tuple[float, float] = (0.0, 0.0)
+        self.eol_in_out: tuple[float, float] = (0.0, 0.0)
 
         # Temp
         self.events.set_mouse_button_down_callback(self.click)
@@ -100,7 +101,8 @@ class Game:
                 self.state = GameState.END_OF_LEVEL
 
         elif self.state == GameState.END_OF_LEVEL:
-            self.medal_dy = (self.medal_dy[0] + self.dt / 1000, 4 * math.sin(4 * self.medal_dy[0]))
+            self.eol_up_down = (self.eol_up_down[0] + self.dt / 1000, 4 * math.sin(2.5 * self.eol_up_down[0]))
+            self.eol_in_out = (self.eol_in_out[0] + self.dt / 1000, 1 + 0.015 * math.sin(2.5 * self.eol_in_out[0]))
 
         textures.CELL_ANIMATOR.play_all(self.dt / 1000)
         self.draw_game()
@@ -132,7 +134,7 @@ class Game:
 
     def draw_end_of_level(self, game_surface: pyg.Surface):
         game_surface.blit(textures.END_OF_LEVEL_BACKGROUND, self.scale.to_screen_pos(co.EOL_BG_X, 0))
-        game_surface.blit(textures.END_OF_LEVEL_TITLE, self.scale.to_screen_pos(*co.EOL_TITLE_POS))
+        utils.blit_scaled(game_surface, textures.END_OF_LEVEL_TITLE, co.EOL_TITLE_POS[0], co.EOL_TITLE_POS[1], self.eol_in_out[1])
 
         utils.draw_text_center(game_surface, f'{self.current_level.points} points', co.POINTS_TEXT_SIZE[1],
                                self.scale.to_screen_rect(pyg.Rect(*co.POINTS_TEXT_POS, *co.POINTS_TEXT_SIZE)),
@@ -142,7 +144,7 @@ class Game:
         medals = self.current_level.get_medals()
 
         for k, (pos, medal) in enumerate(zip(co.MEDAL_POS[medal_count], medals)):
-            game_surface.blit(textures.MEDALS[medal], self.scale.to_screen_pos(pos[0], pos[1] + self.medal_dy[1]))
+            game_surface.blit(textures.MEDALS[medal], self.scale.to_screen_pos(pos[0], pos[1] + self.eol_up_down[1]))
             utils.draw_text_center(game_surface, f'{self.current_level.required_points[k]} pts',
                                    co.MEDAL_TEXT_FONT_SIZE,
                                    self.scale.to_screen_rect(
@@ -150,7 +152,7 @@ class Game:
                                    (0, 0, 0), bold=medal > 0)
 
         game_surface.blit(textures.NEXT_LEVEL_BUTTON,
-                          (co.NEXT_LEVEL_BTN_POS[0], co.NEXT_LEVEL_BTN_POS[1] + self.medal_dy[1]))
+                          (co.NEXT_LEVEL_BTN_POS[0], co.NEXT_LEVEL_BTN_POS[1] + self.eol_up_down[1]))
 
     def draw_main_menu(self, game_surface: pyg.Surface):
         game_surface.blit(textures.LOGO, co.LOGO_POS)
