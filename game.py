@@ -2,12 +2,11 @@ import pygame as pyg
 
 import constants as co
 import textures
-from cell import Cell
 from circle import Circle
 from event_manager import EventManager
 from level import Level, LevelManager
-from window import Scale, Window
 from screen_shake import SHAKER
+from window import Scale, Window
 
 
 class Game:
@@ -27,7 +26,6 @@ class Game:
 
         self.is_ended = False
 
-        self.level_manager: LevelManager = LevelManager()
         self.current_level: Level = None
 
         # Temp
@@ -57,14 +55,15 @@ class Game:
         Window.close()
 
     def start_next_level(self):
-        self.level_manager.load_next_level()
-        self.current_level = self.level_manager.current_level
+        LevelManager.instance().load_next_level()
+        self.current_level = LevelManager.instance().current_level
 
     def loop_game(self):
-        self.current_level.update(self.dt / 1000)
-
-        if self.current_level.is_finished():
-            self.start_next_level()
+        if not LevelManager.instance().current_level_ended:
+            self.current_level.update(self.dt / 1000)
+        else:
+            # todo faire fin de niveau
+            pass
 
         textures.CELL_ANIMATOR.play_all(self.dt / 1000)
         self.draw_game()
