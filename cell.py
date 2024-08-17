@@ -70,11 +70,12 @@ class Cell:
         else:
             anim_scale = 1.0
 
-        surface.blit(pyg.transform.scale(self.__get_main_texture(), (self.rect.w * anim_scale, self.rect.h * anim_scale)),
+        total_scale = scale.scale * anim_scale
+        surface.blit(pyg.transform.scale(self.__get_main_texture(), (self.rect.w * total_scale, self.rect.h * total_scale)),
                      scale.to_screen_pos(self.rect.x + x_offset, self.rect.y + y_offset))
 
         if self.cell_data.modifier_texture >= 0:
-            surface.blit(pyg.transform.scale(self.__get_modifier_texture(), (self.rect.w * anim_scale, self.rect.h * anim_scale)),
+            surface.blit(pyg.transform.scale(self.__get_modifier_texture(), (self.rect.w * total_scale, self.rect.h * total_scale)),
                          scale.to_screen_pos(self.rect.x + x_offset, self.rect.y + y_offset))
 
     def contains_point(self, x: int, y: int):

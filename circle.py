@@ -16,7 +16,7 @@ class Circle:
     def draw(self, surface: pyg.Surface, x_offset: int, y_offset: int, scale: Scale):
         width = max(1, int(self.radius**0.5 / 2.5))
         color = (0, 0, 0) if not self.is_hovered else (255, 0, 0)
-        pyg.draw.circle(surface, color, scale.to_game_pos(self.x + x_offset, self.y + y_offset), self.radius * scale.scale, width=width)
+        pyg.draw.circle(surface, color, scale.to_screen_pos(self.x + x_offset, self.y + y_offset), self.radius * scale.scale, width=width)
 
     def contains_point(self, x: int, y: int):
         return (x - self.x) ** 2 + (y - self.y) ** 2 <= self.radius ** 2
