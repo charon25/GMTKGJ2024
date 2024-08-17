@@ -5,9 +5,12 @@ Lorsqu'un carré est complètement dans un cercle, il est sélectionné
 
 Lorsqu'on relâche le clic, on valide le cercle, et on gagne autant de points que de carré dedans (à voir avec la taille de chaque carré)
 
+Les cercles ne peuvent pas s'intersecter (le cercle est validé lorsqu'il en touche un autre)
+
 But d'un niveau : atteindre au moins un certain nombre de points avec un nombre limité de cercles
 
 Certaines cases ont des effets :
 - case interdite : détruit le cercle s'il la touche
 - case bloquante : bloque la taille du cercle (?)
 - case x2, x3, /2, /3 : multiple le nombre de points
+- case qui donne ou enlève des cercles (?)

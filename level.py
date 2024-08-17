@@ -1,3 +1,5 @@
+import math
+
 import pygame as pyg
 
 import constants
@@ -15,15 +17,16 @@ class Level:
         for cell in self.cells:
             cell.generate(cell_size)
 
-        self.x_offset, self.y_offset = self.__get_limits()
+        self.x_offset, self.y_offset, self.width, self.height = self.__get_limits()
 
         self.circles: list[ValidatedCircle] = list()
         self.temp_circle: Circle | None = None
         self.temp_selected_cells: list[Cell] = list()
+        self.circumscribed_circle: Circle = Circle(self.width // 2, self.height // 2, 0)
 
         self.points = 0
 
-    def __get_limits(self) -> tuple[int, int]:
+    def __get_limits(self) -> tuple[int, int, int, int]:
         min_x: int = constants.WIDTH
         max_x: int = 0
         min_y: int = constants.HEIGHT
@@ -36,7 +39,8 @@ class Level:
             max_y = max(max_y, (cell.y + cell.height) * self.cell_size)
 
         return ((constants.WIDTH - (max_x - min_x)) / 2,
-                constants.GAME_Y_OFFSET + (constants.HEIGHT - (max_y - min_y)) / 2)
+                constants.GAME_Y_OFFSET + (constants.HEIGHT - (max_y - min_y)) / 2,
+                (max_x - min_x), (max_y - min_y))
 
     def reset(self):
         self.temp_selected_cells = list()
@@ -45,6 +49,7 @@ class Level:
 
         self.circles = list()
         self.temp_circle = None
+        self.max_distance = 0
 
         self.points = 0
 
@@ -85,6 +90,8 @@ class Level:
 
         self.circles.append(ValidatedCircle(self.temp_circle, self.temp_selected_cells, earned_points))
 
+        max_dist = math.dist((self.width / 2, self.height / 2), (self.temp_circle.x, self.temp_circle.y)) + self.temp_circle.radius
+        self.circumscribed_circle.radius = max(self.circumscribed_circle.radius, max_dist)
         self.temp_selected_cells = []
         self.temp_circle = None
 
@@ -117,6 +124,16 @@ class Level:
 
     # region ===== UPDATE =====
 
+    def on_mouse_move(self, x: int, y: int):
+        x = x - self.x_offset
+        y = y - self.y_offset
+
+        if not self.circumscribed_circle.contains_point(x, y):
+            return
+
+        for v_circle in self.circles:
+            v_circle.circle.is_hovered = v_circle.circle.contains_point(x, y)
+
     def update(self, dt: float):
         if self.temp_circle is None:
             return
@@ -135,10 +152,12 @@ class Level:
                     self.__on_cell_touch_temp_circle(cell)
 
         for v_circle in self.circles:
+            if self.temp_circle is None:
+                break
+
             if self.temp_circle.touch_circle(v_circle.circle):
                 self.validate_temp_circle()
                 break
-        # temp circle peut être None ici!
 
     def __on_cell_touch_temp_circle(self, cell: Cell):
         if cell.type == CellType.FORBIDDEN:

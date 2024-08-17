@@ -29,6 +29,7 @@ class Game:
         # Temp
         self.events.set_mouse_button_down_callback(self.click)
         self.events.set_mouse_button_up_callback(self.unclick)
+        self.events.set_mouse_motion_callback(self.mouse_move)
         self.circle = Circle(0, 0, 0)
         self.current_level = Level(1, 32, [Cell(x, 0, 1, 1) for x in range(5)]
                                    + [Cell(0, 1, 2, 1)] + [Cell(0, 4, 1, 1, co.CellType.FORBIDDEN)]
@@ -40,6 +41,10 @@ class Game:
 
     def unclick(self, data: dict):
         self.current_level.validate_temp_circle()
+
+    def mouse_move(self, data: dict):
+        x, y = self.scale.to_game_pos(*data['pos'])
+        self.current_level.on_mouse_move(int(x), int(y))
 
     def start(self):
         textures.load_all(self.scale)
@@ -56,7 +61,7 @@ class Game:
 
     def draw_game(self):
         game_surface = pyg.Surface((co.WIDTH, co.HEIGHT), pyg.SRCALPHA)
-        game_surface.fill((100, 100, 100))
+        game_surface.fill((100, 100, 100, 255))
 
         self.current_level.draw(game_surface, self.scale)
 
@@ -68,6 +73,7 @@ class Game:
         game_surface.blit(text, self.scale.to_screen_pos(900, 200))
 
         self.screen.blit(game_surface, (0, 0))
+        pyg.display.update()
 
     def loop(self):
         self.frame += 1
