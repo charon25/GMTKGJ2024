@@ -115,6 +115,11 @@ class Game:
         elif self.state == GameState.END_OF_LEVEL:
             self.draw_end_of_level(game_surface)
 
+        elif self.state == GameState.BROWSER_WAIT_FOR_CLICK:
+            game_surface.fill((0, 0, 0))
+            utils.draw_text_center(game_surface, "Click anywhere to start the game", 128,
+                                   self.scale.to_screen_rect(pyg.Rect(0, 0, co.WIDTH, co.HEIGHT)), (255, 255, 255))
+
         self.screen.blit(game_surface, SHAKER.get_next())
 
     def draw_end_of_level(self, game_surface: pyg.Surface):
@@ -136,7 +141,8 @@ class Game:
                                        pyg.Rect(pos[0], co.MEDAL_TEXT_Y, co.MEDAL_WIDTH, co.MEDAL_TEXT_FONT_SIZE)),
                                    (0, 0, 0), bold=medal > 0)
 
-        game_surface.blit(textures.NEXT_LEVEL_BUTTON, (co.NEXT_LEVEL_BTN_POS[0], co.NEXT_LEVEL_BTN_POS[1] + self.medal_dy[1]))
+        game_surface.blit(textures.NEXT_LEVEL_BUTTON,
+                          (co.NEXT_LEVEL_BTN_POS[0], co.NEXT_LEVEL_BTN_POS[1] + self.medal_dy[1]))
 
     def loop(self):
         self.frame += 1
