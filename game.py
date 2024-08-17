@@ -35,15 +35,18 @@ class Game:
         self.circle = Circle(0, 0, 0)
 
     def click(self, data: dict):
-        x, y = self.scale.to_game_pos(*data['pos'])
-        self.current_level.click_on_level(int(x), int(y))
+        if self.current_level is not None:
+            x, y = self.scale.to_game_pos(*data['pos'])
+            self.current_level.click_on_level(int(x), int(y))
 
     def unclick(self, data: dict):
-        self.current_level.validate_temp_circle()
+        if self.current_level is not None:
+            self.current_level.validate_temp_circle()
 
     def mouse_move(self, data: dict):
-        x, y = self.scale.to_game_pos(*data['pos'])
-        self.current_level.on_mouse_move(int(x), int(y))
+        if self.current_level is not None:
+            x, y = self.scale.to_game_pos(*data['pos'])
+            self.current_level.on_mouse_move(int(x), int(y))
 
     def start(self):
         textures.load_all(self.scale)
@@ -59,7 +62,7 @@ class Game:
         self.current_level = LevelManager.instance().current_level
 
     def loop_game(self):
-        if not LevelManager.instance().current_level_ended:
+        if self.current_level is not None and not LevelManager.instance().current_level_ended:
             self.current_level.update(self.dt / 1000)
         else:
             # todo faire fin de niveau
@@ -72,14 +75,15 @@ class Game:
         game_surface = pyg.Surface((co.WIDTH, co.HEIGHT), pyg.SRCALPHA)
         game_surface.fill((200, 200, 200, 255))
 
-        self.current_level.draw(game_surface, self.scale, self.dt / 1000)
-
         font = pyg.font.Font(None, 30)
         text = font.render(f'{self.clock.get_fps():.0f} fps', False, (0, 0, 0))
         game_surface.blit(text, self.scale.to_screen_pos(10, 10))
 
-        text = font.render(f'{self.current_level.points} points', False, (200, 0, 0))
-        game_surface.blit(text, self.scale.to_screen_pos(900, 200))
+        if self.current_level is not None:
+            self.current_level.draw(game_surface, self.scale, self.dt / 1000)
+
+            text = font.render(f'{self.current_level.points} points', False, (200, 0, 0))
+            game_surface.blit(text, self.scale.to_screen_pos(900, 200))
 
         self.screen.blit(game_surface, SHAKER.get_next())
 
