@@ -9,6 +9,7 @@ from circle import Circle
 from constants import GameState
 from event_manager import EventManager
 from level import Level, LevelManager
+from options import Options
 from screen_shake import SHAKER
 from window import Scale, Window
 
@@ -28,6 +29,8 @@ class Game:
 
         self.frame: int = 0
         self.dt: int = 0
+
+        self.options: Options = Options()
 
         self.is_ended = False
 
@@ -60,6 +63,12 @@ class Game:
                 self.start_next_level()
         elif self.state == GameState.BROWSER_WAIT_FOR_CLICK:
             self.open_main_menu()
+
+        if self.state != GameState.BROWSER_WAIT_FOR_CLICK:
+            if co.MUSIC_VOLUME_BTN_RECT.collidepoint(x, y):
+                self.options.cycle_music_volume()
+            elif co.SFX_VOLUME_BTN_RECT.collidepoint(x, y):
+                self.options.cycle_sfx_volume()
 
     def unclick(self, data: dict):
         if self.state == GameState.PLAYING_LEVEL:
@@ -105,14 +114,22 @@ class Game:
             self.eol_in_out = (self.eol_in_out[0] + self.dt / 1000, 1 + 0.015 * math.sin(2.5 * self.eol_in_out[0]))
 
         textures.CELL_ANIMATOR.play_all(self.dt / 1000)
-        self.draw_game()
+        self.draw()
 
-    def draw_game(self):
+    def draw(self):
         game_surface = pyg.Surface((co.WIDTH, co.HEIGHT), pyg.SRCALPHA)
         game_surface.fill((200, 200, 200, 255))
 
         utils.draw_text(game_surface, f'{self.clock.get_fps():.0f} fps', 30, self.scale.to_screen_pos(10, 10),
                         (0, 0, 0))
+
+        if self.state != GameState.BROWSER_WAIT_FOR_CLICK:
+            utils.draw_text(game_surface, f'Music:', co.VOLUME_TEXT_SIZE,
+                            self.scale.to_screen_pos(*co.MUSIC_VOLUME_TEXT_POS), co.VOLUME_TEXT_COLOR)
+            game_surface.blit(textures.VOLUMES[self.options.music_volume], co.MUSIC_VOLUME_BTN_POS)
+            utils.draw_text(game_surface, f'SFX:', co.VOLUME_TEXT_SIZE,
+                            self.scale.to_screen_pos(*co.SFX_VOLUME_TEXT_POS), co.VOLUME_TEXT_COLOR)
+            game_surface.blit(textures.VOLUMES[self.options.sfx_volume], co.SFX_VOLUME_BTN_POS)
 
         if self.state == GameState.PLAYING_LEVEL:
             self.current_level.draw(game_surface, self.scale, self.dt / 1000)
@@ -134,7 +151,8 @@ class Game:
 
     def draw_end_of_level(self, game_surface: pyg.Surface):
         game_surface.blit(textures.END_OF_LEVEL_BACKGROUND, self.scale.to_screen_pos(co.EOL_BG_X, 0))
-        utils.blit_scaled(game_surface, textures.END_OF_LEVEL_TITLE, co.EOL_TITLE_POS[0], co.EOL_TITLE_POS[1], self.eol_in_out[1])
+        utils.blit_scaled(game_surface, textures.END_OF_LEVEL_TITLE, co.EOL_TITLE_POS[0], co.EOL_TITLE_POS[1],
+                          self.eol_in_out[1])
 
         utils.draw_text_center(game_surface, f'{self.current_level.points} points', co.POINTS_TEXT_SIZE[1],
                                self.scale.to_screen_rect(pyg.Rect(*co.POINTS_TEXT_POS, *co.POINTS_TEXT_SIZE)),
