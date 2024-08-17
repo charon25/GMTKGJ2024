@@ -28,8 +28,6 @@ class Level:
 
         self.points = 0
 
-        self.screen_shake = 0
-
     def __get_limits(self) -> tuple[int, int, int, int]:
         min_x: int = constants.WIDTH
         max_x: int = 0
@@ -87,10 +85,12 @@ class Level:
             self.destroy_temp_circle()
             return
 
+        self.temp_selected_cells = sorted(self.temp_selected_cells)
+
         points = 0
         multiplier = 1.0
-        for cell in self.temp_selected_cells:
-            cell.select()
+        for k, cell in enumerate(self.temp_selected_cells):
+            cell.select(k)
 
             points += cell.get_points()
             multiplier *= cell.cell_data.points_multiplier
@@ -110,8 +110,6 @@ class Level:
         self.points += earned_points
         self.current_circles_count += 1
 
-        self.screen_shake = earned_points
-
     def destroy_temp_circle(self):
         if self.temp_circle is None:
             return
@@ -127,8 +125,8 @@ class Level:
     def remove_circle(self, v_circle: 'ValidatedCircle'):
         self.circles.remove(v_circle)
 
-        for cell in v_circle.contained_cells:
-            cell.unselect()
+        for k, cell in enumerate(v_circle.contained_cells):
+            cell.unselect(k)
 
             self.max_circles_count_upgrade -= cell.cell_data.bonus_circles
 
