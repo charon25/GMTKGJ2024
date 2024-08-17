@@ -18,6 +18,7 @@ class LevelManager:
         self.current_level: Level = None
         self.in_loading_anim = False
         self.current_level_ended = False
+        self.all_level_complete = False
 
     @classmethod
     def instance(cls) -> 'LevelManager':
@@ -28,16 +29,20 @@ class LevelManager:
     def load_next_level(self):
         self.load_level(self.number + 1)
 
+    def __get_level(self):
+        if self.number == 0:
+            return Level(1, 32, 3, [1], [Cell(x, 0, 1, 1) for x in range(8)]
+                         + [Cell(0, 1, 2, 1)] + [Cell(0, 4, 1, 1, co.CellType.FORBIDDEN)]
+                         + [Cell(5, 2, 1, 1, co.CellType.CIRCLE_P1)]
+                         + [Cell(0, -4, 1, 1, co.CellType.BLOCKER)]
+                         + [Cell(3, 1, 1, 1, co.CellType.MULT_2)])
+        else:
+            return Level(1, 32, 3, [4],
+                                       [Cell(1, 0), Cell(0, 1), Cell(2, 1), Cell(1, 2)])
+
     def load_level(self, number: int):
         self.number = number
-        self.current_level = Level(1, 32, 3, [1], [Cell(x, 0, 1, 1) for x in range(8)]
-                                   + [Cell(0, 1, 2, 1)] + [Cell(0, 4, 1, 1, co.CellType.FORBIDDEN)]
-                                   + [Cell(5, 2, 1, 1, co.CellType.CIRCLE_P1)]
-                                   + [Cell(0, -4, 1, 1, co.CellType.BLOCKER)]
-                                   + [Cell(3, 1, 1, 1, co.CellType.MULT_2)])
-
-        # self.current_level = Level(1, 32, 3, [5],
-        #                            [Cell(1, 0), Cell(0, 1), Cell(2, 1), Cell(1, 2)])
+        self.current_level = self.__get_level()
 
         self.current_level_ended = False
         self.current_level.start_loading_animation()
@@ -48,6 +53,9 @@ class LevelManager:
 
     def on_level_unloaded(self):
         self.current_level_ended = True
+
+    def are_all_level_complete(self):
+        return self.number == co.LEVEL_COUNT - 1 and self.current_level_ended
 
 
 class Level:

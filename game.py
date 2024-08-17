@@ -40,6 +40,9 @@ class Game:
         if self.state == GameState.PLAYING_LEVEL:
             x, y = self.scale.to_game_pos(*data['pos'])
             self.current_level.click_on_level(int(x), int(y))
+        elif self.state == GameState.END_OF_LEVEL:
+            # todo temp
+            self.start_next_level()
         elif self.state == GameState.BROWSER_WAIT_FOR_CLICK:
             # todo temp
             self.start_next_level()
@@ -76,7 +79,7 @@ class Game:
             if not LevelManager.instance().current_level_ended:
                 self.current_level.update(self.dt / 1000)
             else:
-                self.state = GameState.END_OF_LEVEL
+                self.state = GameState.END_OF_GAME if LevelManager.instance().are_all_level_complete() else GameState.END_OF_LEVEL
 
         elif self.state == GameState.END_OF_LEVEL:
             pass

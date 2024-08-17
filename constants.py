@@ -10,17 +10,23 @@ class GameState(IntEnum):
     PLAYING_LEVEL = 0
     END_OF_LEVEL = 10
     MAIN_MENU = 20
+    END_OF_GAME = 30
 
 
 MUSICENDEVENT = pyg.constants.USEREVENT + 1
 
+# Window
 WIDTH = 1920
 HEIGHT = 1080
 GAME_RECT = pyg.Rect(0, 0, WIDTH, HEIGHT)
 
 GAME_Y_OFFSET = 0
 
+# Levels
+LEVEL_COUNT = 2
 
+
+# Cells
 class CellData:
     def __init__(self, main_texture: int, modifier_texture: int, can_be_selected: bool = True,
                  points_multiplier: float = 1.0, bonus_circles: int = 0):
