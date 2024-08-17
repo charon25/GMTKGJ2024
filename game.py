@@ -43,11 +43,13 @@ class Game:
         self.events.set_mouse_button_down_callback(self.click)
         self.events.set_mouse_button_up_callback(self.unclick)
         self.events.set_mouse_motion_callback(self.mouse_move)
-        self.events.set_key_down_callback(self.screenshot)
+        self.events.set_key_down_callback(self.key_down)
         self.circle = Circle(0, 0, 0)
 
-    def screenshot(self, data: dict):
-        if data['key'] == 1073741893:
+    def key_down(self, data: dict):
+        if data['key'] == ord('r'):
+            self.restart_level()
+        elif data['key'] == 1073741893:
             pyg.image.save(self.screen, 'screenshot.png', 'png')
 
     def click(self, data: dict):
@@ -58,7 +60,9 @@ class Game:
             else:
                 self.current_level.validate_temp_circle()
         elif self.state == GameState.END_OF_LEVEL:
-            if co.NEXT_LEVEL_BTN_RECT.collidepoint(x, y):
+            if co.RESTART_LEVEL_BTN_RECT.collidepoint(x, y):
+                self.restart_level()
+            elif co.NEXT_LEVEL_BTN_RECT.collidepoint(x, y):
                 self.start_next_level()
         elif self.state == GameState.MAIN_MENU:
             if co.PLAY_BTN_RECT.collidepoint(x, y):
@@ -101,6 +105,11 @@ class Game:
 
     def open_main_menu(self):
         self.state = GameState.MAIN_MENU
+
+    def restart_level(self):
+        LevelManager.instance().reload_current_level()
+        self.current_level = LevelManager.instance().current_level
+        self.state = GameState.PLAYING_LEVEL
 
     def start_next_level(self):
         if LevelManager.instance().are_all_level_complete():
@@ -184,6 +193,8 @@ class Game:
                                        pyg.Rect(pos[0], co.MEDAL_TEXT_Y, co.MEDAL_WIDTH, co.MEDAL_TEXT_FONT_SIZE)),
                                    (0, 0, 0), bold=medal > 0)
 
+        utils.blit_scaled(game_surface, textures.RESTART_LEVEL_BUTTON, co.RESTART_LEVEL_BTN_POS[0], co.RESTART_LEVEL_BTN_POS[1],
+                          self.in_out[1])
         utils.blit_scaled(game_surface, textures.NEXT_LEVEL_BUTTON, co.NEXT_LEVEL_BTN_POS[0], co.NEXT_LEVEL_BTN_POS[1],
                           self.in_out[1])
 
@@ -201,7 +212,7 @@ class Game:
         game_surface.blit(textures.MEDALS[1], self.scale.to_screen_pos(co.EOG_GOLD_MEDAL_POS[0],
                                                                        co.EOG_GOLD_MEDAL_POS[1] + self.up_down[1]))
         utils.draw_text(game_surface,
-                        f'{LevelManager.instance().obtained_gold_medals}/{LevelManager.instance().total_gold_medals}',
+                        f'{sum(LevelManager.instance().gold_medals.values())}/{len(LevelManager.instance().gold_medals)}',
                         co.EOG_GOLD_MEDAL_TEXT_SIZE, co.EOG_GOLD_MEDAL_TEXT_POS, co.OPTION_TEXT_COLOR)
         utils.blit_scaled(game_surface, textures.RESTART_GAME_BUTTON, co.EOG_RESTART_BTN_POS[0],
                           co.EOG_RESTART_BTN_POS[1], self.in_out[1])
