@@ -209,11 +209,12 @@ class Level:
         self.circles.remove(v_circle)
 
         for k, cell in enumerate(v_circle.contained_cells):
+            if cell.animation is None:
+                self.points -= cell.points
             cell.unselect(k)
 
             self.max_circles_count_upgrade -= cell.cell_data.bonus_circles
 
-        self.points -= v_circle.points
         self.current_circles_count -= 1
 
         # todo play sound
