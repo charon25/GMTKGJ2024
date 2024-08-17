@@ -1,3 +1,5 @@
+import math
+
 import pygame as pyg
 
 import constants as co
@@ -31,6 +33,8 @@ class Game:
 
         self.current_level: Level = None
 
+        self.medal_dy: tuple[float, float] = (0.0, 0.0)
+
         # Temp
         self.events.set_mouse_button_down_callback(self.click)
         self.events.set_mouse_button_up_callback(self.unclick)
@@ -43,12 +47,12 @@ class Game:
             pyg.image.save(self.screen, 'screenshot.png', 'png')
 
     def click(self, data: dict):
+        x, y = self.scale.to_game_pos(*data['pos'])
         if self.state == GameState.PLAYING_LEVEL:
-            x, y = self.scale.to_game_pos(*data['pos'])
             self.current_level.click_on_level(int(x), int(y))
         elif self.state == GameState.END_OF_LEVEL:
-            # todo temp
-            self.start_next_level()
+            if co.NEXT_LEVEL_BTN_RECT.collidepoint(x, y):
+                self.start_next_level()
         elif self.state == GameState.BROWSER_WAIT_FOR_CLICK:
             # todo temp
             self.start_next_level()
@@ -91,7 +95,7 @@ class Game:
                 self.state = GameState.END_OF_LEVEL
 
         elif self.state == GameState.END_OF_LEVEL:
-            pass
+            self.medal_dy = (self.medal_dy[0] + self.dt / 1000, 4 * math.sin(4 * self.medal_dy[0]))
 
         textures.CELL_ANIMATOR.play_all(self.dt / 1000)
         self.draw_game()
@@ -125,12 +129,14 @@ class Game:
         medals = self.current_level.get_medals()
 
         for k, (pos, medal) in enumerate(zip(co.MEDAL_POS[medal_count], medals)):
-            game_surface.blit(textures.MEDALS[medal], self.scale.to_screen_pos(*pos))
+            game_surface.blit(textures.MEDALS[medal], self.scale.to_screen_pos(pos[0], pos[1] + self.medal_dy[1]))
             utils.draw_text_center(game_surface, f'{self.current_level.required_points[k]} pts',
                                    co.MEDAL_TEXT_FONT_SIZE,
                                    self.scale.to_screen_rect(
                                        pyg.Rect(pos[0], co.MEDAL_TEXT_Y, co.MEDAL_WIDTH, co.MEDAL_TEXT_FONT_SIZE)),
                                    (0, 0, 0), bold=medal > 0)
+
+        game_surface.blit(textures.NEXT_LEVEL_BUTTON, (co.NEXT_LEVEL_BTN_POS[0], co.NEXT_LEVEL_BTN_POS[1] + self.medal_dy[1]))
 
     def loop(self):
         self.frame += 1

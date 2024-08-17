@@ -32,5 +32,4 @@ def draw_text_center(screen: pyg.Surface, text: str, size: int, rect: pyg.Rect, 
                      italic=False, underline=False):
     font: pyg.font.Font = get_font(size, bold=bold, italic=italic, underline=underline)
     img = font.render(text, False, color)
-    print(rect, img.get_size())
     screen.blit(img, (rect.centerx - img.get_width() / 2, rect.centery - img.get_height() / 2))
