@@ -17,7 +17,7 @@ class Level:
 
         self.x_offset, self.y_offset = self.__get_limits()
 
-        self.circles: list[Circle] = list()
+        self.circles: list[ValidatedCircle] = list()
         self.temp_circle: Circle | None = None
         self.temp_selected_cells: list[Cell] = list()
 
@@ -56,9 +56,9 @@ class Level:
             points += cell.get_points()
             multiplier *= cell.cell_data.points_multiplier
 
-        self.temp_selected_cells = []
+        self.circles.append(ValidatedCircle(self.temp_circle, self.temp_selected_cells))
 
-        self.circles.append(self.temp_circle)
+        self.temp_selected_cells = []
         self.temp_circle = None
 
         print(int(points * multiplier))
@@ -91,12 +91,12 @@ class Level:
         return ((constants.WIDTH - (max_x - min_x)) / 2,
                 constants.GAME_Y_OFFSET + (constants.HEIGHT - (max_y - min_y)) / 2)
 
-    def update(self):
+    def update(self, dt: float):
         if self.temp_circle is None:
             return
 
         # todo voir la taille
-        self.temp_circle.radius += 1
+        self.temp_circle.radius += 1 * (dt * 60)
 
         for cell in self.cells:
             if self.temp_circle is None:
@@ -121,8 +121,14 @@ class Level:
         for cell in self.cells:
             cell.draw(surface, self.x_offset, self.y_offset, scale)
 
-        for circle in self.circles:
-            circle.draw(surface, self.x_offset, self.y_offset, scale)
+        for v_circle in self.circles:
+            v_circle.circle.draw(surface, self.x_offset, self.y_offset, scale)
 
         if self.temp_circle is not None:
             self.temp_circle.draw(surface, self.x_offset, self.y_offset, scale)
+
+
+class ValidatedCircle:
+    def __init__(self, circle: Circle, contained_cells: list[Cell]):
+        self.circle = circle
+        self.contained_celles = contained_cells

@@ -15,6 +15,7 @@ class Game:
         self.scale = scale
         self.is_browser = is_browser
 
+        self.target_fps = 60 if not is_browser else 30
         self.clock = pyg.time.Clock()
 
         self.events = EventManager()
@@ -34,8 +35,8 @@ class Game:
                                    + [Cell(3, 1, 1, 1, co.CellType.MULT_2)])
 
     def click(self, data: dict):
-        x, y = data['pos']
-        self.current_level.set_temp_circle_position(x, y)
+        x, y = self.scale.to_game_pos(*data['pos'])
+        self.current_level.set_temp_circle_position(int(x), int(y))
 
     def unclick(self, data: dict):
         self.current_level.validate_temp_circle()
@@ -48,7 +49,7 @@ class Game:
         Window.close()
 
     def loop_game(self):
-        self.current_level.update()
+        self.current_level.update(self.dt / 1000)
 
         textures.CELL_ANIMATOR.play_all(self.dt / 1000)
         self.draw_game()
@@ -59,11 +60,15 @@ class Game:
 
         self.current_level.draw(game_surface, self.scale)
 
+        font = pyg.font.Font(None, 30)
+        text = font.render(f'{self.clock.get_fps():.0f} fps', False, (0, 0, 0))
+        game_surface.blit(text, self.scale.to_screen_pos(10, 10))
+
         self.screen.blit(game_surface, (0, 0))
 
     def loop(self):
         self.frame += 1
-        self.dt = self.clock.tick(60)
+        self.dt = self.clock.tick(self.target_fps)
         self.events.listen()
 
         self.loop_game()
