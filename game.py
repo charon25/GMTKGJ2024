@@ -55,12 +55,15 @@ class Game:
     def click(self, data: dict):
         x, y = self.scale.to_game_pos(*data['pos'])
         if self.state == GameState.PLAYING_LEVEL:
-            if self.options.hold_to_grow or self.current_level.temp_circle is None:
-                self.current_level.click_on_level(int(x), int(y))
-            else:
-                self.current_level.validate_temp_circle()
-        elif self.state == GameState.END_OF_LEVEL:
             if co.RESTART_LEVEL_BTN_RECT.collidepoint(x, y):
+                self.restart_level()
+            else:
+                if self.options.hold_to_grow or self.current_level.temp_circle is None:
+                    self.current_level.click_on_level(int(x), int(y))
+                else:
+                    self.current_level.validate_temp_circle()
+        elif self.state == GameState.END_OF_LEVEL:
+            if co.EOL_RESTART_LEVEL_BTN_RECT.collidepoint(x, y):
                 self.restart_level()
             elif co.NEXT_LEVEL_BTN_RECT.collidepoint(x, y):
                 self.start_next_level()
@@ -153,10 +156,8 @@ class Game:
             game_surface.blit(textures.CHECKBOXES[self.options.hold_to_grow], co.HOLD_BTN_POS)
 
         if self.state == GameState.PLAYING_LEVEL:
-            self.current_level.draw(game_surface, self.scale, self.dt / 1000)
+            self.draw_game(game_surface)
 
-            utils.draw_text(game_surface, f'{self.current_level.points} points', 30, self.scale.to_screen_pos(900, 200),
-                            (200, 0, 0))
         elif self.state == GameState.END_OF_LEVEL:
             self.draw_end_of_level(game_surface)
 
@@ -172,6 +173,16 @@ class Game:
                                    self.scale.to_screen_rect(pyg.Rect(0, 0, co.WIDTH, co.HEIGHT)), (255, 255, 255))
 
         self.screen.blit(game_surface, SHAKER.get_next())
+
+    def draw_game(self, game_surface):
+        self.current_level.draw(game_surface, self.scale, self.dt / 1000)
+
+        utils.draw_text(game_surface, f'{self.current_level.points} points', 30, self.scale.to_screen_pos(900, 200),
+                        (200, 0, 0))
+
+        utils.blit_scaled(game_surface, textures.RESTART_LEVEL_BUTTON, co.RESTART_LEVEL_BTN_POS[0],
+                          co.RESTART_LEVEL_BTN_POS[1],
+                          self.in_out[1])
 
     def draw_end_of_level(self, game_surface: pyg.Surface):
         game_surface.blit(textures.END_OF_LEVEL_BACKGROUND, self.scale.to_screen_pos(co.EOL_BG_X, 0))
@@ -193,7 +204,8 @@ class Game:
                                        pyg.Rect(pos[0], co.MEDAL_TEXT_Y, co.MEDAL_WIDTH, co.MEDAL_TEXT_FONT_SIZE)),
                                    (0, 0, 0), bold=medal > 0)
 
-        utils.blit_scaled(game_surface, textures.RESTART_LEVEL_BUTTON, co.RESTART_LEVEL_BTN_POS[0], co.RESTART_LEVEL_BTN_POS[1],
+        utils.blit_scaled(game_surface, textures.RESTART_LEVEL_BUTTON, co.EOL_RESTART_LEVEL_BTN_POS[0],
+                          co.EOL_RESTART_LEVEL_BTN_POS[1],
                           self.in_out[1])
         utils.blit_scaled(game_surface, textures.NEXT_LEVEL_BUTTON, co.NEXT_LEVEL_BTN_POS[0], co.NEXT_LEVEL_BTN_POS[1],
                           self.in_out[1])

@@ -312,7 +312,7 @@ class Level:
             x = cell.rect.x + dir_x * (co.WIDTH / 2 + 150)
             y = cell.rect.y + dir_y * (co.WIDTH / 2 + 150)
             cell.set_temp_rect(self.cell_size, x, y)
-            speed = random.random() * 10 + 40
+            speed = random.random() * 10 + 55
             cell.velocity = (-speed * dir_x, -speed * dir_y)
         self.animation = 1
 
