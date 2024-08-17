@@ -30,6 +30,8 @@ class Level:
 
         self.points = 0
 
+        self.screen_shake = 0
+
     def __get_limits(self) -> tuple[int, int, int, int]:
         min_x: int = constants.WIDTH
         max_x: int = 0
@@ -109,6 +111,8 @@ class Level:
 
         self.points += earned_points
         self.current_circles_count += 1
+
+        self.screen_shake = earned_points
 
     def destroy_temp_circle(self):
         if self.temp_circle is None:
