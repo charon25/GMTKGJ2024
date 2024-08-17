@@ -5,8 +5,8 @@ from pygame.transform import scale_by
 from animation_manager import Animation, AnimationManager
 from window import Scale
 
-CELL_TEXTURES: list[list[Animation]] = []
-MODIFIERS_TEXTURES: list[Animation] = []
+CELL_TEXTURES: list[list[Animation]] = list()
+MODIFIERS_TEXTURES: list[Animation] = list()
 CELL_ANIMATOR = AnimationManager()
 
 
@@ -17,8 +17,13 @@ def load_scale(filename: str, scale: Scale) -> pyg.Surface:
 
 
 def load_all(scale: Scale):
+    _load_textures(scale)
     _load_cell_animations(scale)
     _load_modifiers_animations(scale)
+
+
+def _load_textures(scale: Scale):
+    pass
 
 
 def _load_cell_animations(scale: Scale):
@@ -26,12 +31,13 @@ def _load_cell_animations(scale: Scale):
 
     base_cell_animations = [
         Animation(
-            [load_scale("resources/textures/base/0.png", scale), load_scale("resources/textures/base/1.png", scale)],
+            [load_scale("resources/textures/cells/base/0.png", scale),
+             load_scale("resources/textures/cells/base/1.png", scale)],
             [0.5, 0.5]
         ),
         Animation(
-            [load_scale("resources/textures/base/selected_0.png", scale),
-             load_scale("resources/textures/base/selected_1.png", scale)],
+            [load_scale("resources/textures/cells/base/selected_0.png", scale),
+             load_scale("resources/textures/cells/base/selected_1.png", scale)],
             [0.5, 0.5]
         )
     ]
@@ -41,8 +47,8 @@ def _load_cell_animations(scale: Scale):
 
     forbidden_cell_animations = [
         Animation(
-            [load_scale("resources/textures/forbidden/0.png", scale),
-             load_scale("resources/textures/forbidden/1.png", scale)],
+            [load_scale("resources/textures/cells/forbidden/0.png", scale),
+             load_scale("resources/textures/cells/forbidden/1.png", scale)],
             [0.5, 0.5]
         )
     ]
@@ -52,7 +58,7 @@ def _load_cell_animations(scale: Scale):
 
     blocker_cell_animations = [
         Animation(
-            [load_scale("resources/textures/blocker/0.png", scale)],
+            [load_scale("resources/textures/cells/blocker/0.png", scale)],
             [0.5]
         )
     ]
@@ -65,14 +71,14 @@ def _load_modifiers_animations(scale: Scale):
     global MODIFIERS_TEXTURES, CELL_ANIMATOR
 
     mult_2_anim = Animation(
-        [load_scale("resources/textures/_modifiers/mult_2/0.png", scale)],
+        [load_scale("resources/textures/cells/_modifiers/mult_2/0.png", scale)],
         [0.5]
     )
     MODIFIERS_TEXTURES.append(mult_2_anim)
     CELL_ANIMATOR.add_animation(mult_2_anim)
 
     circle_p1_anim = Animation(
-        [load_scale("resources/textures/_modifiers/circle_p1/0.png", scale)],
+        [load_scale("resources/textures/cells/_modifiers/circle_p1/0.png", scale)],
         [0.5]
     )
     MODIFIERS_TEXTURES.append(circle_p1_anim)
