@@ -22,6 +22,8 @@ class Cell:
         self.selected: bool = False
         self.temp_selected: bool = False
 
+        self.points = 0
+
         self.animation: CellAnimation | None = None
 
     def __lt__(self, other: 'Cell'):
@@ -36,9 +38,11 @@ class Cell:
         self.temp_selected = False
         self.animation = CellSelectAnimation(order)
 
-    def unselect(self, order: int):
+    def unselect(self, order: int = -1):
         self.selected = False
         self.temp_selected = False
+        self.animation = None
+        self.points = 0
 
     def __get_select_count(self):
         return self.selected + self.temp_selected
@@ -60,7 +64,8 @@ class Cell:
 
             if self.animation.is_finished:
                 self.animation = None
-                screen_shake.SHAKER.shake(3)
+                screen_shake.SHAKER.shake(1 + self.points + self.cell_data.points_multiplier)
+                print(self.points)
                 # todo ajouter son
         else:
             anim_scale = 1.0

@@ -35,7 +35,7 @@ class Game:
         self.current_level = Level(1, 32, 3, [Cell(x, 0, 1, 1) for x in range(8)]
                                    + [Cell(0, 1, 2, 1)] + [Cell(0, 4, 1, 1, co.CellType.FORBIDDEN)]
                                    + [Cell(5, 2, 1, 1, co.CellType.CIRCLE_P1)]
-                                   + [Cell(0, -1, 1, 1, co.CellType.BLOCKER)]
+                                   + [Cell(0, -4, 1, 1, co.CellType.BLOCKER)]
                                    + [Cell(3, 1, 1, 1, co.CellType.MULT_2)])
 
     def click(self, data: dict):

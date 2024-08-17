@@ -20,6 +20,7 @@ class Level:
         self.circles: list[ValidatedCircle] = list()
         self.temp_circle: Circle | None = None
         self.temp_selected_cells: list[Cell] = list()
+        self.temp_multiplier: float = 1.0
         self.circumscribed_circle: Circle = Circle(self.width // 2, self.height // 2, 0)
 
         self.max_circles_count = max_circles_count
@@ -51,6 +52,7 @@ class Level:
 
         self.circles = list()
         self.temp_circle = None
+        self.temp_multiplier = 1.0
         self.circumscribed_circle = Circle(self.width // 2, self.height // 2, 0)
 
         self.max_circles_count_upgrade = 0
@@ -76,6 +78,7 @@ class Level:
             return
 
         self.temp_circle = Circle(x, y, 0)
+        self.temp_multiplier = 1.0
 
     def validate_temp_circle(self):
         if self.temp_circle is None:
@@ -88,16 +91,15 @@ class Level:
         self.temp_selected_cells = sorted(self.temp_selected_cells)
 
         points = 0
-        multiplier = 1.0
         for k, cell in enumerate(self.temp_selected_cells):
             cell.select(k)
+            cell.points += cell.get_points() * self.temp_multiplier
 
             points += cell.get_points()
-            multiplier *= cell.cell_data.points_multiplier
 
             self.max_circles_count_upgrade += cell.cell_data.bonus_circles
 
-        earned_points = int(points * multiplier)
+        earned_points = int(points * self.temp_multiplier)
 
         self.circles.append(ValidatedCircle(self.temp_circle, self.temp_selected_cells, earned_points))
 
@@ -106,6 +108,7 @@ class Level:
         self.circumscribed_circle.radius = max(self.circumscribed_circle.radius, max_dist)
         self.temp_selected_cells = []
         self.temp_circle = None
+        self.temp_multiplier = 1.0
 
         self.points += earned_points
         self.current_circles_count += 1
@@ -119,6 +122,7 @@ class Level:
         self.temp_selected_cells = []
 
         self.temp_circle = None
+        self.temp_multiplier = 1.0
 
         # todo play sound
 
@@ -184,6 +188,7 @@ class Level:
         if cell.cell_data.can_be_selected:
             cell.temp_selected = True
             self.temp_selected_cells.append(cell)
+            self.temp_multiplier *= cell.cell_data.points_multiplier
 
     def draw(self, surface: pyg.Surface, scale: Scale):
         for cell in self.cells:
