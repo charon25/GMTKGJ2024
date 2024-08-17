@@ -9,6 +9,9 @@ class Circle:
         self.y = y
         self.radius = radius
 
+    def __repr__(self):
+        return f'({self.x:0f} ; {self.y:.0f}) r={self.radius:.1f}'
+
     def draw(self, surface: pyg.Surface, x_offset: int, y_offset: int, scale: Scale):
         width = max(1, int(self.radius**0.5 / 2.5))
         pyg.draw.circle(surface, (0, 0, 0), scale.to_game_pos(self.x + x_offset, self.y + y_offset), self.radius * scale.scale, width=width)
@@ -24,3 +27,6 @@ class Circle:
         return (self.contains_point(rect.x, rect.y) or self.contains_point(rect.x + rect.w, rect.y)
                 or self.contains_point(rect.x, rect.y + rect.h) or self.contains_point(rect.x + rect.w, rect.y + rect.h)
                 or rect.collidepoint(self.x, self.y))
+
+    def touch_circle(self, other: 'Circle'):
+        return (self.x - other.x) ** 2 + (self.y - other.y) ** 2 <= (self.radius + other.radius) ** 2

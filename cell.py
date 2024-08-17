@@ -16,21 +16,18 @@ class Cell:
         self.cell_data: CellData = constants.CELL_DATA[self.type.value]
         self.rect: pyg.Rect = None
 
-        self.selected_count: int = 0
+        self.selected: bool = False
         self.temp_selected: bool = False
 
     def generate(self, cell_size: int):
         self.rect = pyg.Rect(self.x * cell_size, self.y * cell_size, self.width * cell_size, self.height * cell_size)
 
-    def is_full_selected(self):
-        return self.selected_count >= self.cell_data.max_select_count
-
     def unselect(self):
-        self.selected_count = 0
+        self.selected = 0
         self.temp_selected = False
 
     def __get_select_count(self):
-        return self.selected_count + self.temp_selected
+        return self.selected + self.temp_selected
 
     def __get_texture(self) -> pyg.Surface:
         return textures.CELL_TEXTURES[self.type.value][self.__get_select_count()].get_current_sprite()

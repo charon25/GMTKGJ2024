@@ -36,7 +36,7 @@ class Game:
 
     def click(self, data: dict):
         x, y = self.scale.to_game_pos(*data['pos'])
-        self.current_level.set_temp_circle_position(int(x), int(y))
+        self.current_level.click_on_level(int(x), int(y))
 
     def unclick(self, data: dict):
         self.current_level.validate_temp_circle()
@@ -63,6 +63,9 @@ class Game:
         font = pyg.font.Font(None, 30)
         text = font.render(f'{self.clock.get_fps():.0f} fps', False, (0, 0, 0))
         game_surface.blit(text, self.scale.to_screen_pos(10, 10))
+
+        text = font.render(f'{self.current_level.points} points', False, (200, 200, 0))
+        game_surface.blit(text, self.scale.to_screen_pos(900, 200))
 
         self.screen.blit(game_surface, (0, 0))
 

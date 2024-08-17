@@ -23,59 +23,6 @@ class Level:
 
         self.points = 0
 
-    def reset(self):
-        self.temp_selected_cells = list()
-        for cell in self.cells:
-            cell.unselect()
-
-        self.circles = list()
-        self.temp_circle = None
-
-        self.points = 0
-
-    def set_temp_circle_position(self, x: int, y: int):
-        if not any(cell.contains_point(x - self.x_offset, y - self.y_offset) for cell in self.cells):
-            return
-
-        self.temp_circle = Circle(x - self.x_offset, y - self.y_offset, 0)
-
-    def validate_temp_circle(self):
-        if self.temp_circle is None:
-            return
-
-        if self.temp_circle.radius < self.cell_size * 0.707:  # sqrt(2) / 2
-            self.destroy_temp_circle()
-            return
-
-        points = 0
-        multiplier = 1.0
-        for cell in self.temp_selected_cells:
-            cell.temp_selected = False
-            cell.selected_count += 1
-
-            points += cell.get_points()
-            multiplier *= cell.cell_data.points_multiplier
-
-        self.circles.append(ValidatedCircle(self.temp_circle, self.temp_selected_cells))
-
-        self.temp_selected_cells = []
-        self.temp_circle = None
-
-        print(int(points * multiplier))
-        self.points += int(points * multiplier)
-
-    def destroy_temp_circle(self):
-        if self.temp_circle is None:
-            return
-
-        for cell in self.temp_selected_cells:
-            cell.temp_selected = False
-        self.temp_selected_cells = []
-
-        self.temp_circle = None
-
-        # todo play sound
-
     def __get_limits(self) -> tuple[int, int]:
         min_x: int = constants.WIDTH
         max_x: int = 0
@@ -91,6 +38,85 @@ class Level:
         return ((constants.WIDTH - (max_x - min_x)) / 2,
                 constants.GAME_Y_OFFSET + (constants.HEIGHT - (max_y - min_y)) / 2)
 
+    def reset(self):
+        self.temp_selected_cells = list()
+        for cell in self.cells:
+            cell.unselect()
+
+        self.circles = list()
+        self.temp_circle = None
+
+        self.points = 0
+
+    # region ===== CERCLE =====
+
+    def click_on_level(self, x: int, y: int):
+        x = x - self.x_offset
+        y = y - self.y_offset
+
+        for v_circle in self.circles:
+            if v_circle.circle.contains_point(x, y):
+                self.remove_circle(v_circle)
+                return
+
+        if not any(cell.contains_point(x, y) for cell in self.cells):
+            return
+
+        self.temp_circle = Circle(x, y, 0)
+
+    def validate_temp_circle(self):
+        if self.temp_circle is None:
+            return
+
+        if self.temp_circle.radius < self.cell_size * 0.707:  # sqrt(2) / 2
+            self.destroy_temp_circle()
+            return
+
+        points = 0
+        multiplier = 1.0
+        for cell in self.temp_selected_cells:
+            cell.selected = True
+            cell.temp_selected = False
+
+            points += cell.get_points()
+            multiplier *= cell.cell_data.points_multiplier
+
+        earned_points = int(points * multiplier)
+
+        self.circles.append(ValidatedCircle(self.temp_circle, self.temp_selected_cells, earned_points))
+
+        self.temp_selected_cells = []
+        self.temp_circle = None
+
+        self.points += earned_points
+
+    def destroy_temp_circle(self):
+        if self.temp_circle is None:
+            return
+
+        for cell in self.temp_selected_cells:
+            cell.temp_selected = False
+        self.temp_selected_cells = []
+
+        self.temp_circle = None
+
+        # todo play sound
+
+    def remove_circle(self, v_circle: 'ValidatedCircle'):
+        self.circles.remove(v_circle)
+
+        for cell in v_circle.contained_cells:
+            cell.selected = False
+            cell.temp_selected = False
+
+        self.points -= v_circle.points
+
+        # todo play sound
+
+    # endregion
+
+    # region ===== UPDATE =====
+
     def update(self, dt: float):
         if self.temp_circle is None:
             return
@@ -102,11 +128,17 @@ class Level:
             if self.temp_circle is None:
                 break
 
-            if not cell.is_full_selected() and not cell.temp_selected:
+            if not cell.selected and not cell.temp_selected:
                 if self.temp_circle.contains_rect(cell.rect):
                     self.__on_cell_in_temp_circle(cell)
                 elif self.temp_circle.touch_rect(cell.rect):
                     self.__on_cell_touch_temp_circle(cell)
+
+        for v_circle in self.circles:
+            if self.temp_circle.touch_circle(v_circle.circle):
+                self.validate_temp_circle()
+                break
+        # temp circle peut être None ici!
 
     def __on_cell_touch_temp_circle(self, cell: Cell):
         if cell.type == CellType.FORBIDDEN:
@@ -127,8 +159,11 @@ class Level:
         if self.temp_circle is not None:
             self.temp_circle.draw(surface, self.x_offset, self.y_offset, scale)
 
+    # endregion
+
 
 class ValidatedCircle:
-    def __init__(self, circle: Circle, contained_cells: list[Cell]):
+    def __init__(self, circle: Circle, contained_cells: list[Cell], points: int):
         self.circle = circle
-        self.contained_celles = contained_cells
+        self.contained_cells = contained_cells
+        self.points = points
