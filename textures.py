@@ -9,6 +9,9 @@ CELL_TEXTURES: list[list[Animation]] = list()
 MODIFIERS_TEXTURES: list[Animation] = list()
 CELL_ANIMATOR = AnimationManager()
 
+LOGO = load("resources/textures/main_menu/logo.png")
+PLAY_BUTTON = load("resources/textures/main_menu/play_btn.png")
+
 END_OF_LEVEL_BACKGROUND = load("resources/textures/eol/end_of_level_bg.png")
 END_OF_LEVEL_TITLE = load("resources/textures/eol/end_of_level_title.png")
 MEDALS: list[pyg.Surface] = [
@@ -33,16 +36,19 @@ def load_all(scale: Scale):
 
 
 def _load_textures(scale: Scale):
-    global END_OF_LEVEL_BACKGROUND, END_OF_LEVEL_TITLE, MEDALS, NEXT_LEVEL_BUTTON
+    global END_OF_LEVEL_BACKGROUND, END_OF_LEVEL_TITLE, MEDALS, NEXT_LEVEL_BUTTON, LOGO, PLAY_BUTTON
 
     if abs(1 - scale.scale) <= 0.03:
         return
+
+    LOGO = scale_by(LOGO, scale.scale)
 
     END_OF_LEVEL_BACKGROUND = scale_by(END_OF_LEVEL_BACKGROUND, scale.scale)
     END_OF_LEVEL_TITLE = scale_by(END_OF_LEVEL_TITLE, scale.scale)
     for i, texture in enumerate(MEDALS):
         MEDALS[i] = scale_by(texture, scale.scale)
     NEXT_LEVEL_BUTTON = scale_by(NEXT_LEVEL_BUTTON, scale.scale)
+    PLAY_BUTTON = scale_by(PLAY_BUTTON, scale.scale)
 
 
 def _load_cell_animations(scale: Scale):

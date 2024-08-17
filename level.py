@@ -26,6 +26,10 @@ class LevelManager:
             cls.INSTANCE = LevelManager()
         return cls.INSTANCE
 
+    @classmethod
+    def reset(cls):
+        cls.INSTANCE = LevelManager()
+
     def load_next_level(self):
         self.load_level(self.number + 1)
 

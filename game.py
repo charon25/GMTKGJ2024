@@ -53,9 +53,12 @@ class Game:
         elif self.state == GameState.END_OF_LEVEL:
             if co.NEXT_LEVEL_BTN_RECT.collidepoint(x, y):
                 self.start_next_level()
+        elif self.state == GameState.MAIN_MENU:
+            if co.PLAY_BTN_RECT.collidepoint(x, y):
+                LevelManager.reset()
+                self.start_next_level()
         elif self.state == GameState.BROWSER_WAIT_FOR_CLICK:
-            # todo temp
-            self.start_next_level()
+            self.open_main_menu()
 
     def unclick(self, data: dict):
         if self.state == GameState.PLAYING_LEVEL:
@@ -72,12 +75,14 @@ class Game:
         if self.is_browser:
             self.state = GameState.BROWSER_WAIT_FOR_CLICK
         else:
-            # todo temp
-            self.start_next_level()
+            self.open_main_menu()
 
     def stop(self):
         self.is_ended = True
         Window.close()
+
+    def open_main_menu(self):
+        self.state = GameState.MAIN_MENU
 
     def start_next_level(self):
         if LevelManager.instance().are_all_level_complete():
@@ -115,6 +120,9 @@ class Game:
         elif self.state == GameState.END_OF_LEVEL:
             self.draw_end_of_level(game_surface)
 
+        elif self.state == GameState.MAIN_MENU:
+            self.draw_main_menu(game_surface)
+
         elif self.state == GameState.BROWSER_WAIT_FOR_CLICK:
             game_surface.fill((0, 0, 0))
             utils.draw_text_center(game_surface, "Click anywhere to start the game", 128,
@@ -143,6 +151,10 @@ class Game:
 
         game_surface.blit(textures.NEXT_LEVEL_BUTTON,
                           (co.NEXT_LEVEL_BTN_POS[0], co.NEXT_LEVEL_BTN_POS[1] + self.medal_dy[1]))
+
+    def draw_main_menu(self, game_surface: pyg.Surface):
+        game_surface.blit(textures.LOGO, co.LOGO_POS)
+        game_surface.blit(textures.PLAY_BUTTON, co.PLAY_BTN_POS)
 
     def loop(self):
         self.frame += 1
