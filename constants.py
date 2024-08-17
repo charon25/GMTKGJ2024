@@ -1,7 +1,16 @@
 import math
-from enum import Enum
+from enum import IntEnum
 
 import pygame as pyg
+
+
+class GameState(IntEnum):
+    NONE = -9999
+    BROWSER_WAIT_FOR_CLICK = -10
+    PLAYING_LEVEL = 0
+    END_OF_LEVEL = 10
+    MAIN_MENU = 20
+
 
 MUSICENDEVENT = pyg.constants.USEREVENT + 1
 
@@ -32,7 +41,7 @@ CELL_DATA = [
 ]
 
 
-class CellType(Enum):
+class CellType(IntEnum):
     BASE = 0
     FORBIDDEN = 1
     MULT_2 = 2
