@@ -48,7 +48,7 @@ class LevelManager:
             return Level(
                 0, 256, 3, [3, 10, 500],
                 [
-                    Cell(0, 0, 1, CellType.MULT_0)
+                    Cell(0, 0, 1, CellType.MULT_5)
                 ]
             )
             return Level(
