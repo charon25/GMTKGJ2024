@@ -9,6 +9,8 @@ CELL_TEXTURES: list[list[Animation]] = list()
 MODIFIERS_TEXTURES: list[Animation] = list()
 CELL_ANIMATOR = AnimationManager()
 
+BACKGROUND = load("resources/textures/background.png")
+
 LOGO = load("resources/textures/main_menu/logo.png")
 PLAY_BUTTON = load("resources/textures/main_menu/play_btn.png")
 
@@ -56,11 +58,12 @@ def load_all(scale: Scale):
 
 def _load_textures(scale: Scale):
     global END_OF_LEVEL_BACKGROUND, END_OF_LEVEL_TITLE, MEDALS, NEXT_LEVEL_BUTTON, LOGO, PLAY_BUTTON, VOLUMES, CHECKBOXES
-    global RESTART_GAME_BUTTON, RESTART_LEVEL_BUTTON
+    global RESTART_GAME_BUTTON, RESTART_LEVEL_BUTTON, BACKGROUND
 
     if abs(1 - scale.scale) <= 0.03:
         return
 
+    BACKGROUND = scale_by(BACKGROUND, scale.scale)
     LOGO = scale_by(LOGO, scale.scale)
 
     END_OF_LEVEL_BACKGROUND = scale_by(END_OF_LEVEL_BACKGROUND, scale.scale)

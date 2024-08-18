@@ -166,22 +166,8 @@ class Game:
 
     def draw(self):
         game_surface = pyg.Surface((co.WIDTH, co.HEIGHT), pyg.SRCALPHA)
-        game_surface.fill((200, 200, 200, 255))
-
-        utils.draw_text(game_surface, f'{self.clock.get_fps():.0f} fps', 16, self.scale.to_screen_pos(1880, 1065),
-                        (0, 0, 0))
-
-        if self.state != GameState.BROWSER_WAIT_FOR_CLICK and self.state != GameState.END_OF_GAME:
-            utils.draw_text_next_to_img(game_surface, textures.VOLUMES[self.options.music_volume],
-                                        co.MUSIC_VOLUME_BTN_POS, co.OPTION_TEXT_BTN_GAP, 'Music', co.OPTION_TEXT_SIZE, co.OPTION_TEXT_COLOR)
-            utils.draw_text_next_to_img(game_surface, textures.VOLUMES[self.options.sfx_volume],
-                                        co.SFX_VOLUME_BTN_POS, co.OPTION_TEXT_BTN_GAP, 'SFX', co.OPTION_TEXT_SIZE, co.OPTION_TEXT_COLOR)
-
-            utils.draw_text_center_right(game_surface, 'Hold click', co.OPTION_TEXT_SIZE,
-                                         self.scale.to_screen_rect(co.HOLD_TEXT_RECT_1), co.OPTION_TEXT_COLOR)
-            utils.draw_text_center_right(game_surface, 'to grow', co.OPTION_TEXT_SIZE,
-                                         self.scale.to_screen_rect(co.HOLD_TEXT_RECT_2), co.OPTION_TEXT_COLOR)
-            game_surface.blit(textures.CHECKBOXES[self.options.hold_to_grow], co.HOLD_BTN_POS)
+        if self.state != GameState.END_OF_LEVEL and self.state != GameState.BROWSER_WAIT_FOR_CLICK:
+            game_surface.blit(textures.BACKGROUND, self.scale.to_screen_pos(0, 0))
 
         if self.state == GameState.PLAYING_LEVEL:
             self.draw_game(game_surface)
@@ -200,19 +186,33 @@ class Game:
             utils.draw_text_center(game_surface, "Click anywhere to start the game", 128,
                                    self.scale.to_screen_rect(pyg.Rect(0, 0, co.WIDTH, co.HEIGHT)), (255, 255, 255))
 
+        utils.draw_text(game_surface, f'{self.clock.get_fps():.0f} fps', 16, self.scale.to_screen_pos(1880, 1065),
+                        (0, 0, 0))
+
+        if self.state != GameState.BROWSER_WAIT_FOR_CLICK and self.state != GameState.END_OF_GAME:
+            utils.draw_text_next_to_img(game_surface, textures.VOLUMES[self.options.music_volume],
+                                        co.MUSIC_VOLUME_BTN_POS, co.OPTION_TEXT_BTN_GAP, 'Music', co.OPTION_TEXT_SIZE, co.OPTION_TEXT_COLOR)
+            utils.draw_text_next_to_img(game_surface, textures.VOLUMES[self.options.sfx_volume],
+                                        co.SFX_VOLUME_BTN_POS, co.OPTION_TEXT_BTN_GAP, 'SFX', co.OPTION_TEXT_SIZE, co.OPTION_TEXT_COLOR)
+
+            utils.draw_text_center_right(game_surface, 'Hold click', co.OPTION_TEXT_SIZE,
+                                         self.scale.to_screen_rect(co.HOLD_TEXT_RECT_1), co.OPTION_TEXT_COLOR)
+            utils.draw_text_center_right(game_surface, 'to grow', co.OPTION_TEXT_SIZE,
+                                         self.scale.to_screen_rect(co.HOLD_TEXT_RECT_2), co.OPTION_TEXT_COLOR)
+            game_surface.blit(textures.CHECKBOXES[self.options.hold_to_grow], co.HOLD_BTN_POS)
+
         self.screen.blit(game_surface, SHAKER.get_next())
 
     def draw_game(self, game_surface):
-        self.current_level.draw(game_surface, self.scale, self.dt / 1000)
+        self.current_level.draw(game_surface, self.scale, self.dt / 1000, self.up_down[1])
 
         utils.blit_scaled(game_surface, textures.RESTART_LEVEL_BUTTON, co.RESTART_LEVEL_BTN_POS[0],
                           co.RESTART_LEVEL_BTN_POS[1],
                           self.in_out[1])
 
     def draw_end_of_level(self, game_surface: pyg.Surface):
-        game_surface.blit(textures.END_OF_LEVEL_BACKGROUND, self.scale.to_screen_pos(co.EOL_BG_X, 0))
-        utils.blit_scaled(game_surface, textures.END_OF_LEVEL_TITLE, co.EOL_TITLE_POS[0], co.EOL_TITLE_POS[1],
-                          self.in_out[1])
+        game_surface.blit(textures.END_OF_LEVEL_BACKGROUND, self.scale.to_screen_pos(0, 0))
+        game_surface.blit(textures.END_OF_LEVEL_TITLE, (co.EOL_TITLE_POS[0], co.EOL_TITLE_POS[1] + self.up_down[1]))
 
         utils.draw_text_center(game_surface, f'{self.current_level.points} points', co.POINTS_TEXT_SIZE[1],
                                self.scale.to_screen_rect(pyg.Rect(*co.POINTS_TEXT_POS, *co.POINTS_TEXT_SIZE)),
