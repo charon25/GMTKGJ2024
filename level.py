@@ -45,7 +45,7 @@ class LevelManager:
 
     def __get_level(self):
         if self.number == 0:
-            return Level(0, 32, 3, [2, 3, 100], [Cell(x, 0, 1, 1) for x in range(8)]
+            return Level(0, 64, 3, [2, 3, 100], [Cell(x, 0, 1, 1) for x in range(8)]
                          + [Cell(0, 1, 2, 1)] + [Cell(0, 4, 1, 1, co.CellType.FORBIDDEN)]
                          + [Cell(5, 2, 1, 1, co.CellType.CIRCLE_P1)]
                          + [Cell(0, -4, 1, 1, co.CellType.BLOCKER)]
@@ -256,8 +256,8 @@ class Level:
         if self.temp_circle is None:
             return
 
-        # todo voir la taille
-        self.temp_circle.radius += 1 * (dt * 60)
+        # ~ 1 sec pour couvrir une cellule
+        self.temp_circle.radius += 1.414 * self.cell_size * dt
 
         for cell in self.cells:
             if self.temp_circle is None:
