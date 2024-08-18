@@ -46,6 +46,12 @@ class LevelManager:
     def __get_level(self):
         if self.number == 0:
             return Level(
+                0, 256, 3, [3, 10, 500],
+                [
+                    Cell(0, 0, 1, CellType.MULT_0)
+                ]
+            )
+            return Level(
                 0, 64, 3, [3, 10, 500],
                 [
                     Cell(0, 0, 1, CellType.MULT_0),
@@ -263,6 +269,8 @@ class Level:
         y = y - self.y_offset
 
         if not self.circumscribed_circle.contains_point(x, y):
+            for v_circle in self.circles:
+                v_circle.circle.is_hovered = False
             return
 
         for v_circle in self.circles:

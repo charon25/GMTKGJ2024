@@ -39,12 +39,10 @@ class Game:
         self.up_down: tuple[float, float] = (0.0, 0.0)
         self.in_out: tuple[float, float] = (0.0, 0.0)
 
-        # Temp
         self.events.set_mouse_button_down_callback(self.click)
         self.events.set_mouse_button_up_callback(self.unclick)
         self.events.set_mouse_motion_callback(self.mouse_move)
         self.events.set_key_down_callback(self.key_down)
-        self.circle = Circle(0, 0, 0)
 
     def key_down(self, data: dict):
         if self.state == GameState.PLAYING_LEVEL:
