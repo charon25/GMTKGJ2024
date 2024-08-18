@@ -97,6 +97,7 @@ class Level:
         self.required_points = sorted(required_points)
         self.points: float = 0.0
         self.cells_in_animation = 0
+        self.countdown: float = 0.0
 
         self.animation = 0  # 0 : pas d'anim, 1 : loading, -1 : unloading
 
@@ -116,7 +117,7 @@ class Level:
             y_center += cell.rect.centery
 
         self.x_offset = (co.WIDTH - (max_x - min_x)) / 2 - min_x
-        self.y_offset = co.GAME_Y_OFFSET + (co.HEIGHT - (max_y - min_y)) / 2 - min_y
+        self.y_offset = co.GAME_Y_OFFSET + (co.HEIGHT - co.GAME_Y_OFFSET - (max_y - min_y)) / 2 - min_y
         self.width = max_x - min_x
         self.height = max_y - min_y
 
@@ -143,6 +144,7 @@ class Level:
         self.points = 0.0
 
         self.cells_in_animation = 0
+        self.countdown = 0.0
 
     # region ===== CERCLE =====
 
@@ -229,6 +231,8 @@ class Level:
         self.points += cell.points
         self.max_circles_count_upgrade += cell.cell_data.bonus_circles
         self.cells_in_animation -= 1
+        if self.points >= self.required_points[0]:
+            self.countdown = 0.2
 
     def on_mouse_move(self, x: int, y: int):
         x = x - self.x_offset
@@ -245,6 +249,7 @@ class Level:
             self.start_unloading_animation()
 
         self.update_temp_circle(dt)
+        self.countdown -= dt
 
     def update_temp_circle(self, dt: float):
         if self.temp_circle is None:
@@ -284,7 +289,7 @@ class Level:
             self.temp_multiplier *= cell.cell_data.points_multiplier
 
     def is_finished(self):
-        return self.animation == 0 and self.cells_in_animation == 0 and self.points >= self.required_points[0]
+        return self.animation == 0 and self.cells_in_animation == 0 and self.countdown <= 0 and self.points >= self.required_points[0]
 
     def draw(self, surface: pyg.Surface, scale: Scale, dt: float):
         if self.animation == 0:
@@ -299,7 +304,10 @@ class Level:
             self.draw_unloading_animation(surface, scale, dt)
 
     def draw_level(self, surface: pyg.Surface, scale: Scale, dt: float):
-        utils.draw_text_next_to_img(surface, pyg.transform.scale(textures.CELL_TEXTURES[0][0].get_current_sprite(), (64, 64)),
+        complete = self.points >= self.required_points[0]
+        utils.draw_text_next_to_img(surface,
+                                    pyg.transform.scale(textures.CELL_TEXTURES[0][complete].get_current_sprite(),
+                                                        (64, 64)),
                                     co.LEVEL_POINTS_COUNT_POS, 15, f'{self.points:.0f} / {self.required_points[0]:.0f}',
                                     64, co.OPTION_TEXT_COLOR)
 
