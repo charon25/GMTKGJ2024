@@ -2,8 +2,9 @@ import math
 
 
 class CellAnimation:
-    def __init__(self, order: int, phases: list[int]):
-        self.frame = -15 * order
+    def __init__(self, total: int, order: int, phases: list[int]):
+        factor = max(1.5, 15 - 3 * total)
+        self.frame = -factor * order
         self.phases = phases
         self.phase = 0
 
@@ -23,8 +24,8 @@ class CellAnimation:
 
 
 class CellSelectAnimation(CellAnimation):
-    def __init__(self, order: int):
-        super().__init__(order, [0, 15, 22])
+    def __init__(self, total: int, order: int):
+        super().__init__(total, order, [0, 15, 22])
 
     def get_scale(self) -> float:
         if self.phase == 0:

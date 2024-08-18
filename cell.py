@@ -4,6 +4,7 @@ import pygame as pyg
 
 import constants
 import textures
+import utils
 from cell_animation import CellAnimation, CellSelectAnimation
 from constants import CellType, CellData
 from screen_shake import SHAKER
@@ -35,6 +36,8 @@ class Cell:
         self.temp_rect: pyg.Rect = None
         self.previous_sign = 0
 
+        self.flying_text: FlyingText | None = None
+
     def __lt__(self, other: 'Cell'):
         return (self.y, self.x) < (other.y, other.x)
 
@@ -64,10 +67,10 @@ class Cell:
         return (self.temp_rect.right + x_offset < 0 or self.temp_rect.left + x_offset > constants.WIDTH
                 or self.temp_rect.bottom + y_offset < 0 or self.temp_rect.top + y_offset > constants.HEIGHT)
 
-    def select(self, order: int):
+    def select(self, total_selected: int, order: int):
         self.selected = True
         self.temp_selected = False
-        self.animation = CellSelectAnimation(order)
+        self.animation = CellSelectAnimation(total_selected, order)
 
     def unselect(self, order: int = -1):
         self.selected = False
@@ -79,7 +82,8 @@ class Cell:
         return self.selected + self.temp_selected
 
     def __get_main_texture(self) -> pyg.Surface:
-        return textures.CELL_TEXTURES[self.cell_data.main_texture][self.__get_select_count()][self.texture_size].get_current_sprite()
+        return textures.CELL_TEXTURES[self.cell_data.main_texture][self.__get_select_count()][
+            self.texture_size].get_current_sprite()
 
     def __get_modifier_texture(self) -> pyg.Surface:
         # -1 is because there aren't modifiers for sizes 16 and 32
@@ -102,8 +106,9 @@ class Cell:
             if self.animation.is_finished:
                 self.animation = None
                 if self.points > 0:
-                    SHAKER.shake(int(1 + self.points + self.cell_data.points_multiplier))
+                    SHAKER.shake(int(1 + self.points))
                 self.on_select(self)
+                self.flying_text = FlyingText(int(self.points), self.rect)
                 # todo ajouter son
         else:
             anim_scale = 1.0
@@ -117,8 +122,37 @@ class Cell:
                 rect.w * total_scale, rect.h * total_scale)),
                          scale.to_screen_pos(rect.x + x_offset, rect.y + y_offset))
 
+        if self.flying_text is not None:
+            self.flying_text.draw(surface, x_offset, y_offset, scale, dt)
+
+            if self.flying_text.lifetime <= 0:
+                self.flying_text = None
+
     def contains_point(self, x: int, y: int):
         return self.rect.collidepoint(x, y)
 
     def get_points(self):
         return constants.POINTS_FROM_SIZE[self.real_size]
+
+
+class FlyingText:
+    def __init__(self, value: int, cell_rect: pyg.Rect):
+        self.text: str = f'+{value:.0f}'
+        self.x: float = cell_rect.centerx
+        self.y: float = cell_rect.top
+        self.lifetime: float = 1
+
+    def draw(self, screen: pyg.Surface, x_offset: int, y_offset: int, scale: Scale, dt: float):
+        self.lifetime -= dt
+        self.y -= 10 * dt
+
+        font = utils.get_font(24)
+        text = font.render(self.text, False, constants.DARK_COLOR)
+        text_white = font.render(self.text, False, constants.LIGHT_COLOR)
+        x = self.x - text.get_width() / 2 + x_offset
+        y = self.y - text.get_width() / 2 + y_offset
+        for dx in (-2, 0, 2):
+            for dy in (-2, 0, 2):
+                screen.blit(text_white, scale.to_screen_pos(x + dx, y + dy))
+
+        screen.blit(text, scale.to_screen_pos(x, y))

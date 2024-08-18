@@ -46,24 +46,9 @@ class LevelManager:
     def __get_level(self):
         if self.number == 0:
             return Level(
-                0, 256, 3, [3, 10, 500],
+                0, 64, 3, [3000, 10000, 5000000],
                 [
-                    Cell(0, 0, 1, CellType.MULT_5)
-                ]
-            )
-            return Level(
-                0, 64, 3, [3, 10, 500],
-                [
-                    Cell(0, 0, 1, CellType.MULT_0),
-                    Cell(1, 0, 1, CellType.MULT_2),
-                    Cell(2, 0, 1, CellType.MULT_5),
-                    Cell(3, 0, 1, CellType.CIRCLE_1),
-                    Cell(4, 0, 1, CellType.CIRCLE_2),
-                    Cell(0, 1, 2, CellType.MULT_0),
-                    Cell(2, 1, 2, CellType.MULT_2),
-                    Cell(4, 1, 2, CellType.MULT_5),
-                    Cell(6, 1, 2, CellType.CIRCLE_1),
-                    Cell(8, 1, 2, CellType.CIRCLE_2),
+                    Cell(k % 5, k // 5, _type=[CellType.BASE, CellType.MULT_2, CellType.MULT_5][k % 3]) for k in range(25)
                 ]
             )
 
@@ -210,7 +195,7 @@ class Level:
 
         points = 0
         for k, cell in enumerate(self.temp_selected_cells):
-            cell.select(k)
+            cell.select(len(self.temp_selected_cells), k)
             cell.points += cell.get_points() * self.temp_multiplier
 
             points += cell.get_points()
