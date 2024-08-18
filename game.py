@@ -90,6 +90,7 @@ class Game:
             self.current_level.validate_temp_circle()
 
     def mouse_move(self, data: dict):
+        print(*data['pos'])
         if self.state == GameState.PLAYING_LEVEL:
             x, y = self.scale.to_game_pos(*data['pos'])
             self.current_level.on_mouse_move(int(x), int(y))
@@ -143,12 +144,11 @@ class Game:
                         (0, 0, 0))
 
         if self.state != GameState.BROWSER_WAIT_FOR_CLICK and self.state != GameState.END_OF_GAME:
-            utils.draw_text_center_right(game_surface, 'Music', co.OPTION_TEXT_SIZE,
-                                         self.scale.to_screen_rect(co.MUSIC_VOLUME_TEXT_RECT), co.OPTION_TEXT_COLOR)
-            game_surface.blit(textures.VOLUMES[self.options.music_volume], co.MUSIC_VOLUME_BTN_POS)
-            utils.draw_text_center_right(game_surface, 'SFX', co.OPTION_TEXT_SIZE,
-                                         self.scale.to_screen_rect(co.SFX_VOLUME_TEXT_RECT), co.OPTION_TEXT_COLOR)
-            game_surface.blit(textures.VOLUMES[self.options.sfx_volume], co.SFX_VOLUME_BTN_POS)
+            utils.draw_text_next_to_img(game_surface, textures.VOLUMES[self.options.music_volume],
+                                        co.MUSIC_VOLUME_BTN_POS, co.OPTION_TEXT_BTN_GAP, 'Music', co.OPTION_TEXT_SIZE, co.OPTION_TEXT_COLOR)
+            utils.draw_text_next_to_img(game_surface, textures.VOLUMES[self.options.sfx_volume],
+                                        co.SFX_VOLUME_BTN_POS, co.OPTION_TEXT_BTN_GAP, 'SFX', co.OPTION_TEXT_SIZE, co.OPTION_TEXT_COLOR)
+
             utils.draw_text_center_right(game_surface, 'Hold click', co.OPTION_TEXT_SIZE,
                                          self.scale.to_screen_rect(co.HOLD_TEXT_RECT_1), co.OPTION_TEXT_COLOR)
             utils.draw_text_center_right(game_surface, 'to grow', co.OPTION_TEXT_SIZE,
@@ -176,9 +176,6 @@ class Game:
 
     def draw_game(self, game_surface):
         self.current_level.draw(game_surface, self.scale, self.dt / 1000)
-
-        utils.draw_text(game_surface, f'{self.current_level.points} points', 30, self.scale.to_screen_pos(900, 200),
-                        (200, 0, 0))
 
         utils.blit_scaled(game_surface, textures.RESTART_LEVEL_BUTTON, co.RESTART_LEVEL_BTN_POS[0],
                           co.RESTART_LEVEL_BTN_POS[1],

@@ -4,6 +4,8 @@ import random
 import pygame as pyg
 
 import constants as co
+import textures
+import utils
 from cell import Cell
 from circle import Circle
 from constants import CellType
@@ -43,14 +45,14 @@ class LevelManager:
 
     def __get_level(self):
         if self.number == 0:
-            return Level(1, 32, 3, [1, 3, 100], [Cell(x, 0, 1, 1) for x in range(8)]
+            return Level(0, 32, 3, [1, 3, 100], [Cell(x, 0, 1, 1) for x in range(8)]
                          + [Cell(0, 1, 2, 1)] + [Cell(0, 4, 1, 1, co.CellType.FORBIDDEN)]
                          + [Cell(5, 2, 1, 1, co.CellType.CIRCLE_P1)]
                          + [Cell(0, -4, 1, 1, co.CellType.BLOCKER)]
                          + [Cell(3, 1, 1, 1, co.CellType.MULT_2)])
         else:
             return Level(1, 32, 3, [4],
-                                       [Cell(1, 0), Cell(0, 1), Cell(2, 1), Cell(1, 2)])
+                         [Cell(1, 0), Cell(0, 1), Cell(2, 1), Cell(1, 2)])
 
     def load_level(self, number: int):
         self.number = number
@@ -286,13 +288,21 @@ class Level:
 
     def draw(self, surface: pyg.Surface, scale: Scale, dt: float):
         if self.animation == 0:
+            utils.draw_text_center(surface, f"Level {self.number + 1}", 150, scale.to_screen_rect(co.LEVEL_TITLE_RECT),
+                                   co.OPTION_TEXT_COLOR)
             self.draw_level(surface, scale, dt)
         elif self.animation == 1:
+            utils.draw_text_center(surface, f"Level {self.number + 1}", 150, scale.to_screen_rect(co.LEVEL_TITLE_RECT),
+                                   co.OPTION_TEXT_COLOR)
             self.draw_loading_animation(surface, scale, dt)
         elif self.animation == -1:
             self.draw_unloading_animation(surface, scale, dt)
 
     def draw_level(self, surface: pyg.Surface, scale: Scale, dt: float):
+        utils.draw_text_next_to_img(surface, pyg.transform.scale(textures.CELL_TEXTURES[0][0].get_current_sprite(), (64, 64)),
+                                    co.LEVEL_POINTS_COUNT_POS, 15, f'{self.points:.0f} / {self.required_points[0]:.0f}',
+                                    64, co.OPTION_TEXT_COLOR)
+
         for cell in self.cells:
             cell.draw(surface, self.x_offset, self.y_offset, scale, dt)
 
@@ -369,7 +379,8 @@ class Level:
         if len(self.required_points) == 2:
             return [2, 1 if self.points >= self.required_points[1] else 0]
         if len(self.required_points) == 3:
-            return [3, 2 if self.points >= self.required_points[1] else 0, 1 if self.points >= self.required_points[2] else 0]
+            return [3, 2 if self.points >= self.required_points[1] else 0,
+                    1 if self.points >= self.required_points[2] else 0]
 
     def got_gold_medal(self):
         return self.points >= self.required_points[-1]

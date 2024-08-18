@@ -44,6 +44,14 @@ def draw_text_center_right(screen: pyg.Surface, text: str, size: int, rect: pyg.
     screen.blit(img, (rect.right - img.get_width(), rect.centery - img.get_height() / 2))
 
 
+def draw_text_next_to_img(screen: pyg.Surface, img: pyg.Surface, img_pos: tuple[float, float], gap: int, text: str, size: int,
+                          color: tuple[int, int, int], bold=False,
+                          italic=False, underline=False):
+    screen.blit(img, img_pos)
+    draw_text_center_right(screen, text, size, pyg.Rect(img_pos[0] - gap, img_pos[1], 0, img.get_height()), color,
+                           bold=bold, italic=italic, underline=underline)
+
+
 def blit_scaled(screen: pyg.Surface, img: pyg.Surface, x: int, y: int, scale: float):
     scaled_img = pyg.transform.scale_by(img, scale)
     dx = (scaled_img.get_width() - img.get_width()) / 2
