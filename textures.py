@@ -42,6 +42,7 @@ RESTART_GAME_BUTTON = load("resources/textures/restart_btn.png")
 REMOVE_CIRCLE = load("resources/textures/remove_circle.png")
 GMTK_LOGO = load("resources/textures/gmtk-logo.png")
 CIRCLE = load("resources/textures/circle.png")
+PREVIOUS_LEVEL_BUTTON = load("resources/textures/prev_level_btn.png")
 
 
 def load_scale(filename: str, scale: Scale) -> pyg.Surface:
@@ -62,7 +63,7 @@ def load_all(scale: Scale):
 
 def _load_textures(scale: Scale):
     global END_OF_LEVEL_BACKGROUND, END_OF_LEVEL_TITLE, MEDALS, NEXT_LEVEL_BUTTON, LOGO, PLAY_BUTTON, VOLUMES, CHECKBOXES
-    global RESTART_GAME_BUTTON, RESTART_LEVEL_BUTTON, BACKGROUND, GMTK_LOGO, CIRCLE
+    global RESTART_GAME_BUTTON, RESTART_LEVEL_BUTTON, BACKGROUND, GMTK_LOGO, CIRCLE, PREVIOUS_LEVEL_BUTTON
 
     if abs(1 - scale.scale) <= 0.03:
         return
@@ -82,6 +83,7 @@ def _load_textures(scale: Scale):
     CHECKBOXES = scale_list(CHECKBOXES, scale)
     GMTK_LOGO = scale_by(GMTK_LOGO, scale.scale)
     CIRCLE = scale_by(CIRCLE, scale.scale)
+    PREVIOUS_LEVEL_BUTTON = scale_by(PREVIOUS_LEVEL_BUTTON, scale.scale)
 
 
 def _get_animation(filename: str, width: int, height: int, total_duration: float, scale: Scale) -> Animation:

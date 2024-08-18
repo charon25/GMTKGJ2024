@@ -3,5 +3,5 @@
 - Curseur
 - Ajouter le texte pour indiquer que c'est mieux sous Windows
 - Ajouter texte pour résolution
-- Bouton niveau précédent
+- logo level complete
 - compteur des points à la fin du niveau ?

@@ -70,8 +70,10 @@ class Game:
 
     def left_click(self, x: float, y: float):
         if self.state == GameState.PLAYING_LEVEL:
-            if co.RESTART_LEVEL_BTN_RECT.collidepoint(x, y):
+            if self.current_level.animation == 0 and co.RESTART_LEVEL_BTN_RECT.collidepoint(x, y):
                 self.restart_level()
+            elif self.current_level.animation == 0 and co.PREVIOUS_LEVEL_BTN_RECT.collidepoint(x, y):
+                self.start_previous_level()
             else:
                 if self.options.hold_to_grow or self.current_level.temp_circle is None:
                     self.current_level.click_on_level(int(x), int(y))
@@ -145,6 +147,14 @@ class Game:
             self.state = GameState.END_OF_GAME
         else:
             LevelManager.instance().load_next_level()
+            self.current_level = LevelManager.instance().current_level
+            self.state = GameState.PLAYING_LEVEL
+
+    def start_previous_level(self):
+        if LevelManager.instance().number == 0:
+            self.state = GameState.MAIN_MENU
+        else:
+            LevelManager.instance().load_previous_level()
             self.current_level = LevelManager.instance().current_level
             self.state = GameState.PLAYING_LEVEL
 
@@ -222,6 +232,11 @@ class Game:
         utils.blit_scaled(game_surface, textures.RESTART_LEVEL_BUTTON,
                           *self.scale.to_screen_pos(co.RESTART_LEVEL_BTN_POS[0],
                                                     co.RESTART_LEVEL_BTN_POS[1]),
+                          self.in_out[1])
+
+        utils.blit_scaled(game_surface, textures.PREVIOUS_LEVEL_BUTTON,
+                          *self.scale.to_screen_pos(co.PREVIOUS_LEVEL_BTN_POS[0],
+                                                    co.PREVIOUS_LEVEL_BTN_POS[1]),
                           self.in_out[1])
 
     def draw_end_of_level(self, game_surface: pyg.Surface):

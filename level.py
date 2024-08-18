@@ -37,6 +37,9 @@ class LevelManager:
     def load_next_level(self):
         self.load_level(self.number + 1)
 
+    def load_previous_level(self):
+        self.load_level(self.number - 1)
+
     def reload_current_level(self):
         # if self.current_level.is_finished():
         #     self.total_gold_medals -= 1
