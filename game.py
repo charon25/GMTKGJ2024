@@ -241,15 +241,15 @@ class Game:
 
     def draw_end_of_game(self, game_surface: pyg.Surface):
         game_surface.blit(textures.LOGO, (co.LOGO_POS[0], co.LOGO_POS[1] + self.up_down[1]))
-        utils.draw_text_center(game_surface, 'CONGRATULATIONS', 180, co.EOG_TEXT1_RECT, co.OPTION_TEXT_COLOR, bold=True)
-        utils.draw_text_center(game_surface, 'You beat the game!', 120, co.EOG_TEXT2_RECT, co.OPTION_TEXT_COLOR)
-        utils.draw_text_center(game_surface, 'Thanks for playing, please rate and comment :)', 60, co.EOG_TEXT3_RECT,
+        utils.draw_text_center(game_surface, 'CONGRATULATIONS', 150, co.EOG_TEXT1_RECT, co.OPTION_TEXT_COLOR, bold=True)
+        utils.draw_text_center(game_surface, 'You beat the game!', 100, co.EOG_TEXT2_RECT, co.OPTION_TEXT_COLOR)
+        utils.draw_text_center(game_surface, 'Thanks for playing, please rate and comment :)', 45, co.EOG_TEXT3_RECT,
                                co.OPTION_TEXT_COLOR)
 
         game_surface.blit(textures.MEDALS[1], self.scale.to_screen_pos(co.EOG_GOLD_MEDAL_POS[0],
                                                                        co.EOG_GOLD_MEDAL_POS[1] + self.up_down[1]))
         utils.draw_text(game_surface,
-                        f'{sum(LevelManager.instance().gold_medals.values())}/{len(LevelManager.instance().gold_medals)}',
+                        f'{sum(LevelManager.instance().gold_medals.values())} / {len(LevelManager.instance().gold_medals)}',
                         co.EOG_GOLD_MEDAL_TEXT_SIZE, co.EOG_GOLD_MEDAL_TEXT_POS, co.OPTION_TEXT_COLOR)
         utils.blit_scaled(game_surface, textures.RESTART_GAME_BUTTON, co.EOG_RESTART_BTN_POS[0],
                           co.EOG_RESTART_BTN_POS[1], self.in_out[1])

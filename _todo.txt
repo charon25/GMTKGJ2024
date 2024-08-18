@@ -5,3 +5,4 @@
 - Ajouter texte pour résolution
 - Bouton niveau précédent
 - Points flottants
+- Bug gros carré et cercle rouge

@@ -310,11 +310,11 @@ class Level:
 
     def draw(self, surface: pyg.Surface, scale: Scale, dt: float, up_down: float):
         if self.animation == 0:
-            utils.draw_text_center(surface, f"Level {self.number + 1}", 150, scale.to_screen_rect(co.LEVEL_TITLE_RECT),
+            utils.draw_text_center(surface, f"Level {self.number + 1}", 140, scale.to_screen_rect(co.LEVEL_TITLE_RECT),
                                    co.OPTION_TEXT_COLOR)
             self.draw_level(surface, scale, dt, up_down)
         elif self.animation == 1:
-            utils.draw_text_center(surface, f"Level {self.number + 1}", 150, scale.to_screen_rect(co.LEVEL_TITLE_RECT),
+            utils.draw_text_center(surface, f"Level {self.number + 1}", 140, scale.to_screen_rect(co.LEVEL_TITLE_RECT),
                                    co.OPTION_TEXT_COLOR)
             self.draw_loading_animation(surface, scale, dt)
         elif self.animation == -1:

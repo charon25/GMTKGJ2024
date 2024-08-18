@@ -42,7 +42,7 @@ def draw_text_center_right(screen: pyg.Surface, text: str, size: int, rect: pyg.
                            italic=False, underline=False):
     font: pyg.font.Font = get_font(size, bold=bold, italic=italic, underline=underline)
     img = font.render(text, False, color)
-    screen.blit(img, (rect.right - img.get_width(), rect.centery - img.get_height() / 2))
+    screen.blit(img, (rect.right - img.get_width(), rect.centery - img.get_height() / 2 + size * co.FONT_Y_OFFSET))
 
 
 def draw_text_next_to_img(screen: pyg.Surface, img: pyg.Surface, img_pos: tuple[float, float], gap: int, text: str,
