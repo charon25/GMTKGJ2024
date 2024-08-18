@@ -106,18 +106,13 @@ def _load_cell_animations(scale: Scale):
     CELL_TEXTURES.append(base_cell_animations)
     CELL_ANIMATOR.add_animationss(base_cell_animations)
 
-    # forbidden_cell_animations = [[_get_animation("resources/textures/cells/forbidden.png", 64, 64, 1.3, scale)]]
-    # CELL_TEXTURES.append(forbidden_cell_animations)
-    # CELL_ANIMATOR.add_animations(*forbidden_cell_animations)
-    #
-    # blocker_cell_animations = [[
-    #     Animation(
-    #         [load_scale("resources/textures/cells/blocker.png", scale)],
-    #         [0.5]
-    #     )]
-    # ]
-    # CELL_TEXTURES.append(blocker_cell_animations)
-    # CELL_ANIMATOR.add_animations(*blocker_cell_animations)
+    forbidden_cell_animations = [_get_all_animations("resources/textures/cells/forbidden", 1.3, scale)]
+    CELL_TEXTURES.append(forbidden_cell_animations)
+    CELL_ANIMATOR.add_animations(*forbidden_cell_animations)
+
+    blocker_cell_animations = [_get_all_animations("resources/textures/cells/blocker", 1, scale)]
+    CELL_TEXTURES.append(blocker_cell_animations)
+    CELL_ANIMATOR.add_animations(*blocker_cell_animations)
 
 
 def _load_modifiers_animations(scale: Scale):

@@ -20,6 +20,7 @@ class Cell:
         self.rect: pyg.Rect = None
         self.index: int = -1
         self.on_select: Callable[['Cell'], None] = lambda cell: None
+        self.real_size = 99999
         self.texture_size = 99999
 
         self.selected: bool = False
@@ -39,7 +40,8 @@ class Cell:
 
     def generate(self, cell_size: int, index: int, on_select: Callable[['Cell'], None]):
         self.rect = pyg.Rect(self.x * cell_size, self.y * cell_size, self.size * cell_size, self.size * cell_size)
-        self.texture_size = constants.TEXTURE_INDEX_FROM_SIZE[self.size * cell_size]
+        self.real_size = self.size * cell_size
+        self.texture_size = constants.TEXTURE_INDEX_FROM_SIZE[self.real_size]
         self.index = index
         self.on_select = on_select
 
@@ -117,5 +119,4 @@ class Cell:
         return self.rect.collidepoint(x, y)
 
     def get_points(self):
-        # todo
-        return int(self.size * self.size * 1.25)
+        return constants.POINTS_FROM_SIZE[self.real_size]

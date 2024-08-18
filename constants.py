@@ -173,6 +173,14 @@ TEXTURE_INDEX_FROM_SIZE: dict[int, int] = {
 }
 TEXTURE_SIZES = sorted(TEXTURE_INDEX_FROM_SIZE.keys())
 
+POINTS_FROM_SIZE: dict[int, int] = {
+    16: 2,
+    32: 5,
+    64: 10,
+    128: 20,
+    256: 40
+}
+
 
 # Screen shake
 SCREEN_SHAKE_COUNT = 5
