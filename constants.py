@@ -15,6 +15,14 @@ class GameState(IntEnum):
 
 MUSICENDEVENT = pyg.constants.USEREVENT + 1
 
+# Inputs
+R_KEY = ord('r')
+ENTER_KEY = ord('\r')
+F12_KEY = 1073741893
+
+LEFT_CLICK = 1
+RIGHT_CLICK = 3
+
 # Window
 WIDTH = 1920
 HEIGHT = 1080

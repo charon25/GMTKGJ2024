@@ -47,13 +47,31 @@ class Game:
         self.circle = Circle(0, 0, 0)
 
     def key_down(self, data: dict):
-        if data['key'] == ord('r'):
-            self.restart_level()
-        elif data['key'] == 1073741893:
+        print(data['key'])
+        if self.state == GameState.PLAYING_LEVEL:
+            if data['key'] == co.R_KEY:
+                self.restart_level()
+        elif self.state == GameState.END_OF_LEVEL:
+            if data['key'] == co.R_KEY:
+                self.restart_level()
+            elif data['key'] == co.ENTER_KEY:
+                self.start_next_level()
+        elif self.state == GameState.MAIN_MENU:
+            if data['key'] == co.ENTER_KEY:
+                self.start_next_level()
+
+        if data['key'] == co.F12_KEY:
             pyg.image.save(self.screen, 'screenshot.png', 'png')
 
     def click(self, data: dict):
         x, y = self.scale.to_game_pos(*data['pos'])
+        button = data['button']
+        if button == co.LEFT_CLICK:
+            self.left_click(x, y)
+        elif button == co.RIGHT_CLICK:
+            self.right_click(x, y)
+
+    def left_click(self, x: float, y: float):
         if self.state == GameState.PLAYING_LEVEL:
             if co.RESTART_LEVEL_BTN_RECT.collidepoint(x, y):
                 self.restart_level()
@@ -62,18 +80,23 @@ class Game:
                     self.current_level.click_on_level(int(x), int(y))
                 else:
                     self.current_level.validate_temp_circle()
+                    self.current_level.on_mouse_move(int(x), int(y))
+
         elif self.state == GameState.END_OF_LEVEL:
             if co.EOL_RESTART_LEVEL_BTN_RECT.collidepoint(x, y):
                 self.restart_level()
             elif co.NEXT_LEVEL_BTN_RECT.collidepoint(x, y):
                 self.start_next_level()
+
         elif self.state == GameState.MAIN_MENU:
             if co.PLAY_BTN_RECT.collidepoint(x, y):
                 LevelManager.reset()
                 self.start_next_level()
+
         elif self.state == GameState.END_OF_GAME:
             if co.EOG_RESTART_BTN_RECT.collidepoint(x, y):
                 self.open_main_menu()
+
         elif self.state == GameState.BROWSER_WAIT_FOR_CLICK:
             self.open_main_menu()
 
@@ -85,12 +108,17 @@ class Game:
             elif co.HOLD_BTN_RECT.collidepoint(x, y):
                 self.options.hold_to_grow = not self.options.hold_to_grow
 
+    def right_click(self, x: float, y: float):
+        if self.state == GameState.PLAYING_LEVEL:
+            self.current_level.destroy_temp_circle()
+
     def unclick(self, data: dict):
         if self.state == GameState.PLAYING_LEVEL and self.options.hold_to_grow:
             self.current_level.validate_temp_circle()
+            x, y = self.scale.to_game_pos(*data['pos'])
+            self.current_level.on_mouse_move(int(x), int(y))
 
     def mouse_move(self, data: dict):
-        print(*data['pos'])
         if self.state == GameState.PLAYING_LEVEL:
             x, y = self.scale.to_game_pos(*data['pos'])
             self.current_level.on_mouse_move(int(x), int(y))
