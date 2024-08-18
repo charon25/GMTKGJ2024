@@ -191,9 +191,11 @@ class Game:
 
         if self.state != GameState.BROWSER_WAIT_FOR_CLICK and self.state != GameState.END_OF_GAME:
             utils.draw_text_next_to_img(game_surface, textures.VOLUMES[self.options.music_volume],
-                                        co.MUSIC_VOLUME_BTN_POS, co.OPTION_TEXT_BTN_GAP, 'Music', co.OPTION_TEXT_SIZE, co.OPTION_TEXT_COLOR)
+                                        co.MUSIC_VOLUME_BTN_POS, co.OPTION_TEXT_BTN_GAP, 'Music', co.OPTION_TEXT_SIZE,
+                                        co.OPTION_TEXT_COLOR)
             utils.draw_text_next_to_img(game_surface, textures.VOLUMES[self.options.sfx_volume],
-                                        co.SFX_VOLUME_BTN_POS, co.OPTION_TEXT_BTN_GAP, 'SFX', co.OPTION_TEXT_SIZE, co.OPTION_TEXT_COLOR)
+                                        co.SFX_VOLUME_BTN_POS, co.OPTION_TEXT_BTN_GAP, 'SFX', co.OPTION_TEXT_SIZE,
+                                        co.OPTION_TEXT_COLOR)
 
             utils.draw_text_center_right(game_surface, 'Hold click', co.OPTION_TEXT_SIZE,
                                          self.scale.to_screen_rect(co.HOLD_TEXT_RECT_1), co.OPTION_TEXT_COLOR)
@@ -214,20 +216,23 @@ class Game:
         game_surface.blit(textures.END_OF_LEVEL_BACKGROUND, self.scale.to_screen_pos(0, 0))
         game_surface.blit(textures.END_OF_LEVEL_TITLE, (co.EOL_TITLE_POS[0], co.EOL_TITLE_POS[1] + self.up_down[1]))
 
-        utils.draw_text_center(game_surface, f'{self.current_level.points:.0f} points', co.POINTS_TEXT_SIZE[1],
-                               self.scale.to_screen_rect(pyg.Rect(*co.POINTS_TEXT_POS, *co.POINTS_TEXT_SIZE)),
-                               (0, 0, 0))
+        utils.draw_text_next_to_img(game_surface,
+                                    textures.CELL_TEXTURES[0][1][co.TEXTURE_INDEX_FROM_SIZE[64]].get_current_sprite(),
+                                    self.scale.to_screen_pos(*co.POINTS_TEXT_POS), 15,
+                                    f'{self.current_level.points:.0f}',
+                                    co.POINTS_TEXT_SIZE[1], co.EOL_TEXT_COLOR)
 
         medal_count = len(self.current_level.required_points) - 1
         medals = self.current_level.get_medals()
 
         for k, (pos, medal) in enumerate(zip(co.MEDAL_POS[medal_count], medals)):
             game_surface.blit(textures.MEDALS[medal], self.scale.to_screen_pos(pos[0], pos[1] + self.up_down[1]))
-            utils.draw_text_center(game_surface, f'{self.current_level.required_points[k]} pts',
-                                   co.MEDAL_TEXT_FONT_SIZE,
-                                   self.scale.to_screen_rect(
-                                       pyg.Rect(pos[0], co.MEDAL_TEXT_Y, co.MEDAL_WIDTH, co.MEDAL_TEXT_FONT_SIZE)),
-                                   (0, 0, 0), bold=medal > 0)
+
+            utils.draw_text_and_img_centered(game_surface, textures.CELL_TEXTURES[0][medal > 0][
+                co.TEXTURE_INDEX_FROM_SIZE[32]].get_current_sprite(), f'{self.current_level.required_points[k]:.0f}',
+                                             co.MEDAL_TEXT_FONT_SIZE, self.scale.to_screen_rect(
+                    pyg.Rect(pos[0], co.MEDAL_TEXT_Y, co.MEDAL_WIDTH, co.MEDAL_TEXT_FONT_SIZE)), 8,
+                                             co.EOL_TEXT_COLOR, bold=medal > 0)
 
         utils.blit_scaled(game_surface, textures.RESTART_LEVEL_BUTTON, co.EOL_RESTART_LEVEL_BTN_POS[0],
                           co.EOL_RESTART_LEVEL_BTN_POS[1],

@@ -38,16 +38,14 @@ def draw_text_center(screen: pyg.Surface, text: str, size: int, rect: pyg.Rect, 
 
 
 def draw_text_center_right(screen: pyg.Surface, text: str, size: int, rect: pyg.Rect,
-                           color: tuple[int, int, int], bold=False,
-                           italic=False, underline=False):
+                           color: tuple[int, int, int], bold=False, italic=False, underline=False):
     font: pyg.font.Font = get_font(size, bold=bold, italic=italic, underline=underline)
     img = font.render(text, False, color)
     screen.blit(img, (rect.right - img.get_width(), rect.centery - img.get_height() / 2 + size * co.FONT_Y_OFFSET))
 
 
 def draw_text_next_to_img(screen: pyg.Surface, img: pyg.Surface, img_pos: tuple[float, float], gap: int, text: str,
-                          size: int,
-                          color: tuple[int, int, int], scale: float = 1.0, bold=False,
+                          size: int, color: tuple[int, int, int], scale: float = 1.0, bold=False,
                           italic=False, underline=False):
     if scale == 1.0:
         screen.blit(img, img_pos)
@@ -55,6 +53,17 @@ def draw_text_next_to_img(screen: pyg.Surface, img: pyg.Surface, img_pos: tuple[
         blit_scaled(screen, img, img_pos[0], img_pos[1], scale)
     draw_text_center_right(screen, text, size, pyg.Rect(img_pos[0] - gap, img_pos[1], 0, img.get_height()), color,
                            bold=bold, italic=italic, underline=underline)
+
+
+def draw_text_and_img_centered(screen: pyg.Surface, img: pyg.Surface, text: str,
+                               size: int, rect: pyg.Rect, gap: int, color: tuple[int, int, int],
+                               bold=False, italic=False, underline=False):
+    font: pyg.font.Font = get_font(size, bold=bold, italic=italic, underline=underline)
+    text_surf = font.render(text, False, color)
+    dw = (rect.width - (img.get_width() + gap + text_surf.get_width())) / 2
+    screen.blit(text_surf,
+                (rect.left + dw, rect.top + (rect.height - text_surf.get_height()) / 2 + co.FONT_Y_OFFSET * size))
+    screen.blit(img, (rect.left + dw + text_surf.get_width() + gap, rect.top + (rect.height - img.get_width()) / 2))
 
 
 def blit_scaled(screen: pyg.Surface, img: pyg.Surface, x: float, y: float, scale: float):
