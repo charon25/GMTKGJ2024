@@ -92,6 +92,7 @@ class Level:
         self.cells = sorted(cells)
 
         self.x_offset, self.y_offset, self.width, self.height = 0, 0, 0, 0
+        self.rect: pyg.Rect = None
         self.__compute_terrain()
 
         self.circles: list[ValidatedCircle] = list()
@@ -131,6 +132,7 @@ class Level:
         self.y_offset = co.GAME_Y_OFFSET + (co.HEIGHT - co.GAME_Y_OFFSET - (max_y - min_y)) / 2 - min_y
         self.width = max_x - min_x
         self.height = max_y - min_y
+        self.rect = pyg.Rect(self.x_offset, self.y_offset, self.width, self.height)
 
         x_center = x_center / len(self.cells)
         y_center = y_center / len(self.cells)

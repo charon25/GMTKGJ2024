@@ -5,6 +5,7 @@ import pygame as pyg
 import constants as co
 import textures
 import utils
+from bg_animation import BackgroundAnimation
 from constants import GameState
 from event_manager import EventManager
 from level import Level, LevelManager
@@ -19,6 +20,7 @@ class Game:
         self.screen = screen
         self.scale = scale
         utils.SCALE = scale.scale
+        self.bg_animation = BackgroundAnimation(self.scale)
         self.is_browser = is_browser
 
         self.target_fps = 60
@@ -70,9 +72,9 @@ class Game:
 
     def left_click(self, x: float, y: float):
         if self.state == GameState.PLAYING_LEVEL:
-            if self.current_level.animation == 0 and co.RESTART_LEVEL_BTN_RECT.collidepoint(x, y):
+            if co.RESTART_LEVEL_BTN_RECT.collidepoint(x, y):
                 self.restart_level()
-            elif self.current_level.animation == 0 and co.PREVIOUS_LEVEL_BTN_RECT.collidepoint(x, y):
+            elif co.PREVIOUS_LEVEL_BTN_RECT.collidepoint(x, y):
                 self.start_previous_level()
             else:
                 if self.options.hold_to_grow or self.current_level.temp_circle is None:
@@ -138,6 +140,9 @@ class Game:
         self.state = GameState.MAIN_MENU
 
     def restart_level(self):
+        if self.current_level.animation == 1:
+            return
+
         LevelManager.instance().reload_current_level()
         self.current_level = LevelManager.instance().current_level
         self.state = GameState.PLAYING_LEVEL
@@ -151,6 +156,9 @@ class Game:
             self.state = GameState.PLAYING_LEVEL
 
     def start_previous_level(self):
+        if self.current_level.animation != 0:
+            return
+
         if LevelManager.instance().number == 0:
             self.state = GameState.MAIN_MENU
         else:
@@ -173,8 +181,18 @@ class Game:
 
     def draw(self):
         game_surface = pyg.Surface((co.WIDTH, co.HEIGHT), pyg.SRCALPHA)
-        if self.state != GameState.END_OF_LEVEL and self.state != GameState.BROWSER_WAIT_FOR_CLICK:
-            game_surface.blit(textures.BACKGROUND, self.scale.to_screen_pos(0, 0))
+        if self.state != GameState.BROWSER_WAIT_FOR_CLICK:
+            game_surface.blit(
+                textures.BACKGROUND if self.state != GameState.END_OF_LEVEL else textures.END_OF_LEVEL_BACKGROUND,
+                self.scale.to_screen_pos(0, 0))
+
+            if self.state == GameState.PLAYING_LEVEL:
+                excl_rect = self.current_level.rect
+            elif self.state == GameState.END_OF_LEVEL:
+                excl_rect = co.EOL_BG_RECT
+            else:
+                excl_rect = None
+            self.bg_animation.draw(game_surface, excl_rect, self.dt / 1000)
 
         if self.state == GameState.PLAYING_LEVEL:
             self.draw_game(game_surface)
@@ -240,15 +258,8 @@ class Game:
                           self.in_out[1])
 
     def draw_end_of_level(self, game_surface: pyg.Surface):
-        game_surface.blit(textures.END_OF_LEVEL_BACKGROUND, self.scale.to_screen_pos(0, 0))
         game_surface.blit(textures.END_OF_LEVEL_TITLE,
                           self.scale.to_screen_pos(co.EOL_TITLE_POS[0], co.EOL_TITLE_POS[1] + self.up_down[1]))
-
-        # utils.draw_text_next_to_img(game_surface,
-        #                             textures.CELL_TEXTURES[0][1][co.TEXTURE_INDEX_FROM_SIZE[64]].get_current_sprite(),
-        #                             self.scale.to_screen_pos(*co.POINTS_TEXT_POS), 15,
-        #                             f'{self.current_level.points:.0f}',
-        #                             co.POINTS_TEXT_SIZE[1], co.DARK_COLOR)
 
         utils.draw_text_and_img_centered(game_surface,
                                          textures.CELL_TEXTURES[0][1][
