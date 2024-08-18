@@ -3,6 +3,7 @@ from pygame.image import load
 from pygame.transform import scale_by
 
 from animation_manager import Animation, AnimationManager
+from images import Image
 from window import Scale
 
 CELL_TEXTURES: list[list[Animation]] = list()
@@ -78,20 +79,21 @@ def _load_textures(scale: Scale):
     CHECKBOXES = scale_list(CHECKBOXES, scale)
 
 
+def _get_animation(filename: str, width: int, height: int, total_duration: float, scale: Scale) -> Animation:
+    textures = Image.slice_horizontally_then_vertically(filename, width, height)
+    count = len(textures)
+    return Animation(
+        [scale_by(texture, scale.scale) for texture in textures],
+        [total_duration / count] * count
+    )
+
+
 def _load_cell_animations(scale: Scale):
     global CELL_TEXTURES, CELL_ANIMATOR
 
     base_cell_animations = [
-        Animation(
-            [load_scale("resources/textures/cells/base/0.png", scale),
-             load_scale("resources/textures/cells/base/1.png", scale)],
-            [0.5, 0.5]
-        ),
-        Animation(
-            [load_scale("resources/textures/cells/base/selected_0.png", scale),
-             load_scale("resources/textures/cells/base/selected_1.png", scale)],
-            [0.5, 0.5]
-        )
+        _get_animation("resources/textures/cells/base/base.png", 64, 64, 4, scale),
+        _get_animation("resources/textures/cells/base/base_selected.png", 64, 64, 4, scale)
     ]
 
     CELL_TEXTURES.append(base_cell_animations)

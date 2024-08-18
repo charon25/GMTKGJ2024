@@ -103,7 +103,7 @@ class Window:
             pygame.display.set_caption(title)
 
         if icon_path != "":
-            icon = images.Image.create(icon_path)
+            icon = pygame.image.load(icon_path)
             pygame.display.set_icon(icon)
 
         return screen
