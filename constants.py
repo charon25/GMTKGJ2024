@@ -61,6 +61,15 @@ RESTART_LEVEL_BTN_SIZE = 120
 RESTART_LEVEL_BTN_POS = (20, 20)
 RESTART_LEVEL_BTN_RECT = pyg.Rect(*RESTART_LEVEL_BTN_POS, RESTART_LEVEL_BTN_SIZE, RESTART_LEVEL_BTN_SIZE)
 
+LEVEL_TUTORIAL_11_RECT = pyg.Rect(0, 950, WIDTH, 50)
+LEVEL_TUTORIAL_12_RECT = pyg.Rect(0, 950, WIDTH, 50)
+LEVEL_TUTORIAL_22_RECT = pyg.Rect(0, 1000, WIDTH, 50)
+
+LEVEL_TUTORIALS: list[list[str]] = [
+    ["Lorem ipsum dolor sit amet, consectetur adipiscing elit,", "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"],
+    ["Excepteur sint occaecat cupidatat non proident, sunt in culpa"]
+]
+
 # End of level
 EOL_BG_WIDTH = 700
 EOL_BG_X = (WIDTH - EOL_BG_WIDTH) / 2

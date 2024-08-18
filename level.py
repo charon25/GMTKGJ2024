@@ -100,6 +100,7 @@ class Level:
         self.countdown: float = 0.0
 
         self.animation = 0  # 0 : pas d'anim, 1 : loading, -1 : unloading
+        self.tutorials: list[str] = co.LEVEL_TUTORIALS[self.number]
 
     def __compute_terrain(self):
         min_x: int = co.WIDTH
@@ -310,6 +311,12 @@ class Level:
                                                         (64, 64)),
                                     co.LEVEL_POINTS_COUNT_POS, 15, f'{self.points:.0f} / {self.required_points[0]:.0f}',
                                     64, co.OPTION_TEXT_COLOR)
+
+        if len(self.tutorials) == 1:
+            utils.draw_text_center(surface, self.tutorials[0], 50, scale.to_screen_rect(co.LEVEL_TUTORIAL_11_RECT), co.OPTION_TEXT_COLOR)
+        elif len(self.tutorials) == 2:
+            utils.draw_text_center(surface, self.tutorials[0], 50, scale.to_screen_rect(co.LEVEL_TUTORIAL_12_RECT), co.OPTION_TEXT_COLOR)
+            utils.draw_text_center(surface, self.tutorials[1], 50, scale.to_screen_rect(co.LEVEL_TUTORIAL_22_RECT), co.OPTION_TEXT_COLOR)
 
         for cell in self.cells:
             cell.draw(surface, self.x_offset, self.y_offset, scale, dt)
