@@ -13,11 +13,12 @@ class BackgroundAnimation:
         self.scale = scale
 
     def draw(self, screen: pyg.Surface, excl_rect: pyg.Rect | None, dt: float):
-        if len(self.cells) < 20:
+        if len(self.cells) < 35:
             x = co.BG_CELL_SIZE * random.randrange(co.WIDTH // co.BG_CELL_SIZE)
             y = co.BG_CELL_SIZE * random.randrange(co.WIDTH // co.BG_CELL_SIZE) + co.BG_CELL_OFFSET_Y
-            if excl_rect is not None and not excl_rect.colliderect(pyg.Rect(x, y, co.BG_CELL_SIZE, co.BG_CELL_SIZE)):
+            if excl_rect is None or not excl_rect.colliderect(pyg.Rect(x, y, co.BG_CELL_SIZE, co.BG_CELL_SIZE)):
                 self.cells.append(BackgroundCell(x, y, self.scale))
+
         for i in range(len(self.cells) - 1, -1, -1):
             cell = self.cells[i]
             if cell.lifetime <= 0:
