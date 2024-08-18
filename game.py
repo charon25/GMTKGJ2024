@@ -180,7 +180,7 @@ class Game:
 
         elif self.state == GameState.BROWSER_WAIT_FOR_CLICK:
             game_surface.fill((0, 0, 0))
-            utils.draw_text_center(game_surface, "Click anywhere to start the game", 128,
+            utils.draw_text_center(game_surface, "Click anywhere to start the game", 100,
                                    self.scale.to_screen_rect(pyg.Rect(0, 0, co.WIDTH, co.HEIGHT)), (255, 255, 255))
 
         utils.draw_text(game_surface, f'{self.clock.get_fps():.0f} fps', 16, self.scale.to_screen_pos(1880, 1065),
