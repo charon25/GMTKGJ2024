@@ -179,38 +179,38 @@ class Game:
             self.draw_end_of_game(game_surface)
 
         elif self.state == GameState.BROWSER_WAIT_FOR_CLICK:
-            game_surface.fill((0, 0, 0))
+            game_surface.fill(co.DARK_COLOR)
             utils.draw_text_center(game_surface, "Click anywhere to start the game", 100,
                                    self.scale.to_screen_rect(pyg.Rect(0, 0, co.WIDTH, co.HEIGHT)), (255, 255, 255))
 
-        utils.draw_text(game_surface, f'{self.clock.get_fps():.0f} fps', 16, self.scale.to_screen_pos(1880, 1065),
-                        (0, 0, 0))
+        utils.draw_text(game_surface, f'{self.clock.get_fps():.0f} fps', 16, self.scale.to_screen_pos(1870, 1060),
+                        co.DARK_COLOR)
 
         if self.state != GameState.BROWSER_WAIT_FOR_CLICK and self.state != GameState.END_OF_GAME:
             utils.draw_text_next_to_img(game_surface, textures.VOLUMES[self.options.music_volume],
                                         self.scale.to_screen_pos(*co.MUSIC_VOLUME_BTN_POS),
                                         co.OPTION_TEXT_BTN_GAP * self.scale.scale, 'Music', co.OPTION_TEXT_SIZE,
-                                        co.OPTION_TEXT_COLOR)
+                                        co.MEDIUM_COLOR)
             utils.draw_text_next_to_img(game_surface, textures.VOLUMES[self.options.sfx_volume],
                                         self.scale.to_screen_pos(*co.SFX_VOLUME_BTN_POS),
                                         co.OPTION_TEXT_BTN_GAP * self.scale.scale, 'SFX', co.OPTION_TEXT_SIZE,
-                                        co.OPTION_TEXT_COLOR)
+                                        co.MEDIUM_COLOR)
 
             utils.draw_text_center_right(game_surface, 'Hold click', co.OPTION_TEXT_SIZE,
-                                         self.scale.to_screen_rect(co.HOLD_TEXT_RECT_1), co.OPTION_TEXT_COLOR)
+                                         self.scale.to_screen_rect(co.HOLD_TEXT_RECT_1), co.MEDIUM_COLOR)
             utils.draw_text_center_right(game_surface, 'to grow', co.OPTION_TEXT_SIZE,
-                                         self.scale.to_screen_rect(co.HOLD_TEXT_RECT_2), co.OPTION_TEXT_COLOR)
+                                         self.scale.to_screen_rect(co.HOLD_TEXT_RECT_2), co.MEDIUM_COLOR)
             game_surface.blit(textures.CHECKBOXES[self.options.hold_to_grow],
                               self.scale.to_screen_pos(*co.HOLD_BTN_POS))
 
         if self.scale.x_offset > 0:
-            pyg.draw.rect(game_surface, (0, 0, 0), pyg.Rect(0, 0, self.scale.x_offset, co.HEIGHT * self.scale.scale))
-            pyg.draw.rect(game_surface, (0, 0, 0),
+            pyg.draw.rect(game_surface, co.BLACK, pyg.Rect(0, 0, self.scale.x_offset, co.HEIGHT * self.scale.scale))
+            pyg.draw.rect(game_surface, co.BLACK,
                           pyg.Rect(self.scale.x_offset + co.WIDTH * self.scale.scale, 0, self.scale.x_offset,
                                    co.HEIGHT * self.scale.scale))
         elif self.scale.y_offset > 0:
-            pyg.draw.rect(game_surface, (0, 0, 0), pyg.Rect(0, 0, co.WIDTH * self.scale.scale, self.scale.y_offset))
-            pyg.draw.rect(game_surface, (0, 0, 0),
+            pyg.draw.rect(game_surface, co.BLACK, pyg.Rect(0, 0, co.WIDTH * self.scale.scale, self.scale.y_offset))
+            pyg.draw.rect(game_surface, co.BLACK,
                           pyg.Rect(0, self.scale.y_offset + co.HEIGHT * self.scale.scale, co.WIDTH * self.scale.scale,
                                    self.scale.y_offset))
 
@@ -233,7 +233,7 @@ class Game:
                                     textures.CELL_TEXTURES[0][1][co.TEXTURE_INDEX_FROM_SIZE[64]].get_current_sprite(),
                                     self.scale.to_screen_pos(*co.POINTS_TEXT_POS), 15,
                                     f'{self.current_level.points:.0f}',
-                                    co.POINTS_TEXT_SIZE[1], co.EOL_TEXT_COLOR)
+                                    co.POINTS_TEXT_SIZE[1], co.DARK_COLOR)
 
         medal_count = len(self.current_level.required_points) - 1
         medals = self.current_level.get_medals()
@@ -245,7 +245,7 @@ class Game:
                 co.TEXTURE_INDEX_FROM_SIZE[32]].get_current_sprite(), f'{self.current_level.required_points[k]:.0f}',
                                              co.MEDAL_TEXT_FONT_SIZE, self.scale.to_screen_rect(
                     pyg.Rect(pos[0], co.MEDAL_TEXT_Y, co.MEDAL_WIDTH, co.MEDAL_TEXT_FONT_SIZE)), 8,
-                                             co.EOL_TEXT_COLOR, bold=medal > 0)
+                                             co.DARK_COLOR, bold=medal > 0)
 
         utils.blit_scaled(game_surface, textures.RESTART_LEVEL_BUTTON,
                           *self.scale.to_screen_pos(co.EOL_RESTART_LEVEL_BTN_POS[0],
@@ -263,18 +263,23 @@ class Game:
 
     def draw_end_of_game(self, game_surface: pyg.Surface):
         game_surface.blit(textures.LOGO, self.scale.to_screen_pos(co.LOGO_POS[0], co.LOGO_POS[1] + self.up_down[1]))
-        utils.draw_text_center(game_surface, 'CONGRATULATIONS', 150, self.scale.to_screen_rect(co.EOG_TEXT1_RECT), co.OPTION_TEXT_COLOR, bold=True)
-        utils.draw_text_center(game_surface, 'You beat the game!', 100, self.scale.to_screen_rect(co.EOG_TEXT2_RECT), co.OPTION_TEXT_COLOR)
-        utils.draw_text_center(game_surface, 'Thanks for playing, please rate and comment :)', 45, self.scale.to_screen_rect(co.EOG_TEXT3_RECT),
-                               co.OPTION_TEXT_COLOR)
+        utils.draw_text_center(game_surface, 'CONGRATULATIONS', 150, self.scale.to_screen_rect(co.EOG_TEXT1_RECT),
+                               co.MEDIUM_COLOR, bold=True)
+        utils.draw_text_center(game_surface, 'You beat the game!', 100, self.scale.to_screen_rect(co.EOG_TEXT2_RECT),
+                               co.MEDIUM_COLOR)
+        utils.draw_text_center(game_surface, 'Thanks for playing, please rate and comment :)', 45,
+                               self.scale.to_screen_rect(co.EOG_TEXT3_RECT),
+                               co.MEDIUM_COLOR)
 
         game_surface.blit(textures.MEDALS[1], self.scale.to_screen_pos(co.EOG_GOLD_MEDAL_POS[0],
                                                                        co.EOG_GOLD_MEDAL_POS[1] + self.up_down[1]))
         utils.draw_text(game_surface,
                         f'{sum(LevelManager.instance().gold_medals.values())} / {len(LevelManager.instance().gold_medals)}',
-                        co.EOG_GOLD_MEDAL_TEXT_SIZE, self.scale.to_screen_pos(*co.EOG_GOLD_MEDAL_TEXT_POS), co.OPTION_TEXT_COLOR)
-        utils.blit_scaled(game_surface, textures.RESTART_GAME_BUTTON, *self.scale.to_screen_pos(co.EOG_RESTART_BTN_POS[0],
-                          co.EOG_RESTART_BTN_POS[1]), self.in_out[1])
+                        co.EOG_GOLD_MEDAL_TEXT_SIZE, self.scale.to_screen_pos(*co.EOG_GOLD_MEDAL_TEXT_POS),
+                        co.MEDIUM_COLOR)
+        utils.blit_scaled(game_surface, textures.RESTART_GAME_BUTTON,
+                          *self.scale.to_screen_pos(co.EOG_RESTART_BTN_POS[0],
+                                                    co.EOG_RESTART_BTN_POS[1]), self.in_out[1])
 
     def loop(self):
         self.frame += 1

@@ -1,5 +1,6 @@
 import pygame as pyg
 
+import constants
 import textures
 import constants as co
 from window import Scale
@@ -17,7 +18,7 @@ class Circle:
 
     def draw(self, surface: pyg.Surface, x_offset: int, y_offset: int, scale: Scale):
         width = max(1, int(self.radius ** 0.5 / 2.5))
-        color = (0, 0, 0) if not self.is_hovered else (255, 0, 0)
+        color = constants.DARK_COLOR if not self.is_hovered else constants.RED_COLOR
         pyg.draw.circle(surface, color, scale.to_screen_pos(self.x + x_offset, self.y + y_offset),
                         self.radius * scale.scale, width=width)
         if self.is_hovered:
