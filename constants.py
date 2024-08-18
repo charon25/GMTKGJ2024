@@ -164,14 +164,15 @@ class CellType(IntEnum):
     BLOCKER = 4
 
 
-TEXTURE_SIZES: dict[int, int] = {
+TEXTURE_INDEX_FROM_SIZE: dict[int, int] = {
     16: 0,
     32: 1,
     64: 2,
     128: 3,
-    256: 4,
-    512: 5
+    256: 4
 }
+TEXTURE_SIZES = sorted(TEXTURE_INDEX_FROM_SIZE.keys())
+
 
 # Screen shake
 SCREEN_SHAKE_COUNT = 5

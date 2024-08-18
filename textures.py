@@ -2,11 +2,12 @@ import pygame as pyg
 from pygame.image import load
 from pygame.transform import scale_by
 
+import constants
 from animation_manager import Animation, AnimationManager
 from images import Image
 from window import Scale
 
-CELL_TEXTURES: list[list[Animation]] = list()
+CELL_TEXTURES: list[list[list[Animation]]] = list()
 MODIFIERS_TEXTURES: list[Animation] = list()
 CELL_ANIMATOR = AnimationManager()
 
@@ -88,28 +89,35 @@ def _get_animation(filename: str, width: int, height: int, total_duration: float
     )
 
 
+def _get_all_animations(filename: str, total_duration: float, scale: Scale) -> list[Animation]:
+    return [
+        _get_animation(f"{filename}/{size}.png", size, size, total_duration, scale)
+        for size in constants.TEXTURE_SIZES
+    ]
+
+
 def _load_cell_animations(scale: Scale):
     global CELL_TEXTURES, CELL_ANIMATOR
 
     base_cell_animations = [
-        _get_animation("resources/textures/cells/base.png", 64, 64, 4, scale),
-        _get_animation("resources/textures/cells/selected.png", 64, 64, 4, scale)
+        _get_all_animations("resources/textures/cells/base", 4, scale),
+        _get_all_animations("resources/textures/cells/selected", 4, scale)
     ]
     CELL_TEXTURES.append(base_cell_animations)
-    CELL_ANIMATOR.add_animations(base_cell_animations)
+    CELL_ANIMATOR.add_animationss(base_cell_animations)
 
-    forbidden_cell_animations = [_get_animation("resources/textures/cells/forbidden.png", 64, 64, 1.3, scale)]
-    CELL_TEXTURES.append(forbidden_cell_animations)
-    CELL_ANIMATOR.add_animations(forbidden_cell_animations)
-
-    blocker_cell_animations = [
-        Animation(
-            [load_scale("resources/textures/cells/blocker.png", scale)],
-            [0.5]
-        )
-    ]
-    CELL_TEXTURES.append(blocker_cell_animations)
-    CELL_ANIMATOR.add_animations(blocker_cell_animations)
+    # forbidden_cell_animations = [[_get_animation("resources/textures/cells/forbidden.png", 64, 64, 1.3, scale)]]
+    # CELL_TEXTURES.append(forbidden_cell_animations)
+    # CELL_ANIMATOR.add_animations(*forbidden_cell_animations)
+    #
+    # blocker_cell_animations = [[
+    #     Animation(
+    #         [load_scale("resources/textures/cells/blocker.png", scale)],
+    #         [0.5]
+    #     )]
+    # ]
+    # CELL_TEXTURES.append(blocker_cell_animations)
+    # CELL_ANIMATOR.add_animations(*blocker_cell_animations)
 
 
 def _load_modifiers_animations(scale: Scale):

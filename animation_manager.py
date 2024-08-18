@@ -81,6 +81,10 @@ class AnimationManager:
         for animation in animations:
             self.add_animation(animation)
 
+    def add_animationss(self, animationss: list[list[Animation]]):
+        for animations in animationss:
+            self.add_animations(animations)
+
     def add_animation(self, animation: Animation) -> None:
         """
         Add the specified animation to the manager.

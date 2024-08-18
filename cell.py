@@ -39,7 +39,7 @@ class Cell:
 
     def generate(self, cell_size: int, index: int, on_select: Callable[['Cell'], None]):
         self.rect = pyg.Rect(self.x * cell_size, self.y * cell_size, self.size * cell_size, self.size * cell_size)
-        self.texture_size = constants.TEXTURE_SIZES[self.size * cell_size]
+        self.texture_size = constants.TEXTURE_INDEX_FROM_SIZE[self.size * cell_size]
         self.index = index
         self.on_select = on_select
 
@@ -77,7 +77,7 @@ class Cell:
         return self.selected + self.temp_selected
 
     def __get_main_texture(self) -> pyg.Surface:
-        return textures.CELL_TEXTURES[self.cell_data.main_texture][self.__get_select_count()][self.rect.width].get_current_sprite()
+        return textures.CELL_TEXTURES[self.cell_data.main_texture][self.__get_select_count()][self.texture_size].get_current_sprite()
 
     def __get_modifier_texture(self) -> pyg.Surface:
         return textures.MODIFIERS_TEXTURES[self.cell_data.modifier_texture].get_current_sprite()

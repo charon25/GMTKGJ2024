@@ -46,12 +46,13 @@ class LevelManager:
     def __get_level(self):
         if self.number == 0:
             return Level(
-                0, 16, 3, [3],
+                0, 256, 3, [3],
                 [
                     Cell(0, 0, 1),
-                    Cell(1, 0, 2),
-                    Cell(3, 0, 4),
-                    Cell(7, 0, 8)
+                    # Cell(1, 0, 2),
+                    # Cell(3, 0, 4),
+                    # Cell(7, 0, 8),
+                    # Cell(15, 0, 16)
                 ]
             )
 
@@ -137,7 +138,11 @@ class Level:
 
         for cell in self.cells:
             mag = math.dist(cell.rect.center, (x_center, y_center))
-            cell.vector = ((cell.rect.centerx - x_center) / mag, (cell.rect.centery - y_center) / mag)
+            if mag == 0:
+                angle = random.random() * 2 * math.pi
+                cell.vector = (math.cos(angle), math.sin(angle))
+            else:
+                cell.vector = ((cell.rect.centerx - x_center) / mag, (cell.rect.centery - y_center) / mag)
 
     def reset(self):
         self.temp_selected_cells = list()
@@ -318,7 +323,7 @@ class Level:
     def draw_level(self, surface: pyg.Surface, scale: Scale, dt: float, up_down: float):
         complete = self.points >= self.required_points[0]
         utils.draw_text_next_to_img(surface,
-                                    pyg.transform.scale(textures.CELL_TEXTURES[0][complete].get_current_sprite(),
+                                    pyg.transform.scale(textures.CELL_TEXTURES[0][complete][co.TEXTURE_INDEX_FROM_SIZE[64]].get_current_sprite(),
                                                         (64, 64)),
                                     co.LEVEL_POINTS_COUNT_POS, 15, f'{self.points:.0f} / {self.required_points[0]:.0f}',
                                     64, co.OPTION_TEXT_COLOR)
