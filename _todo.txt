@@ -5,5 +5,4 @@
 - Ajouter texte pour résolution
 - Bouton niveau précédent
 - Points flottants
-- Nombre de cercles dans l'ui niveau
 - compteur des points à la fin du niveau ?

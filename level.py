@@ -339,7 +339,14 @@ class Level:
     def draw_level(self, surface: pyg.Surface, scale: Scale, dt: float, up_down: float):
         utils.draw_text_next_to_img(surface,
                                     textures.CELL_TEXTURES[0][1][co.TEXTURE_INDEX_FROM_SIZE[64]].get_current_sprite(),
-                                    co.LEVEL_POINTS_COUNT_POS, 15, f'{self.points:.0f} / {self.required_points[0]:.0f}',
+                                    scale.to_screen_pos(*co.LEVEL_POINTS_COUNT_POS), int(15 * scale.scale),
+                                    f'{self.points:.0f} / {self.required_points[0]:.0f}',
+                                    64, co.OPTION_TEXT_COLOR)
+
+        circle_count = max(0, self.max_circles_count + self.max_circles_count_upgrade - self.current_circles_count)
+        utils.draw_text_next_to_img(surface,
+                                    textures.CIRCLE, scale.to_screen_pos(*co.CIRCLES_COUNT_POS),
+                                    int(15 * scale.scale), str(circle_count),
                                     64, co.OPTION_TEXT_COLOR)
 
         if len(self.tutorials) == 1:
