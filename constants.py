@@ -164,6 +164,15 @@ class CellType(IntEnum):
     BLOCKER = 4
 
 
+TEXTURE_SIZES: dict[int, int] = {
+    16: 0,
+    32: 1,
+    64: 2,
+    128: 3,
+    256: 4,
+    512: 5
+}
+
 # Screen shake
 SCREEN_SHAKE_COUNT = 5
 SCREEN_SHAKE_MAX_INTENSITY = 20

@@ -214,7 +214,7 @@ class Game:
         game_surface.blit(textures.END_OF_LEVEL_BACKGROUND, self.scale.to_screen_pos(0, 0))
         game_surface.blit(textures.END_OF_LEVEL_TITLE, (co.EOL_TITLE_POS[0], co.EOL_TITLE_POS[1] + self.up_down[1]))
 
-        utils.draw_text_center(game_surface, f'{self.current_level.points} points', co.POINTS_TEXT_SIZE[1],
+        utils.draw_text_center(game_surface, f'{self.current_level.points:.0f} points', co.POINTS_TEXT_SIZE[1],
                                self.scale.to_screen_rect(pyg.Rect(*co.POINTS_TEXT_POS, *co.POINTS_TEXT_SIZE)),
                                (0, 0, 0))
 

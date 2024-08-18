@@ -11,16 +11,16 @@ from window import Scale
 
 
 class Cell:
-    def __init__(self, x: int, y: int, width: int = 1, height: int = 1, _type: CellType = CellType.BASE):
+    def __init__(self, x: int, y: int, size: int = 1, _type: CellType = CellType.BASE):
         self.x = x
         self.y = y
-        self.width = width
-        self.height = height
+        self.size = size
         self.type = _type
         self.cell_data: CellData = constants.CELL_DATA[self.type.value]
         self.rect: pyg.Rect = None
         self.index: int = -1
         self.on_select: Callable[['Cell'], None] = lambda cell: None
+        self.texture_size = 99999
 
         self.selected: bool = False
         self.temp_selected: bool = False
@@ -38,12 +38,13 @@ class Cell:
         return (self.y, self.x) < (other.y, other.x)
 
     def generate(self, cell_size: int, index: int, on_select: Callable[['Cell'], None]):
-        self.rect = pyg.Rect(self.x * cell_size, self.y * cell_size, self.width * cell_size, self.height * cell_size)
+        self.rect = pyg.Rect(self.x * cell_size, self.y * cell_size, self.size * cell_size, self.size * cell_size)
+        self.texture_size = constants.TEXTURE_SIZES[self.size * cell_size]
         self.index = index
         self.on_select = on_select
 
     def set_temp_rect(self, cell_size: int, x: int, y: int):
-        self.temp_rect = pyg.Rect(x, y, self.width * cell_size, self.height * cell_size)
+        self.temp_rect = pyg.Rect(x, y, self.size * cell_size, self.size * cell_size)
 
     def is_in_place(self) -> bool:
         x = self.temp_rect.centerx - self.rect.centerx
@@ -76,7 +77,7 @@ class Cell:
         return self.selected + self.temp_selected
 
     def __get_main_texture(self) -> pyg.Surface:
-        return textures.CELL_TEXTURES[self.cell_data.main_texture][self.__get_select_count()].get_current_sprite()
+        return textures.CELL_TEXTURES[self.cell_data.main_texture][self.__get_select_count()][self.rect.width].get_current_sprite()
 
     def __get_modifier_texture(self) -> pyg.Surface:
         return textures.MODIFIERS_TEXTURES[self.cell_data.modifier_texture].get_current_sprite()
@@ -117,4 +118,4 @@ class Cell:
 
     def get_points(self):
         # todo
-        return int(self.width * self.height * 1.25)
+        return int(self.size * self.size * 1.25)

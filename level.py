@@ -45,11 +45,21 @@ class LevelManager:
 
     def __get_level(self):
         if self.number == 0:
-            return Level(0, 64, 3, [2, 3, 100], [Cell(x, 0, 1, 1) for x in range(8)]
-                         + [Cell(0, 1, 2, 1)] + [Cell(0, 4, 1, 1, co.CellType.FORBIDDEN)]
-                         + [Cell(5, 2, 1, 1, co.CellType.CIRCLE_P1)]
-                         + [Cell(0, -4, 1, 1, co.CellType.BLOCKER)]
-                         + [Cell(3, 1, 1, 1, co.CellType.MULT_2)])
+            return Level(
+                0, 16, 3, [3],
+                [
+                    Cell(0, 0, 1),
+                    Cell(1, 0, 2),
+                    Cell(3, 0, 4),
+                    Cell(7, 0, 8)
+                ]
+            )
+
+            return Level(0, 64, 3, [2, 3, 100], [Cell(x, 0, 1) for x in range(8)]
+                         + [Cell(0, 1, 2)] + [Cell(0, 4, 1, co.CellType.FORBIDDEN)]
+                         + [Cell(5, 2, 1, co.CellType.CIRCLE_P1)]
+                         + [Cell(0, -4, 1, co.CellType.BLOCKER)]
+                         + [Cell(3, 1, 1, co.CellType.MULT_2)])
         else:
             return Level(1, 64, 3, [4],
                          [Cell(1, 0), Cell(0, 1), Cell(2, 1), Cell(1, 2)])
