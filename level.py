@@ -51,7 +51,7 @@ class LevelManager:
                          + [Cell(0, -4, 1, 1, co.CellType.BLOCKER)]
                          + [Cell(3, 1, 1, 1, co.CellType.MULT_2)])
         else:
-            return Level(1, 32, 3, [4],
+            return Level(1, 64, 3, [4],
                          [Cell(1, 0), Cell(0, 1), Cell(2, 1), Cell(1, 2)])
 
     def load_level(self, number: int):
