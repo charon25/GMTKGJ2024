@@ -229,11 +229,18 @@ class Game:
         game_surface.blit(textures.END_OF_LEVEL_TITLE,
                           self.scale.to_screen_pos(co.EOL_TITLE_POS[0], co.EOL_TITLE_POS[1] + self.up_down[1]))
 
-        utils.draw_text_next_to_img(game_surface,
-                                    textures.CELL_TEXTURES[0][1][co.TEXTURE_INDEX_FROM_SIZE[64]].get_current_sprite(),
-                                    self.scale.to_screen_pos(*co.POINTS_TEXT_POS), 15,
-                                    f'{self.current_level.points:.0f}',
-                                    co.POINTS_TEXT_SIZE[1], co.DARK_COLOR)
+        # utils.draw_text_next_to_img(game_surface,
+        #                             textures.CELL_TEXTURES[0][1][co.TEXTURE_INDEX_FROM_SIZE[64]].get_current_sprite(),
+        #                             self.scale.to_screen_pos(*co.POINTS_TEXT_POS), 15,
+        #                             f'{self.current_level.points:.0f}',
+        #                             co.POINTS_TEXT_SIZE[1], co.DARK_COLOR)
+
+        utils.draw_text_and_img_centered(game_surface,
+                                         textures.CELL_TEXTURES[0][1][
+                                             co.TEXTURE_INDEX_FROM_SIZE[64]].get_current_sprite(),
+                                         f'{self.current_level.points:.0f}',
+                                         co.POINTS_TEXT_SIZE[1], self.scale.to_screen_rect(co.POINTS_TEXT_RECT), 15,
+                                         co.DARK_COLOR)
 
         medal_count = len(self.current_level.required_points) - 1
         medals = self.current_level.get_medals()
