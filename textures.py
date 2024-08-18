@@ -35,6 +35,7 @@ MEDALS: list[pyg.Surface] = [
 RESTART_LEVEL_BUTTON = load("resources/textures/eol/eol_restart_level_btn.png")
 NEXT_LEVEL_BUTTON = load("resources/textures/eol/eol_next_level_btn.png")
 RESTART_GAME_BUTTON = load("resources/textures/restart_btn.png")
+REMOVE_CIRCLE = load("resources/textures/remove_circle.png")
 
 
 def load_scale(filename: str, scale: Scale) -> pyg.Surface:

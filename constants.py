@@ -78,6 +78,8 @@ LEVEL_TUTORIALS: list[list[str]] = [
     ["Excepteur sint occaecat cupidatat non proident, sunt in culpa"]
 ]
 
+REMOVE_CIRCLE_TEXTURE_SIZE = 16
+
 # End of level
 EOL_BG_WIDTH = 700
 EOL_BG_X = (WIDTH - EOL_BG_WIDTH) / 2
