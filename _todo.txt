@@ -1,8 +1,9 @@
 - Changer nom fenêtre
-- Ajouter texte pour navigateur ("cliquer n'importe où pour lancer le jeu")
+- Icône
+- Curseur
 - Ajouter le texte pour indiquer que c'est mieux sous Windows
 - Ajouter texte pour résolution
 
 Level :
-- Min points (+ médailles ?)
+- UI Level
 - Texte tuto
