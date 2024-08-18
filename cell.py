@@ -32,6 +32,7 @@ class Cell:
         self.vector = (0.0, 0.0)
         self.velocity = (0.0, 0.0)
         self.temp_rect: pyg.Rect = None
+        self.previous_sign = 0
 
     def __lt__(self, other: 'Cell'):
         return (self.y, self.x) < (other.y, other.x)
@@ -45,8 +46,16 @@ class Cell:
         self.temp_rect = pyg.Rect(x, y, self.width * cell_size, self.height * cell_size)
 
     def is_in_place(self) -> bool:
-        return (self.temp_rect.centerx - self.rect.centerx) ** 2 + (
-                    self.temp_rect.centery - self.rect.centery) ** 2 < 5000
+        x = self.temp_rect.centerx - self.rect.centerx
+        y = self.temp_rect.centery - self.rect.centery
+        if abs(x) < 0.0001 and abs(y) < 0.0001:
+            return True
+
+        dot = self.vector[0] * (x + self.velocity[0]) + self.vector[1] * (y + self.velocity[1])
+        sign = 1 if dot >= 0 else -1
+        in_place = (sign == -self.previous_sign)
+        self.previous_sign = sign
+        return in_place
 
     def is_outside_screen(self, x_offset: int, y_offset: int):
         return (self.temp_rect.right + x_offset < 0 or self.temp_rect.left + x_offset > constants.WIDTH
