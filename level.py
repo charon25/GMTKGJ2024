@@ -290,13 +290,14 @@ class Level:
             self.temp_multiplier *= cell.cell_data.points_multiplier
 
     def is_finished(self):
-        return self.animation == 0 and self.cells_in_animation == 0 and self.countdown <= 0 and self.points >= self.required_points[0]
+        return self.animation == 0 and self.cells_in_animation == 0 and self.countdown <= 0 and self.points >= \
+            self.required_points[0]
 
-    def draw(self, surface: pyg.Surface, scale: Scale, dt: float):
+    def draw(self, surface: pyg.Surface, scale: Scale, dt: float, up_down: float):
         if self.animation == 0:
             utils.draw_text_center(surface, f"Level {self.number + 1}", 150, scale.to_screen_rect(co.LEVEL_TITLE_RECT),
                                    co.OPTION_TEXT_COLOR)
-            self.draw_level(surface, scale, dt)
+            self.draw_level(surface, scale, dt, up_down)
         elif self.animation == 1:
             utils.draw_text_center(surface, f"Level {self.number + 1}", 150, scale.to_screen_rect(co.LEVEL_TITLE_RECT),
                                    co.OPTION_TEXT_COLOR)
@@ -304,7 +305,7 @@ class Level:
         elif self.animation == -1:
             self.draw_unloading_animation(surface, scale, dt)
 
-    def draw_level(self, surface: pyg.Surface, scale: Scale, dt: float):
+    def draw_level(self, surface: pyg.Surface, scale: Scale, dt: float, up_down: float):
         complete = self.points >= self.required_points[0]
         utils.draw_text_next_to_img(surface,
                                     pyg.transform.scale(textures.CELL_TEXTURES[0][complete].get_current_sprite(),
@@ -313,10 +314,13 @@ class Level:
                                     64, co.OPTION_TEXT_COLOR)
 
         if len(self.tutorials) == 1:
-            utils.draw_text_center(surface, self.tutorials[0], 50, scale.to_screen_rect(co.LEVEL_TUTORIAL_11_RECT), co.OPTION_TEXT_COLOR)
+            utils.draw_text_center(surface, self.tutorials[0], 50, scale.to_screen_rect(co.LEVEL_TUTORIAL_11_RECT),
+                                   co.OPTION_TEXT_COLOR, up_down=up_down)
         elif len(self.tutorials) == 2:
-            utils.draw_text_center(surface, self.tutorials[0], 50, scale.to_screen_rect(co.LEVEL_TUTORIAL_12_RECT), co.OPTION_TEXT_COLOR)
-            utils.draw_text_center(surface, self.tutorials[1], 50, scale.to_screen_rect(co.LEVEL_TUTORIAL_22_RECT), co.OPTION_TEXT_COLOR)
+            utils.draw_text_center(surface, self.tutorials[0], 50, scale.to_screen_rect(co.LEVEL_TUTORIAL_12_RECT),
+                                   co.OPTION_TEXT_COLOR, up_down=up_down)
+            utils.draw_text_center(surface, self.tutorials[1], 50, scale.to_screen_rect(co.LEVEL_TUTORIAL_22_RECT),
+                                   co.OPTION_TEXT_COLOR, up_down=up_down)
 
         for cell in self.cells:
             cell.draw(surface, self.x_offset, self.y_offset, scale, dt)
