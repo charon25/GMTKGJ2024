@@ -238,8 +238,9 @@ class Game:
                           self.in_out[1])
 
     def draw_main_menu(self, game_surface: pyg.Surface):
-        game_surface.blit(textures.LOGO, (co.LOGO_POS[0], co.LOGO_POS[1] + self.up_down[1]))
+        game_surface.blit(textures.LOGO, self.scale.to_screen_pos(co.LOGO_POS[0], co.LOGO_POS[1] + self.up_down[1]))
         utils.blit_scaled(game_surface, textures.PLAY_BUTTON, co.PLAY_BTN_POS[0], co.PLAY_BTN_POS[1], self.in_out[1])
+        game_surface.blit(textures.GMTK_LOGO, self.scale.to_screen_pos(20, 20))
 
     def draw_end_of_game(self, game_surface: pyg.Surface):
         game_surface.blit(textures.LOGO, (co.LOGO_POS[0], co.LOGO_POS[1] + self.up_down[1]))
