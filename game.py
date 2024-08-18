@@ -5,7 +5,6 @@ import pygame as pyg
 import constants as co
 import textures
 import utils
-from circle import Circle
 from constants import GameState
 from event_manager import EventManager
 from level import Level, LevelManager
@@ -19,6 +18,7 @@ class Game:
         self.state: GameState = GameState.NONE
         self.screen = screen
         self.scale = scale
+        utils.SCALE = scale.scale
         self.is_browser = is_browser
 
         self.target_fps = 60
@@ -188,30 +188,46 @@ class Game:
 
         if self.state != GameState.BROWSER_WAIT_FOR_CLICK and self.state != GameState.END_OF_GAME:
             utils.draw_text_next_to_img(game_surface, textures.VOLUMES[self.options.music_volume],
-                                        co.MUSIC_VOLUME_BTN_POS, co.OPTION_TEXT_BTN_GAP, 'Music', co.OPTION_TEXT_SIZE,
+                                        self.scale.to_screen_pos(*co.MUSIC_VOLUME_BTN_POS),
+                                        co.OPTION_TEXT_BTN_GAP * self.scale.scale, 'Music', co.OPTION_TEXT_SIZE,
                                         co.OPTION_TEXT_COLOR)
             utils.draw_text_next_to_img(game_surface, textures.VOLUMES[self.options.sfx_volume],
-                                        co.SFX_VOLUME_BTN_POS, co.OPTION_TEXT_BTN_GAP, 'SFX', co.OPTION_TEXT_SIZE,
+                                        self.scale.to_screen_pos(*co.SFX_VOLUME_BTN_POS),
+                                        co.OPTION_TEXT_BTN_GAP * self.scale.scale, 'SFX', co.OPTION_TEXT_SIZE,
                                         co.OPTION_TEXT_COLOR)
 
             utils.draw_text_center_right(game_surface, 'Hold click', co.OPTION_TEXT_SIZE,
                                          self.scale.to_screen_rect(co.HOLD_TEXT_RECT_1), co.OPTION_TEXT_COLOR)
             utils.draw_text_center_right(game_surface, 'to grow', co.OPTION_TEXT_SIZE,
                                          self.scale.to_screen_rect(co.HOLD_TEXT_RECT_2), co.OPTION_TEXT_COLOR)
-            game_surface.blit(textures.CHECKBOXES[self.options.hold_to_grow], co.HOLD_BTN_POS)
+            game_surface.blit(textures.CHECKBOXES[self.options.hold_to_grow],
+                              self.scale.to_screen_pos(*co.HOLD_BTN_POS))
+
+        if self.scale.x_offset > 0:
+            pyg.draw.rect(game_surface, (0, 0, 0), pyg.Rect(0, 0, self.scale.x_offset, co.HEIGHT * self.scale.scale))
+            pyg.draw.rect(game_surface, (0, 0, 0),
+                          pyg.Rect(self.scale.x_offset + co.WIDTH * self.scale.scale, 0, self.scale.x_offset,
+                                   co.HEIGHT * self.scale.scale))
+        elif self.scale.y_offset > 0:
+            pyg.draw.rect(game_surface, (0, 0, 0), pyg.Rect(0, 0, co.WIDTH * self.scale.scale, self.scale.y_offset))
+            pyg.draw.rect(game_surface, (0, 0, 0),
+                          pyg.Rect(0, self.scale.y_offset + co.HEIGHT * self.scale.scale, co.WIDTH * self.scale.scale,
+                                   self.scale.y_offset))
 
         self.screen.blit(game_surface, SHAKER.get_next())
 
     def draw_game(self, game_surface):
         self.current_level.draw(game_surface, self.scale, self.dt / 1000, self.up_down[1])
 
-        utils.blit_scaled(game_surface, textures.RESTART_LEVEL_BUTTON, co.RESTART_LEVEL_BTN_POS[0],
-                          co.RESTART_LEVEL_BTN_POS[1],
+        utils.blit_scaled(game_surface, textures.RESTART_LEVEL_BUTTON,
+                          *self.scale.to_screen_pos(co.RESTART_LEVEL_BTN_POS[0],
+                                                    co.RESTART_LEVEL_BTN_POS[1]),
                           self.in_out[1])
 
     def draw_end_of_level(self, game_surface: pyg.Surface):
         game_surface.blit(textures.END_OF_LEVEL_BACKGROUND, self.scale.to_screen_pos(0, 0))
-        game_surface.blit(textures.END_OF_LEVEL_TITLE, (co.EOL_TITLE_POS[0], co.EOL_TITLE_POS[1] + self.up_down[1]))
+        game_surface.blit(textures.END_OF_LEVEL_TITLE,
+                          self.scale.to_screen_pos(co.EOL_TITLE_POS[0], co.EOL_TITLE_POS[1] + self.up_down[1]))
 
         utils.draw_text_next_to_img(game_surface,
                                     textures.CELL_TEXTURES[0][1][co.TEXTURE_INDEX_FROM_SIZE[64]].get_current_sprite(),
@@ -231,31 +247,34 @@ class Game:
                     pyg.Rect(pos[0], co.MEDAL_TEXT_Y, co.MEDAL_WIDTH, co.MEDAL_TEXT_FONT_SIZE)), 8,
                                              co.EOL_TEXT_COLOR, bold=medal > 0)
 
-        utils.blit_scaled(game_surface, textures.RESTART_LEVEL_BUTTON, co.EOL_RESTART_LEVEL_BTN_POS[0],
-                          co.EOL_RESTART_LEVEL_BTN_POS[1],
+        utils.blit_scaled(game_surface, textures.RESTART_LEVEL_BUTTON,
+                          *self.scale.to_screen_pos(co.EOL_RESTART_LEVEL_BTN_POS[0],
+                                                    co.EOL_RESTART_LEVEL_BTN_POS[1]),
                           self.in_out[1])
-        utils.blit_scaled(game_surface, textures.NEXT_LEVEL_BUTTON, co.NEXT_LEVEL_BTN_POS[0], co.NEXT_LEVEL_BTN_POS[1],
+        utils.blit_scaled(game_surface, textures.NEXT_LEVEL_BUTTON,
+                          *self.scale.to_screen_pos(co.NEXT_LEVEL_BTN_POS[0], co.NEXT_LEVEL_BTN_POS[1]),
                           self.in_out[1])
 
     def draw_main_menu(self, game_surface: pyg.Surface):
         game_surface.blit(textures.LOGO, self.scale.to_screen_pos(co.LOGO_POS[0], co.LOGO_POS[1] + self.up_down[1]))
-        utils.blit_scaled(game_surface, textures.PLAY_BUTTON, co.PLAY_BTN_POS[0], co.PLAY_BTN_POS[1], self.in_out[1])
+        utils.blit_scaled(game_surface, textures.PLAY_BUTTON,
+                          *self.scale.to_screen_pos(co.PLAY_BTN_POS[0], co.PLAY_BTN_POS[1]), self.in_out[1])
         game_surface.blit(textures.GMTK_LOGO, self.scale.to_screen_pos(20, 20))
 
     def draw_end_of_game(self, game_surface: pyg.Surface):
-        game_surface.blit(textures.LOGO, (co.LOGO_POS[0], co.LOGO_POS[1] + self.up_down[1]))
-        utils.draw_text_center(game_surface, 'CONGRATULATIONS', 150, co.EOG_TEXT1_RECT, co.OPTION_TEXT_COLOR, bold=True)
-        utils.draw_text_center(game_surface, 'You beat the game!', 100, co.EOG_TEXT2_RECT, co.OPTION_TEXT_COLOR)
-        utils.draw_text_center(game_surface, 'Thanks for playing, please rate and comment :)', 45, co.EOG_TEXT3_RECT,
+        game_surface.blit(textures.LOGO, self.scale.to_screen_pos(co.LOGO_POS[0], co.LOGO_POS[1] + self.up_down[1]))
+        utils.draw_text_center(game_surface, 'CONGRATULATIONS', 150, self.scale.to_screen_rect(co.EOG_TEXT1_RECT), co.OPTION_TEXT_COLOR, bold=True)
+        utils.draw_text_center(game_surface, 'You beat the game!', 100, self.scale.to_screen_rect(co.EOG_TEXT2_RECT), co.OPTION_TEXT_COLOR)
+        utils.draw_text_center(game_surface, 'Thanks for playing, please rate and comment :)', 45, self.scale.to_screen_rect(co.EOG_TEXT3_RECT),
                                co.OPTION_TEXT_COLOR)
 
         game_surface.blit(textures.MEDALS[1], self.scale.to_screen_pos(co.EOG_GOLD_MEDAL_POS[0],
                                                                        co.EOG_GOLD_MEDAL_POS[1] + self.up_down[1]))
         utils.draw_text(game_surface,
                         f'{sum(LevelManager.instance().gold_medals.values())} / {len(LevelManager.instance().gold_medals)}',
-                        co.EOG_GOLD_MEDAL_TEXT_SIZE, co.EOG_GOLD_MEDAL_TEXT_POS, co.OPTION_TEXT_COLOR)
-        utils.blit_scaled(game_surface, textures.RESTART_GAME_BUTTON, co.EOG_RESTART_BTN_POS[0],
-                          co.EOG_RESTART_BTN_POS[1], self.in_out[1])
+                        co.EOG_GOLD_MEDAL_TEXT_SIZE, self.scale.to_screen_pos(*co.EOG_GOLD_MEDAL_TEXT_POS), co.OPTION_TEXT_COLOR)
+        utils.blit_scaled(game_surface, textures.RESTART_GAME_BUTTON, *self.scale.to_screen_pos(co.EOG_RESTART_BTN_POS[0],
+                          co.EOG_RESTART_BTN_POS[1]), self.in_out[1])
 
     def loop(self):
         self.frame += 1

@@ -3,9 +3,11 @@ import pygame as pyg
 import constants as co
 
 FONT_CACHE: dict[int, pyg.font.Font] = dict()
+SCALE: float = 1.0
 
 
 def get_font(size, bold=False, italic=False, underline=False):
+    size = int(round(size * SCALE, 0))
     if size in FONT_CACHE:
         font: pyg.font.Font = FONT_CACHE[size]
     else:
