@@ -46,13 +46,18 @@ class LevelManager:
     def __get_level(self):
         if self.number == 0:
             return Level(
-                0, 256, 3, [3, 10, 500],
+                0, 64, 3, [3, 10, 500],
                 [
-                    Cell(0, 0, 1),
-                    # Cell(1, 0, 2),
-                    # Cell(3, 0, 4),
-                    # Cell(7, 0, 8),
-                    # Cell(15, 0, 16)
+                    Cell(0, 0, 1, CellType.MULT_0),
+                    Cell(1, 0, 1, CellType.MULT_2),
+                    Cell(2, 0, 1, CellType.MULT_5),
+                    Cell(3, 0, 1, CellType.CIRCLE_1),
+                    Cell(4, 0, 1, CellType.CIRCLE_2),
+                    Cell(0, 1, 2, CellType.MULT_0),
+                    Cell(2, 1, 2, CellType.MULT_2),
+                    Cell(4, 1, 2, CellType.MULT_5),
+                    Cell(6, 1, 2, CellType.CIRCLE_1),
+                    Cell(8, 1, 2, CellType.CIRCLE_2),
                 ]
             )
 
@@ -165,6 +170,9 @@ class Level:
     # region ===== CERCLE =====
 
     def click_on_level(self, x: int, y: int):
+        if self.animation != 0:
+            return
+
         x = x - self.x_offset
         y = y - self.y_offset
 

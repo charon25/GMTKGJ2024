@@ -82,7 +82,8 @@ class Cell:
         return textures.CELL_TEXTURES[self.cell_data.main_texture][self.__get_select_count()][self.texture_size].get_current_sprite()
 
     def __get_modifier_texture(self) -> pyg.Surface:
-        return textures.MODIFIERS_TEXTURES[self.cell_data.modifier_texture].get_current_sprite()
+        # -1 is because there aren't modifiers for sizes 16 and 32
+        return textures.MODIFIERS_TEXTURES[self.cell_data.modifier_texture][self.texture_size - 2].get_current_sprite()
 
     def draw(self, surface: pyg.Surface, x_offset: int, y_offset: int, scale: Scale, dt: float):
         if not self.displayed:
@@ -100,7 +101,8 @@ class Cell:
 
             if self.animation.is_finished:
                 self.animation = None
-                SHAKER.shake(int(1 + self.points + self.cell_data.points_multiplier))
+                if self.points > 0:
+                    SHAKER.shake(int(1 + self.points + self.cell_data.points_multiplier))
                 self.on_select(self)
                 # todo ajouter son
         else:
@@ -110,7 +112,7 @@ class Cell:
         surface.blit(pyg.transform.scale(self.__get_main_texture(), (rect.w * total_scale, rect.h * total_scale)),
                      scale.to_screen_pos(rect.x + x_offset, rect.y + y_offset))
 
-        if self.cell_data.modifier_texture >= 0:
+        if self.cell_data.modifier_texture >= 0 and self.real_size in constants.VALID_MULTIPLIER_SIZES:
             surface.blit(pyg.transform.scale(self.__get_modifier_texture(), (
                 rect.w * total_scale, rect.h * total_scale)),
                          scale.to_screen_pos(rect.x + x_offset, rect.y + y_offset))

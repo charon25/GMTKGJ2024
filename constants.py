@@ -47,7 +47,8 @@ OPTION_TEXT_BTN_GAP = 10
 
 MUSIC_VOLUME_BTN_POS = (OPTION_BTN_X, 20)
 MUSIC_VOLUME_BTN_RECT = pyg.Rect(*MUSIC_VOLUME_BTN_POS, OPTION_BTN_SIZE, OPTION_BTN_SIZE)
-MUSIC_VOLUME_TEXT_RECT = pyg.Rect(MUSIC_VOLUME_BTN_POS[0] - OPTION_TEXT_BTN_GAP, MUSIC_VOLUME_BTN_POS[1], 0, OPTION_BTN_SIZE)
+MUSIC_VOLUME_TEXT_RECT = pyg.Rect(MUSIC_VOLUME_BTN_POS[0] - OPTION_TEXT_BTN_GAP, MUSIC_VOLUME_BTN_POS[1], 0,
+                                  OPTION_BTN_SIZE)
 
 SFX_VOLUME_BTN_POS = (OPTION_BTN_X, MUSIC_VOLUME_BTN_POS[1] + 20 + OPTION_BTN_SIZE)
 SFX_VOLUME_BTN_RECT = pyg.Rect(*SFX_VOLUME_BTN_POS, OPTION_BTN_SIZE, OPTION_BTN_SIZE)
@@ -74,7 +75,8 @@ LEVEL_TUTORIAL_12_RECT = pyg.Rect(0, 930, WIDTH, 50)
 LEVEL_TUTORIAL_22_RECT = pyg.Rect(0, 1000, WIDTH, 50)
 
 LEVEL_TUTORIALS: list[list[str]] = [
-    ["Lorem ipsum dolor sit amet, consectetur adipiscing elit,", "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"],
+    ["Lorem ipsum dolor sit amet, consectetur adipiscing elit,",
+     "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"],
     ["Excepteur sint occaecat cupidatat non proident, sunt in culpa"]
 ]
 
@@ -117,7 +119,8 @@ MEDAL_TEXT_Y = MEDAL_Y + MEDAL_HEIGHT + 20
 
 EOL_RESTART_LEVEL_BTN_POS = (EOL_BG_X + MEDAL_X, MEDAL_TEXT_Y + MEDAL_TEXT_FONT_SIZE + 100)
 EOL_RESTART_LEVEL_BTN_SIZE = 120
-EOL_RESTART_LEVEL_BTN_RECT = pyg.Rect(*EOL_RESTART_LEVEL_BTN_POS, EOL_RESTART_LEVEL_BTN_SIZE, EOL_RESTART_LEVEL_BTN_SIZE)
+EOL_RESTART_LEVEL_BTN_RECT = pyg.Rect(*EOL_RESTART_LEVEL_BTN_POS, EOL_RESTART_LEVEL_BTN_SIZE,
+                                      EOL_RESTART_LEVEL_BTN_SIZE)
 
 NEXT_LEVEL_BTN_POS = (EOL_BG_X + MEDAL_X + 40 + EOL_RESTART_LEVEL_BTN_SIZE, MEDAL_TEXT_Y + MEDAL_TEXT_FONT_SIZE + 100)
 NEXT_LEVEL_BTN_SIZE = (330, 120)
@@ -130,15 +133,17 @@ EOG_TEXT3_RECT = pyg.Rect((WIDTH - 750) / 2, EOG_TEXT2_RECT[1] + 100, 750, 160)
 
 EOG_GOLD_MEDAL_POS = (530, 812)
 EOG_GOLD_MEDAL_TEXT_SIZE = 60
-EOG_GOLD_MEDAL_TEXT_POS = (EOG_GOLD_MEDAL_POS[0] + MEDAL_WIDTH + 10, EOG_GOLD_MEDAL_POS[1] + (MEDAL_HEIGHT - EOG_GOLD_MEDAL_TEXT_SIZE) / 2)
+EOG_GOLD_MEDAL_TEXT_POS = (
+    EOG_GOLD_MEDAL_POS[0] + MEDAL_WIDTH + 10, EOG_GOLD_MEDAL_POS[1] + (MEDAL_HEIGHT - EOG_GOLD_MEDAL_TEXT_SIZE) / 2)
 
 EOG_RESTART_BTN_SIZE = 200
 EOG_RESTART_BTN_POS = (WIDTH - EOG_GOLD_MEDAL_POS[0] - EOG_RESTART_BTN_SIZE, EOG_GOLD_MEDAL_POS[1])
 EOG_RESTART_BTN_RECT = pyg.Rect(*EOG_RESTART_BTN_POS, EOG_RESTART_BTN_SIZE, EOG_RESTART_BTN_SIZE)
 
+
 # Cells
 class CellData:
-    def __init__(self, main_texture: int, modifier_texture: int, can_be_selected: bool = True,
+    def __init__(self, main_texture: int, modifier_texture: int = -1, can_be_selected: bool = True,
                  points_multiplier: float = 1.0, bonus_circles: int = 0):
         self.main_texture = main_texture  # Index into the CELL_TEXTURES animations list
         self.modifier_texture = modifier_texture  # Index into the MODIFIERS_TEXTURES animations list
@@ -151,18 +156,24 @@ class CellData:
 CELL_DATA = [
     CellData(0, -1),
     CellData(1, -1, can_be_selected=False),
-    CellData(0, 0, points_multiplier=2.0),
-    CellData(0, 1, bonus_circles=1),
-    CellData(2, 0, can_be_selected=False)
+    CellData(2, can_be_selected=False),
+    CellData(0, modifier_texture=0, points_multiplier=0.0),
+    CellData(0, modifier_texture=1, points_multiplier=2.0),
+    CellData(0, modifier_texture=2, points_multiplier=5.0),
+    CellData(0, modifier_texture=3, bonus_circles=1),
+    CellData(0, modifier_texture=4, bonus_circles=2),
 ]
 
 
 class CellType(IntEnum):
     BASE = 0
     FORBIDDEN = 1
-    MULT_2 = 2
-    CIRCLE_P1 = 3
-    BLOCKER = 4
+    BLOCKER = 2
+    MULT_0 = 3
+    MULT_2 = 4
+    MULT_5 = 5
+    CIRCLE_1 = 6
+    CIRCLE_2 = 7
 
 
 TEXTURE_INDEX_FROM_SIZE: dict[int, int] = {
@@ -173,6 +184,7 @@ TEXTURE_INDEX_FROM_SIZE: dict[int, int] = {
     256: 4
 }
 TEXTURE_SIZES = sorted(TEXTURE_INDEX_FROM_SIZE.keys())
+VALID_MULTIPLIER_SIZES = [64, 128]
 
 POINTS_FROM_SIZE: dict[int, int] = {
     16: 2,
@@ -181,7 +193,6 @@ POINTS_FROM_SIZE: dict[int, int] = {
     128: 20,
     256: 40
 }
-
 
 # Screen shake
 SCREEN_SHAKE_COUNT = 5

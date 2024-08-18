@@ -8,7 +8,7 @@ from images import Image
 from window import Scale
 
 CELL_TEXTURES: list[list[list[Animation]]] = list()
-MODIFIERS_TEXTURES: list[Animation] = list()
+MODIFIERS_TEXTURES: list[list[Animation]] = list()
 CELL_ANIMATOR = AnimationManager()
 
 BACKGROUND = load("resources/textures/background.png")
@@ -96,6 +96,15 @@ def _get_all_animations(filename: str, total_duration: float, scale: Scale) -> l
     ]
 
 
+def _get_modifier_animation(filename: str, size: int, initial_duration: float, anim_duration: float, scale: Scale) -> Animation:
+    textures = Image.slice_horizontally_then_vertically(f"{filename}/{size}.png", size, size)
+    count = len(textures)
+    return Animation(
+        [scale_by(texture, scale.scale) for texture in textures],
+        [initial_duration] + [anim_duration / (count - 1)] * (count - 1)
+    )
+
+
 def _load_cell_animations(scale: Scale):
     global CELL_TEXTURES, CELL_ANIMATOR
 
@@ -118,16 +127,10 @@ def _load_cell_animations(scale: Scale):
 def _load_modifiers_animations(scale: Scale):
     global MODIFIERS_TEXTURES, CELL_ANIMATOR
 
-    mult_2_anim = Animation(
-        [load_scale("resources/textures/cells/_modifiers/mult_2/0.png", scale)],
-        [0.5]
-    )
-    MODIFIERS_TEXTURES.append(mult_2_anim)
-    CELL_ANIMATOR.add_animation(mult_2_anim)
-
-    circle_p1_anim = Animation(
-        [load_scale("resources/textures/cells/_modifiers/circle_p1/0.png", scale)],
-        [0.5]
-    )
-    MODIFIERS_TEXTURES.append(circle_p1_anim)
-    CELL_ANIMATOR.add_animation(circle_p1_anim)
+    for folder in ('mult_0', 'mult_2', 'mult_5', 'circle_1', 'circle_2'):
+        animations = [
+            _get_modifier_animation("resources/textures/cells/_modifiers/" + folder, 64, 6, 0.5, scale),
+            _get_modifier_animation("resources/textures/cells/_modifiers/" + folder, 128, 6, 0.5, scale)
+        ]
+        MODIFIERS_TEXTURES.append(animations)
+        CELL_ANIMATOR.add_animations(animations)

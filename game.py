@@ -47,7 +47,6 @@ class Game:
         self.circle = Circle(0, 0, 0)
 
     def key_down(self, data: dict):
-        print(data['key'])
         if self.state == GameState.PLAYING_LEVEL:
             if data['key'] == co.R_KEY:
                 self.restart_level()
