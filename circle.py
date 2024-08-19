@@ -17,13 +17,14 @@ class Circle:
         return f'({self.x:0f} ; {self.y:.0f}) r={self.radius:.1f}'
 
     def draw(self, surface: pyg.Surface, x_offset: int, y_offset: int, scale: Scale):
-        width = max(1, int(self.radius ** 0.5 / 2.5))
+        width = max(1, int(self.radius ** 0.5 / 2.5 * scale.scale))
         color = constants.DARK_COLOR if not self.is_hovered else constants.RED_COLOR
         pyg.draw.circle(surface, color, scale.to_screen_pos(self.x + x_offset, self.y + y_offset),
                         self.radius * scale.scale, width=width)
         if self.is_hovered:
-            surface.blit(textures.REMOVE_CIRCLE, (self.x - co.REMOVE_CIRCLE_TEXTURE_SIZE / 2 + x_offset,
-                                                  self.y - co.REMOVE_CIRCLE_TEXTURE_SIZE / 2 + y_offset))
+            surface.blit(textures.REMOVE_CIRCLE,
+                         scale.to_screen_pos(self.x - co.REMOVE_CIRCLE_TEXTURE_SIZE / 2 + x_offset,
+                                             self.y - co.REMOVE_CIRCLE_TEXTURE_SIZE / 2 + y_offset))
 
     def contains_point(self, x: int, y: int):
         return (x - self.x) ** 2 + (y - self.y) ** 2 <= self.radius ** 2
