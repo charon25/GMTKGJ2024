@@ -69,8 +69,8 @@ class LevelManager:
         self.current_level_ended = True
         self.gold_medals[self.number] = self.current_level.got_gold_medal()
 
-    def are_all_level_complete(self):
-        return self.number == co.LEVEL_COUNT - 1 and self.current_level_ended
+    def on_last_level(self):
+        return self.number == co.LEVEL_COUNT - 1
 
 
 class Level:

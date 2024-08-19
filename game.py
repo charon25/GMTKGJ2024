@@ -50,6 +50,8 @@ class Game:
         if self.state == GameState.PLAYING_LEVEL:
             if data['key'] == co.R_KEY:
                 self.restart_level()
+            if data['key'] == co.N_KEY and self.current_level.animation == 0:
+                self.start_next_level()
         elif self.state == GameState.END_OF_LEVEL:
             if data['key'] == co.R_KEY:
                 self.restart_level()
@@ -149,7 +151,7 @@ class Game:
         self.state = GameState.PLAYING_LEVEL
 
     def start_next_level(self):
-        if LevelManager.instance().are_all_level_complete():
+        if LevelManager.instance().on_last_level():
             self.state = GameState.END_OF_GAME
         else:
             LevelManager.instance().load_next_level()

@@ -79,7 +79,7 @@ HOLD_TEXT_RECT_2 = pyg.Rect(HOLD_BTN_POS[0] - OPTION_TEXT_BTN_GAP, HOLD_BTN_POS[
 
 # Levels
 LEVEL_COUNT = 15
-INITIAL_LEVEL = 10
+INITIAL_LEVEL = 0
 
 LEVEL_TITLE_RECT = pyg.Rect(0, 10, WIDTH, 120)
 
@@ -103,7 +103,7 @@ LEVEL_TUTORIALS: list[list[str]] = [
     ["Click and hold to create and grow a new circle"],
     ["Circle enough squares to get the required amount of points"],
     ["Circles can touch but not contains red squares"],
-    [],
+    ["Use [R] to restart a level, and [N] to skip to the next one"],
     ["Each size gives a different amount of point"],
     ["You can click on a circle to remove it"]
 ]
