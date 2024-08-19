@@ -1,5 +1,4 @@
 - Changer nom fenêtre
-- Icône
 - Logo
 
 - compteur des points à la fin du niveau ?

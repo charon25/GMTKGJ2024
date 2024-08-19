@@ -8,7 +8,7 @@ from window import Window
 def main():
     pygame.init()
     pygame.display.init()
-    screen = Window.create(width=1920, height=1080, fullscreen=True, title='GMTK 2024', icon_path='resources/icon.ico')
+    screen = Window.create(width=1920, height=1080, fullscreen=True, title='Squale', icon_path='resources/icon.ico')
     scale = Window.get_scale(co.WIDTH, co.HEIGHT, screen=screen)
 
     game = Game(screen, scale, is_browser=False)
