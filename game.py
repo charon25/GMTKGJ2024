@@ -125,7 +125,7 @@ class Game:
                 sound_to_play = sounds.BUTTON_CLICK
 
         if sound_to_play:
-            SoundManager.instance().play_random_sound(sound_to_play)
+            SoundManager.instance().play_sound(sound_to_play)
 
     def right_click(self, x: float, y: float):
         if self.state == GameState.PLAYING_LEVEL:

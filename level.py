@@ -206,7 +206,7 @@ class Level:
                 return
 
         if self.current_circles_count >= self.max_circles_count + self.max_circles_count_upgrade:
-            SoundManager.instance().play_random_sound(sounds.NO_CIRCLE_LEFT)
+            SoundManager.instance().play_sound(sounds.NO_CIRCLE_LEFT)
             return
 
         if not any(cell.contains_point(x, y) for cell in self.cells):
@@ -214,7 +214,7 @@ class Level:
 
         self.temp_circle = Circle(x, y, 0)
         self.temp_multiplier = 1.0
-        SoundManager.instance().play_random_sound(sounds.GROWING_CIRCLE, volume=0.4)
+        SoundManager.instance().play_sound(sounds.GROWING_CIRCLE, volume=0.4)
 
     def validate_temp_circle(self, sound: str = sounds.VALIDATE_CIRCLE_CLICK):
         if self.temp_circle is None:
@@ -247,7 +247,7 @@ class Level:
         self.current_circles_count += 1
 
         SoundManager.instance().stop_sound(sounds.GROWING_CIRCLE)
-        SoundManager.instance().play_random_sound(sound)
+        SoundManager.instance().play_sound(sound)
 
     def destroy_temp_circle(self, sound: str = ""):
         if self.temp_circle is None:
@@ -262,7 +262,7 @@ class Level:
 
         SoundManager.instance().stop_sound(sounds.GROWING_CIRCLE)
         if sound:
-            SoundManager.instance().play_random_sound(sound)
+            SoundManager.instance().play_sound(sound)
 
     def remove_circle(self, v_circle: 'ValidatedCircle'):
         self.circles.remove(v_circle)
@@ -279,7 +279,7 @@ class Level:
 
         self.current_circles_count -= 1
 
-        SoundManager.instance().play_random_sound(sounds.REMOVE_CIRCLE, volume=0.5)
+        SoundManager.instance().play_sound(sounds.REMOVE_CIRCLE, volume=0.5)
 
     # endregion
 
@@ -288,6 +288,9 @@ class Level:
     def on_cell_selected(self, cell: Cell):
         self.points += cell.points
         self.max_circles_count_upgrade += cell.cell_data.bonus_circles
+        if cell.cell_data.bonus_circles > 0:
+            SoundManager.instance().play_sound(sounds.BONUS_CIRCLE)
+
         self.cells_in_animation -= 1
         if cell.type == CellType.PACIFIER:
             for c in self._flood_fill(cell.x, cell.y):
@@ -413,7 +416,7 @@ class Level:
             cell.velocity = (-speed * dir_x, -speed * dir_y)
         self.animation = 1
 
-        SoundManager.instance().play_random_sound(sounds.START_LEVEL)
+        SoundManager.instance().play_sound(sounds.START_LEVEL)
 
     def draw_loading_animation(self, surface: pyg.Surface, scale: Scale, dt: float):
         placed_cells_count = 0
@@ -441,7 +444,7 @@ class Level:
             cell.velocity = (speed * dir_x, speed * dir_y)
         self.animation = -1
 
-        SoundManager.instance().play_random_sound(sounds.END_LEVEL)
+        SoundManager.instance().play_sound(sounds.END_LEVEL)
 
     def draw_unloading_animation(self, surface: pyg.Surface, scale: Scale, dt: float):
         removed_cells_count = 0

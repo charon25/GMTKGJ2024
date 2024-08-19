@@ -9,8 +9,7 @@
 - Cercle supprimé OK
 
 - Case sélectionné (après animation) OK
-- Son powerup (?)
+- Son cercle bonus OK
 
 - Anim début niveau OK
 - Anim fin niveau OK
-- Son niveau réussi

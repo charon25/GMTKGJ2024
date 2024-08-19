@@ -10,7 +10,7 @@ class SoundManager:
     INSTANCE = None
 
     def __init__(self):
-        self.sounds: dict[str, list[mixer.Sound]] = dict()
+        self.sounds: dict[str, mixer.Sound] = dict()
         self.musics: dict[str, str] = dict()
         mixer.init()
         mixer.music.set_endevent(constants.MUSICENDEVENT)
@@ -24,31 +24,24 @@ class SoundManager:
 
     def add_sound(self, sound_path: str, sound_name: str) -> None:
         sound = mixer.Sound(sound_path)
+        self.sounds[sound_name] = sound
 
-        if sound_name not in self.sounds:
-            self.sounds[sound_name] = []
-        self.sounds[sound_name].append(sound)
-
-    def play_random_sound(self, sound_name: str, volume: float = 1.0) -> None:
-        sound_candidates = self.sounds.get(sound_name, None)
-
-        if sound_candidates is None:
+    def play_sound(self, sound_name: str, volume: float = 1.0) -> None:
+        sound = self.sounds.get(sound_name, None)
+        if sound is None:
             return
 
-        sound_to_play: mixer.Sound = random.choice(sound_candidates)
         base_volume = self.options.get_sfx_volume()
         if base_volume > 0:
-            sound_to_play.set_volume(base_volume * volume)
-            sound_to_play.play()
+            sound.set_volume(base_volume * volume)
+            sound.play()
 
     def stop_sound(self, sound_name):
-        sound_candidates = self.sounds.get(sound_name, None)
-
-        if sound_candidates is None:
+        sound = self.sounds.get(sound_name, None)
+        if sound is None:
             return
 
-        for sound in sound_candidates:
-            sound.stop()
+        sound.stop()
 
     def add_music(self, music_path: str, music_name: str) -> None:
         self.musics[music_name] = music_path

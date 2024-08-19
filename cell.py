@@ -119,7 +119,7 @@ class Cell:
                     SHAKER.shake(int(1 + self.points))
                 self.on_select(self)
                 self.flying_text = FlyingText(int(self.points), self.rect)
-                SoundManager.instance().play_random_sound(sounds.CELL_SELECT, volume=0.5 + (self.texture_size + 1) / 10)
+                SoundManager.instance().play_sound(sounds.CELL_SELECT, volume=0.5 + (self.texture_size + 1) / 10)
         else:
             anim_scale = 1.0
 

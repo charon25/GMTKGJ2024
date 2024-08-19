@@ -10,6 +10,7 @@ NO_CIRCLE_LEFT = "noCircleLeft"
 DESTROY_CIRCLE = "destroyCircle"
 START_LEVEL = "startLevel"
 END_LEVEL = "endLevel"
+BONUS_CIRCLE = "bonusCircle"
 
 
 def add_sound(filepath: str, sound_name: str):
@@ -18,7 +19,6 @@ def add_sound(filepath: str, sound_name: str):
 
 def load_sounds():
     add_sound("resources/audio/sounds/btn_1.ogg", BUTTON_CLICK)
-    add_sound("resources/audio/sounds/btn_2.ogg", BUTTON_CLICK)
 
     add_sound("resources/audio/sounds/cell_select_1.wav", CELL_SELECT)
 
@@ -33,4 +33,7 @@ def load_sounds():
     add_sound("resources/audio/sounds/destroy_circle_1.ogg", DESTROY_CIRCLE)
 
     add_sound("resources/audio/sounds/start_level_1.ogg", START_LEVEL)
+
     add_sound("resources/audio/sounds/end_level_1.ogg", END_LEVEL)
+
+    add_sound("resources/audio/sounds/bonus_circle.ogg", BONUS_CIRCLE)
