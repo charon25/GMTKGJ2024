@@ -22,7 +22,7 @@ cd ..
 if "%~1"=="--debug" (
     pygbag --width 960 --height 540 --package PROJECT_NAME --title PROJECT_NAME --icon %PROJECT_FOLDER%/%ICON_PATH% --can_close 1 %PROJECT_FOLDER%
 ) else (
-    pygbag --width 960 --height 540 --build --archive --package PROJECT_NAME --title PROJECT_NAME --icon %PROJECT_FOLDER%/%ICON_PATH% --can_close 1 %PROJECT_FOLDER%
+    pygbag --width 960 --height 540 --no_opt --build --archive --package PROJECT_NAME --title PROJECT_NAME --icon %PROJECT_FOLDER%/%ICON_PATH% --can_close 1 %PROJECT_FOLDER%
 )
 cd %PROJECT_FOLDER%/build
 copy web.zip ..\dist\%PROJECT_NAME%-web.zip

@@ -3,6 +3,7 @@ import math
 import pygame as pyg
 
 import constants as co
+import sounds
 import textures
 import utils
 from bg_animation import BackgroundAnimation
@@ -11,6 +12,7 @@ from event_manager import EventManager
 from level import Level, LevelManager
 from options import Options
 from screen_shake import SHAKER
+from sound_manager import SoundManager
 from window import Scale, Window
 
 
@@ -129,6 +131,8 @@ class Game:
     def start(self):
         pyg.mouse.set_visible(False)
         textures.load_all(self.scale)
+        SoundManager.instance().options = self.options
+        sounds.load_sounds()
 
         if self.is_browser:
             self.state = GameState.BROWSER_WAIT_FOR_CLICK
