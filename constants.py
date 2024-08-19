@@ -75,7 +75,7 @@ HOLD_TEXT_RECT_2 = pyg.Rect(HOLD_BTN_POS[0] - OPTION_TEXT_BTN_GAP, HOLD_BTN_POS[
 # Levels
 LEVEL_COUNT = 8000
 # TODO CHANGER POUR METTRE 0
-INITIAL_LEVEL = 9
+INITIAL_LEVEL = 10
 
 LEVEL_TITLE_RECT = pyg.Rect(0, 10, WIDTH, 120)
 
@@ -186,6 +186,8 @@ CELL_DATA = [
     CellData(0, modifier_texture=2, points_multiplier=5.0),
     CellData(0, modifier_texture=3, bonus_circles=1),
     CellData(0, modifier_texture=4, bonus_circles=2),
+    CellData(1, can_be_selected=False, bonus_circles=1),
+    CellData(1, can_be_selected=False, bonus_circles=2),
     CellData(0, modifier_texture=5),
 ]
 
@@ -199,8 +201,18 @@ class CellType(IntEnum):
     MULT_5 = 5
     CIRCLE_1 = 6
     CIRCLE_2 = 7
-    PACIFIER = 8
+    FORBIDDEN_CIRCLE_1 = 8
+    FORBIDDEN_CIRCLE_2 = 9
+    PACIFIER = 10
 
+
+PACIFIED_MAP: dict[CellType, CellType] = {
+    CellType.FORBIDDEN: CellType.BASE,
+    CellType.FORBIDDEN_CIRCLE_1: CellType.CIRCLE_1,
+    CellType.FORBIDDEN_CIRCLE_2: CellType.CIRCLE_2,
+}
+
+PACIFIED_INV_MAP: dict[CellType, CellType] = {value: key for key, value in PACIFIED_MAP.items()}
 
 TEXTURE_INDEX_FROM_SIZE: dict[int, int] = {
     16: 0,

@@ -85,6 +85,8 @@ class Cell:
         self.points = 0.0
 
     def __get_select_count(self):
+        if not self.cell_data.can_be_selected:
+            return 0
         return self.selected + self.temp_selected
 
     def __get_main_texture(self) -> pyg.Surface:

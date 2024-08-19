@@ -264,7 +264,8 @@ class Level:
                 self.max_circles_count_upgrade -= cell.cell_data.bonus_circles
                 if cell.type == CellType.PACIFIER:
                     for c in cell.affected_cells:
-                        c.change_type(CellType.FORBIDDEN)
+                        if c.type in co.PACIFIED_INV_MAP:
+                            c.change_type(co.PACIFIED_INV_MAP[c.type])
             cell.unselect(k)
 
         self.current_circles_count -= 1
@@ -281,8 +282,8 @@ class Level:
         self.cells_in_animation -= 1
         if cell.type == CellType.PACIFIER:
             for c in self._flood_fill(cell.x, cell.y):
-                if c.type == CellType.FORBIDDEN:
-                    c.change_type(CellType.BASE)
+                if c.type in co.PACIFIED_MAP:
+                    c.change_type(co.PACIFIED_MAP[c.type])
                     cell.affected_cells.append(c)
         if self.points >= self.required_points[0]:
             self.countdown = 0.4
@@ -335,12 +336,12 @@ class Level:
             self.validate_temp_circle()
 
     def __on_cell_in_temp_circle(self, cell: Cell):
-        if cell.type == CellType.FORBIDDEN:
-            self.destroy_temp_circle()
-        elif cell.cell_data.can_be_selected:
+        if cell.cell_data.can_be_selected:
             cell.temp_selected = True
             self.temp_selected_cells.append(cell)
             self.temp_multiplier *= cell.cell_data.points_multiplier
+        else:
+            self.destroy_temp_circle()
 
     def is_finished(self):
         return self.animation == 0 and self.cells_in_animation == 0 and self.countdown <= 0 and self.points >= \
