@@ -4,7 +4,7 @@
 - Cercle validé OK
 - Cercle bloqué par blocker OK
 - Cercle bloqué par un autre cercle OK
-- Cercle détruit par zone rouge
+- Cercle détruit par zone rouge OK
 - Plus de cercles OK
 - Cercle supprimé OK
 

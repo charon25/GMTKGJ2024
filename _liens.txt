@@ -5,3 +5,4 @@ SFX :
 - [CC0] kenney.nl
 - [CC0] https://freesound.org/people/Reitanna/sounds/332661/
 - [CC0] https://freesound.org/people/d.n.audio.uk/sounds/263809/
+- [CC0] https://freesound.org/people/BirdieBronze/sounds/376237/

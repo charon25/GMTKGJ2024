@@ -249,7 +249,7 @@ class Level:
         SoundManager.instance().stop_sound(sounds.GROWING_CIRCLE)
         SoundManager.instance().play_random_sound(sound)
 
-    def destroy_temp_circle(self):
+    def destroy_temp_circle(self, sound: str = ""):
         if self.temp_circle is None:
             return
 
@@ -261,7 +261,8 @@ class Level:
         self.temp_multiplier = 1.0
 
         SoundManager.instance().stop_sound(sounds.GROWING_CIRCLE)
-        # todo play sound
+        if sound:
+            SoundManager.instance().play_random_sound(sound)
 
     def remove_circle(self, v_circle: 'ValidatedCircle'):
         self.circles.remove(v_circle)
@@ -349,7 +350,7 @@ class Level:
             self.temp_selected_cells.append(cell)
             self.temp_multiplier *= cell.cell_data.points_multiplier
         else:
-            self.destroy_temp_circle()
+            self.destroy_temp_circle(sounds.DESTROY_CIRCLE)
 
     def is_finished(self):
         return (self.animation == 0 and self.cells_in_animation <= 0

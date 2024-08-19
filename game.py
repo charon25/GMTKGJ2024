@@ -124,7 +124,8 @@ class Game:
                 self.options.hold_to_grow = not self.options.hold_to_grow
                 sound_to_play = sounds.BUTTON_CLICK
 
-        SoundManager.instance().play_random_sound(sound_to_play)
+        if sound_to_play:
+            SoundManager.instance().play_random_sound(sound_to_play)
 
     def right_click(self, x: float, y: float):
         if self.state == GameState.PLAYING_LEVEL:
