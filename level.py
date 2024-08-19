@@ -222,7 +222,7 @@ class Level:
 
         self.temp_selected_cells = sorted(self.temp_selected_cells)
 
-        self.cells_in_animation = len(self.temp_selected_cells)
+        self.cells_in_animation += len(self.temp_selected_cells)
 
         points = 0
         for k, cell in enumerate(self.temp_selected_cells):
@@ -344,8 +344,8 @@ class Level:
             self.destroy_temp_circle()
 
     def is_finished(self):
-        return self.animation == 0 and self.cells_in_animation == 0 and self.countdown <= 0 and self.points >= \
-            self.required_points[0]
+        return (self.animation == 0 and self.cells_in_animation <= 0
+                and self.countdown <= 0 and self.points >= self.required_points[0])
 
     def draw(self, surface: pyg.Surface, scale: Scale, dt: float, up_down: float):
         if self.animation == 0:
