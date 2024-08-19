@@ -53,6 +53,5 @@ class Image:
         sprites = list()
         for row in sprites_rows:
             sprites.extend(Image.slice_by_columns(row, width))
-        pygame.image.save(sprites[0], "test.png")
 
         return sprites

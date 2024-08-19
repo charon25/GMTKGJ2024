@@ -1,8 +1,8 @@
 :: DEFINITIONS (care for blank spaces)
 set PYI_MAIN=main_pyi.py
 
-set PROJECT_FOLDER=GMTKGJ2024
-set PROJECT_NAME=GMTKGameJam2024
+set PROJECT_FOLDER=Squale
+set PROJECT_NAME=Squale
 set RESOURCES_FOLDER=resources
 set ICON_PATH=%RESOURCES_FOLDER%/icon.ico
 
