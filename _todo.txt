@@ -2,8 +2,6 @@
 - Icône
 - Logo
 
-- Ajouter le texte pour indiquer que c'est mieux sous Windows
-- Ajouter texte pour résolution
 - logo level complete
 - "By charon25"
 

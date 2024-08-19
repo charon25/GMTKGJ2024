@@ -45,6 +45,7 @@ CIRCLE = load("resources/textures/circle.png")
 PREVIOUS_LEVEL_BUTTON = load("resources/textures/prev_level_btn.png")
 BG_CELL = load("resources/textures/cells/bg_cell.png")
 CURSOR = load("resources/textures/cursor.png")
+BROWSER_TEXT = load("resources/textures/main_menu/browser_text.png")
 
 
 def load_scale(filename: str, scale: Scale) -> pyg.Surface:
@@ -66,6 +67,7 @@ def load_all(scale: Scale):
 def _load_textures(scale: Scale):
     global END_OF_LEVEL_BACKGROUND, END_OF_LEVEL_TITLE, MEDALS, NEXT_LEVEL_BUTTON, LOGO, PLAY_BUTTON, VOLUMES, CHECKBOXES
     global RESTART_GAME_BUTTON, RESTART_LEVEL_BUTTON, BACKGROUND, GMTK_LOGO, CIRCLE, PREVIOUS_LEVEL_BUTTON, BG_CELL
+    global BROWSER_TEXT
 
     if abs(1 - scale.scale) <= 0.03:
         return
@@ -87,6 +89,7 @@ def _load_textures(scale: Scale):
     CIRCLE = scale_by(CIRCLE, scale.scale)
     PREVIOUS_LEVEL_BUTTON = scale_by(PREVIOUS_LEVEL_BUTTON, scale.scale)
     BG_CELL = scale_by(BG_CELL, scale.scale)
+    BROWSER_TEXT = scale_by(BROWSER_TEXT, scale.scale)
 
 
 def _get_animation(filename: str, width: int, height: int, total_duration: float, scale: Scale) -> Animation:

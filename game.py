@@ -244,7 +244,8 @@ class Game:
                                    self.scale.y_offset))
 
         mouse_x, mouse_y = self.scale.to_game_pos(*pyg.mouse.get_pos())
-        game_surface.blit(textures.CURSOR, self.scale.to_screen_pos(mouse_x - co.CURSOR_OFFSET / self.scale.scale, mouse_y - co.CURSOR_OFFSET / self.scale.scale))
+        game_surface.blit(textures.CURSOR, self.scale.to_screen_pos(mouse_x - co.CURSOR_OFFSET / self.scale.scale,
+                                                                    mouse_y - co.CURSOR_OFFSET / self.scale.scale))
 
         self.screen.blit(game_surface, SHAKER.get_next())
 
@@ -297,6 +298,8 @@ class Game:
         utils.blit_scaled(game_surface, textures.PLAY_BUTTON,
                           *self.scale.to_screen_pos(co.PLAY_BTN_POS[0], co.PLAY_BTN_POS[1]), self.in_out[1])
         game_surface.blit(textures.GMTK_LOGO, self.scale.to_screen_pos(20, 20))
+        if self.is_browser:
+            game_surface.blit(textures.BROWSER_TEXT, self.scale.to_screen_pos(*co.BROWSER_TEXT_POS))
 
     def draw_end_of_game(self, game_surface: pyg.Surface):
         game_surface.blit(textures.LOGO, self.scale.to_screen_pos(co.LOGO_POS[0], co.LOGO_POS[1] + self.up_down[1]))
