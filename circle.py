@@ -23,8 +23,8 @@ class Circle:
                         self.radius * scale.scale, width=width)
         if self.is_hovered:
             surface.blit(textures.REMOVE_CIRCLE,
-                         scale.to_screen_pos(self.x - co.REMOVE_CIRCLE_TEXTURE_SIZE / 2 + x_offset,
-                                             self.y - co.REMOVE_CIRCLE_TEXTURE_SIZE / 2 + y_offset))
+                         scale.to_screen_pos(self.x - co.REMOVE_CIRCLE_TEXTURE_SIZE / 2 / scale.scale + x_offset,
+                                             self.y - co.REMOVE_CIRCLE_TEXTURE_SIZE / 2 / scale.scale + y_offset))
 
     def contains_point(self, x: int, y: int):
         return (x - self.x) ** 2 + (y - self.y) ** 2 <= self.radius ** 2
