@@ -89,4 +89,15 @@ def get_level(number: int) -> LevelData:
             Cell(2, 5), Cell(3, 5, _type=CellType.CIRCLE_2),
         ]
 
+    elif number == 8:
+        set_main_params(level_data, 64, 1, [1000, 1300, 1400])
+        level_data.cells = [
+            Cell(1, 0), Cell(2, 0), Cell(3, 0), Cell(4, 0), Cell(5, 0, _type=CellType.MULT_2),
+            Cell(1, 1, _type=CellType.MULT_5), Cell(2, 1), Cell(3, 1), Cell(4, 1), Cell(5, 1),
+            Cell(1, 2), Cell(2, 2), Cell(3, 2, 2, CellType.MULT_0), Cell(5, 2),
+            Cell(1, 3), Cell(2, 3), Cell(5, 3),
+            Cell(1, 4), Cell(2, 4), Cell(3, 4), Cell(4, 4), Cell(5, 4),
+            Cell(0, 5, _type=CellType.BLOCKER),
+        ]
+
     return level_data

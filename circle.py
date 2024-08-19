@@ -29,9 +29,9 @@ class Circle:
         return (x - self.x) ** 2 + (y - self.y) ** 2 <= self.radius ** 2
 
     def contains_rect(self, rect: pyg.Rect):
-        return (self.contains_point(rect.x, rect.y) and self.contains_point(rect.x + rect.w, rect.y)
-                and self.contains_point(rect.x, rect.y + rect.h) and self.contains_point(rect.x + rect.w,
-                                                                                         rect.y + rect.h))
+        left, top, right, bottom = rect.left + co.CELL_OFFSET, rect.top + co.CELL_OFFSET, rect.right - co.CELL_OFFSET, rect.bottom - co.CELL_OFFSET
+        return (self.contains_point(left, top) and self.contains_point(right, top)
+                and self.contains_point(left, bottom) and self.contains_point(right, bottom))
 
     def touch_rect(self, rect: pyg.Rect):
         return (self.contains_point(rect.x, rect.y) or self.contains_point(rect.x + rect.w, rect.y)

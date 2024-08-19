@@ -184,7 +184,7 @@ class Level:
         if self.temp_circle is None:
             return
 
-        if self.temp_circle.radius < self.cell_size * 0.707:  # sqrt(2) / 2
+        if self.temp_circle.radius < self.cell_size * 0.4:
             self.destroy_temp_circle()
             return
 
