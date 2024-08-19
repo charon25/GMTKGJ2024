@@ -213,6 +213,7 @@ class Level:
 
         self.temp_circle = Circle(x, y, 0)
         self.temp_multiplier = 1.0
+        SoundManager.instance().play_random_sound(sounds.GROWING_CIRCLE, volume=0.4)
 
     def validate_temp_circle(self, sound: str = sounds.VALIDATE_CIRCLE_CLICK):
         if self.temp_circle is None:
@@ -244,6 +245,7 @@ class Level:
 
         self.current_circles_count += 1
 
+        SoundManager.instance().stop_sound(sounds.GROWING_CIRCLE)
         SoundManager.instance().play_random_sound(sound)
 
     def destroy_temp_circle(self):
@@ -257,6 +259,7 @@ class Level:
         self.temp_circle = None
         self.temp_multiplier = 1.0
 
+        SoundManager.instance().stop_sound(sounds.GROWING_CIRCLE)
         # todo play sound
 
     def remove_circle(self, v_circle: 'ValidatedCircle'):

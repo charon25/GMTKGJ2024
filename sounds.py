@@ -7,6 +7,7 @@ CELL_SELECT = "cellSelect"
 REMOVE_CIRCLE = "removeCircle"
 VALIDATE_CIRCLE_BLOCKER = "validateCircleBlocker"
 VALIDATE_CIRCLE_CLICK = "validateCircleClick"
+GROWING_CIRCLE = "growingCircle"
 
 
 def add_sound(filepath: str, sound_name: str):
@@ -25,3 +26,5 @@ def load_sounds():
 
     add_sound("resources/audio/sounds/validate_circle_blocker_1.ogg", VALIDATE_CIRCLE_BLOCKER)
     add_sound("resources/audio/sounds/validate_circle_blocker_2.ogg", VALIDATE_CIRCLE_BLOCKER)
+
+    add_sound("resources/audio/sounds/growing_circle.wav", GROWING_CIRCLE)

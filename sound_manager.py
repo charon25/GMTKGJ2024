@@ -41,6 +41,15 @@ class SoundManager:
             sound_to_play.set_volume(base_volume * volume)
             sound_to_play.play()
 
+    def stop_sound(self, sound_name):
+        sound_candidates = self.sounds.get(sound_name, None)
+
+        if sound_candidates is None:
+            return
+
+        for sound in sound_candidates:
+            sound.stop()
+
     def add_music(self, music_path: str, music_name: str) -> None:
         self.musics[music_name] = music_path
 

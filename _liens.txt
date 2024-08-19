@@ -2,5 +2,6 @@ Font :
 - [CC0] https://www.pentacom.jp/pentacom/bitfontmaker2/gallery/?id=828
 
 SFX :
--[CC0] kenney.nl
--[CC0] https://freesound.org/people/Reitanna/sounds/332661/
+- [CC0] kenney.nl
+- [CC0] https://freesound.org/people/Reitanna/sounds/332661/
+- [CC0] https://freesound.org/people/d.n.audio.uk/sounds/263809/
