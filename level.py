@@ -413,6 +413,8 @@ class Level:
             cell.velocity = (-speed * dir_x, -speed * dir_y)
         self.animation = 1
 
+        SoundManager.instance().play_random_sound(sounds.START_LEVEL)
+
     def draw_loading_animation(self, surface: pyg.Surface, scale: Scale, dt: float):
         placed_cells_count = 0
         for cell in self.cells:
@@ -438,6 +440,8 @@ class Level:
             speed = random.random() * 10 + 40
             cell.velocity = (speed * dir_x, speed * dir_y)
         self.animation = -1
+
+        SoundManager.instance().play_random_sound(sounds.END_LEVEL)
 
     def draw_unloading_animation(self, surface: pyg.Surface, scale: Scale, dt: float):
         removed_cells_count = 0

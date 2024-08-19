@@ -11,6 +11,6 @@
 - Case sélectionné (après animation) OK
 - Son powerup (?)
 
-- Anim début niveau
-- Anim fin niveau
+- Anim début niveau OK
+- Anim fin niveau OK
 - Son niveau réussi

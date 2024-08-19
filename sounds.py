@@ -8,6 +8,8 @@ VALIDATE_CIRCLE_CLICK = "validateCircleClick"
 GROWING_CIRCLE = "growingCircle"
 NO_CIRCLE_LEFT = "noCircleLeft"
 DESTROY_CIRCLE = "destroyCircle"
+START_LEVEL = "startLevel"
+END_LEVEL = "endLevel"
 
 
 def add_sound(filepath: str, sound_name: str):
@@ -29,3 +31,6 @@ def load_sounds():
     add_sound("resources/audio/sounds/no_circles_1.ogg", NO_CIRCLE_LEFT)
 
     add_sound("resources/audio/sounds/destroy_circle_1.ogg", DESTROY_CIRCLE)
+
+    add_sound("resources/audio/sounds/start_level_1.ogg", START_LEVEL)
+    add_sound("resources/audio/sounds/end_level_1.ogg", END_LEVEL)
