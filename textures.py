@@ -44,6 +44,7 @@ GMTK_LOGO = load("resources/textures/gmtk-logo.png")
 CIRCLE = load("resources/textures/circle.png")
 PREVIOUS_LEVEL_BUTTON = load("resources/textures/prev_level_btn.png")
 BG_CELL = load("resources/textures/cells/bg_cell.png")
+CURSOR = load("resources/textures/cursor.png")
 
 
 def load_scale(filename: str, scale: Scale) -> pyg.Surface:

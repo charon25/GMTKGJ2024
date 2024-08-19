@@ -125,6 +125,7 @@ class Game:
             self.current_level.on_mouse_move(int(x), int(y))
 
     def start(self):
+        pyg.mouse.set_visible(False)
         textures.load_all(self.scale)
 
         if self.is_browser:
@@ -241,6 +242,9 @@ class Game:
             pyg.draw.rect(game_surface, co.BLACK,
                           pyg.Rect(0, self.scale.y_offset + co.HEIGHT * self.scale.scale, co.WIDTH * self.scale.scale,
                                    self.scale.y_offset))
+
+        mouse_pos = pyg.mouse.get_pos()
+        game_surface.blit(textures.CURSOR, self.scale.to_screen_pos(mouse_pos[0] - co.CURSOR_OFFSET, mouse_pos[1] - co.CURSOR_OFFSET))
 
         self.screen.blit(game_surface, SHAKER.get_next())
 
