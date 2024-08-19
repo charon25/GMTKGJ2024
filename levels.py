@@ -102,14 +102,13 @@ def get_level(number: int) -> LevelData:
         ]
 
     elif number == 9:
-        set_main_params(level_data, 64, 1, [1000, 1300, 1400])
+        set_main_params(level_data, 64, 2, [40, 50, 90])
         level_data.cells = [
-            Cell(4, 0, _type=CellType.FORBIDDEN),
-            Cell(0, 1, _type=CellType.FORBIDDEN), Cell(5, 1, _type=CellType.FORBIDDEN),
-            Cell(2, 2, _type=CellType.FORBIDDEN), Cell(5, 2, 2, _type=CellType.BASE),
-            Cell(0, 3, _type=CellType.FORBIDDEN), Cell(4, 2, _type=CellType.PACIFIER),
-            Cell(7, 4, _type=CellType.FORBIDDEN),
-            Cell(3, 5, _type=CellType.FORBIDDEN), Cell(6, 5, _type=CellType.FORBIDDEN),
+            Cell(2, 0, _type=CellType.MULT_2),
+            Cell(1, 1, _type=CellType.FORBIDDEN), Cell(2, 1, _type=CellType.FORBIDDEN), Cell(3, 1, _type=CellType.FORBIDDEN),
+            Cell(2, 2),
+            Cell(0, 3, _type=CellType.FORBIDDEN), Cell(2, 3, _type=CellType.PACIFIER), Cell(4, 3, _type=CellType.FORBIDDEN),
+            Cell(2, 5, _type=CellType.FORBIDDEN),
         ]
 
     return level_data

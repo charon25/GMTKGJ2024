@@ -178,8 +178,8 @@ class CellData:
 
 # Needs to be in same order as enum below
 CELL_DATA = [
-    CellData(0, -1),
-    CellData(1, -1, can_be_selected=False),
+    CellData(0),
+    CellData(1, can_be_selected=False),
     CellData(2, can_be_selected=False),
     CellData(0, modifier_texture=0, points_multiplier=0.0),
     CellData(0, modifier_texture=1, points_multiplier=2.0),

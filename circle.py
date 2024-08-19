@@ -34,9 +34,9 @@ class Circle:
                 and self.contains_point(left, bottom) and self.contains_point(right, bottom))
 
     def touch_rect(self, rect: pyg.Rect):
-        return (self.contains_point(rect.x, rect.y) or self.contains_point(rect.x + rect.w, rect.y)
-                or self.contains_point(rect.x, rect.y + rect.h) or self.contains_point(rect.x + rect.w, rect.y + rect.h)
-                or rect.collidepoint(self.x, self.y))
+        left, top, right, bottom = rect.left + co.CELL_OFFSET, rect.top + co.CELL_OFFSET, rect.right - co.CELL_OFFSET, rect.bottom - co.CELL_OFFSET
+        return (self.contains_point(left, top) or self.contains_point(right, top)
+                or self.contains_point(left, bottom) or self.contains_point(right, bottom))
 
     def touch_circle(self, other: 'Circle'):
         return (self.x - other.x) ** 2 + (self.y - other.y) ** 2 <= (self.radius + other.radius) ** 2
