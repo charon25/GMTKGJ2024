@@ -62,9 +62,6 @@ class Game:
         elif self.state == GameState.MAIN_MENU:
             if data['key'] == co.ENTER_KEY:
                 self.start_next_level()
-        # TODO : remove quand publie
-        if data['key'] == co.F12_KEY:
-            pyg.image.save(self.screen, 'level_solutions/screenshot.png', 'png')
 
     def click(self, data: dict):
         x, y = self.scale.to_game_pos(*data['pos'])
