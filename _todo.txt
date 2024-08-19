@@ -2,6 +2,4 @@
 - Icône
 - Logo
 
-- "By charon25"
-
 - compteur des points à la fin du niveau ?

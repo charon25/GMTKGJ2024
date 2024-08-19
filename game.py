@@ -195,6 +195,8 @@ class Game:
                 excl_rect = None
             self.bg_animation.draw(game_surface, excl_rect, self.dt / 1000)
 
+            utils.draw_text(game_surface, "By charon25", 42, self.scale.to_screen_pos(*co.CREDIT_TEXT_POS), co.MEDIUM_COLOR)
+
         if self.state == GameState.PLAYING_LEVEL:
             self.draw_game(game_surface)
 
