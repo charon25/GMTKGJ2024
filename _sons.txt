@@ -1,10 +1,11 @@
 - Clic sur un bouton OK
 
 - Cercle qui grossit OK
-- Cercle validé
+- Cercle validé OK
 - Cercle bloqué par blocker OK
-- Cercle bloqué par un autre cercle
+- Cercle bloqué par un autre cercle OK
 - Cercle détruit par zone rouge
+- Plus de cercles OK
 - Cercle supprimé OK
 
 - Case sélectionné (après animation) OK

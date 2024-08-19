@@ -206,6 +206,7 @@ class Level:
                 return
 
         if self.current_circles_count >= self.max_circles_count + self.max_circles_count_upgrade:
+            SoundManager.instance().play_random_sound(sounds.NO_CIRCLE_LEFT)
             return
 
         if not any(cell.contains_point(x, y) for cell in self.cells):

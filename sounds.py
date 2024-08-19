@@ -1,13 +1,12 @@
-import pygame.mixer as mixer
-
 from sound_manager import SoundManager
 
 BUTTON_CLICK = "buttonClick"
 CELL_SELECT = "cellSelect"
-REMOVE_CIRCLE = "removeCircle"
+REMOVE_CIRCLE = "validateCircleClick"
 VALIDATE_CIRCLE_BLOCKER = "validateCircleBlocker"
 VALIDATE_CIRCLE_CLICK = "validateCircleClick"
 GROWING_CIRCLE = "growingCircle"
+NO_CIRCLE_LEFT = "noCircleLeft"
 
 
 def add_sound(filepath: str, sound_name: str):
@@ -20,11 +19,10 @@ def load_sounds():
 
     add_sound("resources/audio/sounds/cell_select_1.wav", CELL_SELECT)
 
-    add_sound("resources/audio/sounds/remove_circle_1.ogg", REMOVE_CIRCLE)
-    add_sound("resources/audio/sounds/remove_circle_2.ogg", REMOVE_CIRCLE)
-    add_sound("resources/audio/sounds/remove_circle_3.ogg", REMOVE_CIRCLE)
-
     add_sound("resources/audio/sounds/validate_circle_blocker_1.ogg", VALIDATE_CIRCLE_BLOCKER)
-    add_sound("resources/audio/sounds/validate_circle_blocker_2.ogg", VALIDATE_CIRCLE_BLOCKER)
+
+    add_sound("resources/audio/sounds/validate_circle_1.ogg", VALIDATE_CIRCLE_CLICK)
 
     add_sound("resources/audio/sounds/growing_circle.wav", GROWING_CIRCLE)
+
+    add_sound("resources/audio/sounds/no_circles_1.ogg", NO_CIRCLE_LEFT)
