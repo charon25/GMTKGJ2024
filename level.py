@@ -83,6 +83,7 @@ class Level:
 
         self.x_offset, self.y_offset, self.width, self.height = 0, 0, 0, 0
         self.rect: pyg.Rect = None
+        self.radius_inc_speed: float = 0.0
         self.__compute_terrain()
 
         self.circles: list[ValidatedCircle] = list()
@@ -109,6 +110,7 @@ class Level:
         min_y: int = co.HEIGHT
         max_y: int = 0
         x_center, y_center = 0, 0
+        max_cell_size = 0
         for k, cell in enumerate(self.cells):
             cell.generate(self.cell_size, k, self.on_cell_selected)
             min_x = min(min_x, cell.rect.left)
@@ -117,12 +119,14 @@ class Level:
             max_y = max(max_y, cell.rect.bottom)
             x_center += cell.rect.centerx
             y_center += cell.rect.centery
+            max_cell_size = max(max_cell_size, cell.real_size)
 
         self.x_offset = (co.WIDTH - (max_x - min_x)) / 2 - min_x
         self.y_offset = co.GAME_Y_OFFSET + (co.HEIGHT - co.GAME_Y_OFFSET - (max_y - min_y)) / 2 - min_y
         self.width = max_x - min_x
         self.height = max_y - min_y
         self.rect = pyg.Rect(self.x_offset, self.y_offset, self.width, self.height)
+        self.radius_inc_speed = 1.5 * max(64, max_cell_size)
 
         x_center = x_center / len(self.cells)
         y_center = y_center / len(self.cells)
@@ -267,8 +271,7 @@ class Level:
         if self.temp_circle is None:
             return
 
-        # ~ 1 sec pour couvrir une cellule
-        self.temp_circle.radius += 1.414 * self.cell_size * dt
+        self.temp_circle.radius += self.radius_inc_speed * dt
 
         for cell in self.cells:
             if self.temp_circle is None:
@@ -289,13 +292,13 @@ class Level:
                 break
 
     def __on_cell_touch_temp_circle(self, cell: Cell):
-        if cell.type == CellType.FORBIDDEN:
-            self.destroy_temp_circle()
-        elif cell.type == CellType.BLOCKER:
+        if cell.type == CellType.BLOCKER:
             self.validate_temp_circle()
 
     def __on_cell_in_temp_circle(self, cell: Cell):
-        if cell.cell_data.can_be_selected:
+        if cell.type == CellType.FORBIDDEN:
+            self.destroy_temp_circle()
+        elif cell.cell_data.can_be_selected:
             cell.temp_selected = True
             self.temp_selected_cells.append(cell)
             self.temp_multiplier *= cell.cell_data.points_multiplier
