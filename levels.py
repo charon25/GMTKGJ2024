@@ -114,7 +114,7 @@ def get_level(number: int) -> LevelData:
         ]
 
     elif number == 10:
-        set_main_params(level_data, 32, 1, [580, 600, 710])
+        set_main_params(level_data, 32, 1, [580, 600, 720])
         level_data.cells = [
             Cell(0, 0), Cell(1, 0), Cell(14, 0), Cell(15, 0),
             Cell(0, 1), Cell(1, 1), Cell(14, 1), Cell(15, 1),
