@@ -105,10 +105,38 @@ def get_level(number: int) -> LevelData:
         set_main_params(level_data, 64, 2, [40, 50, 90])
         level_data.cells = [
             Cell(2, 0, _type=CellType.MULT_2),
-            Cell(1, 1, _type=CellType.FORBIDDEN), Cell(2, 1, _type=CellType.FORBIDDEN), Cell(3, 1, _type=CellType.FORBIDDEN),
+            Cell(1, 1, _type=CellType.FORBIDDEN), Cell(2, 1, _type=CellType.FORBIDDEN),
+            Cell(3, 1, _type=CellType.FORBIDDEN),
             Cell(2, 2),
-            Cell(0, 3, _type=CellType.FORBIDDEN), Cell(2, 3, _type=CellType.PACIFIER), Cell(4, 3, _type=CellType.FORBIDDEN),
+            Cell(0, 3, _type=CellType.FORBIDDEN), Cell(2, 3, _type=CellType.PACIFIER),
+            Cell(4, 3, _type=CellType.FORBIDDEN),
             Cell(2, 5, _type=CellType.FORBIDDEN),
+        ]
+
+    elif number == 10:
+        set_main_params(level_data, 32, 1, [580, 600, 625])
+        level_data.cells = [
+            Cell(0, 0), Cell(1, 0), Cell(14, 0), Cell(15, 0),
+            Cell(0, 1), Cell(1, 1), Cell(14, 1), Cell(15, 1),
+            Cell(0, 2, 2, CellType.PACIFIER), Cell(14, 2, 2),
+            Cell(0, 4, 2, CellType.MULT_2), Cell(14, 4, 2, CellType.MULT_5),
+            Cell(0, 6, 2), Cell(14, 6, 2),
+            Cell(0, 8), Cell(1, 8), Cell(14, 8), Cell(15, 8),
+            Cell(0, 9), Cell(1, 9), Cell(14, 9), Cell(15, 9),
+            Cell(2, 9), Cell(3, 9), Cell(4, 9), Cell(5, 9), Cell(6, 9), Cell(7, 9), Cell(8, 9), Cell(9, 9),
+            Cell(10, 9), Cell(11, 9), Cell(12, 9), Cell(13, 9),
+            Cell(2, 10, 2, _type=CellType.FORBIDDEN), Cell(12, 10, 2, _type=CellType.FORBIDDEN),
+            Cell(2, 12, 2, _type=CellType.FORBIDDEN), Cell(12, 12, 2, _type=CellType.FORBIDDEN),
+            Cell(2, 14, 2, _type=CellType.FORBIDDEN_CIRCLE_2), Cell(12, 14, 2, _type=CellType.FORBIDDEN),
+            Cell(6, 12, 4, CellType.CIRCLE_2),
+        ]
+
+    elif number == 11:
+        set_main_params(level_data, 64, 2, [450, 460, 520])
+        level_data.cells = [
+            Cell(1, 0, _type=CellType.FORBIDDEN), Cell(4, 0, _type=CellType.FORBIDDEN), Cell(5, 0, _type=CellType.FORBIDDEN), Cell(9, 0), Cell(10, 0), Cell(11, 0),
+            Cell(0, 1, _type=CellType.FORBIDDEN), Cell(1, 1, _type=CellType.PACIFIER), Cell(2, 1, _type=CellType.FORBIDDEN), Cell(3, 1, _type=CellType.FORBIDDEN), Cell(4, 1, _type=CellType.FORBIDDEN), Cell(5, 1, _type=CellType.FORBIDDEN), Cell(7, 1, _type=CellType.BLOCKER), Cell(9, 1), Cell(10, 1, _type=CellType.MULT_5), Cell(11, 1),
+            Cell(1, 2, _type=CellType.FORBIDDEN), Cell(4, 2, _type=CellType.FORBIDDEN), Cell(5, 2, _type=CellType.FORBIDDEN), Cell(9, 2), Cell(10, 2), Cell(11, 2),
         ]
 
     return level_data
