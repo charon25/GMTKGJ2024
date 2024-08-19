@@ -143,3 +143,7 @@ def _load_modifiers_animations(scale: Scale):
         ]
         MODIFIERS_TEXTURES.append(animations)
         CELL_ANIMATOR.add_animations(animations)
+
+    animations = [_get_modifier_animation("resources/textures/cells/_modifiers/pacifier", 64, 6, 0.5, scale)]
+    MODIFIERS_TEXTURES.append(animations)
+    CELL_ANIMATOR.add_animations(animations)

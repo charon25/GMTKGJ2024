@@ -186,7 +186,7 @@ CELL_DATA = [
     CellData(0, modifier_texture=2, points_multiplier=5.0),
     CellData(0, modifier_texture=3, bonus_circles=1),
     CellData(0, modifier_texture=4, bonus_circles=2),
-    CellData(0, modifier_texture=4),
+    CellData(0, modifier_texture=5),
 ]
 
 
