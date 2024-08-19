@@ -60,7 +60,7 @@ class Game:
                 self.start_next_level()
 
         if data['key'] == co.F12_KEY:
-            pyg.image.save(self.screen, 'screenshot.png', 'png')
+            pyg.image.save(self.screen, 'level_solutions/screenshot.png', 'png')
 
     def click(self, data: dict):
         x, y = self.scale.to_game_pos(*data['pos'])

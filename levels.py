@@ -71,4 +71,22 @@ def get_level(number: int) -> LevelData:
             Cell(0, 2), Cell(1, 2), Cell(5, 2),
         ]
 
+    elif number == 6:
+        set_main_params(level_data, 64, 1, 300)
+        level_data.cells = [
+            Cell(1, 0), Cell(7, 0),
+            Cell(0, 1), Cell(1, 1, _type=CellType.CIRCLE_1), Cell(2, 1), Cell(4, 1, _type=CellType.FORBIDDEN), Cell(6, 1),
+            Cell(7, 1, _type=CellType.MULT_5), Cell(8, 1),
+            Cell(1, 2), Cell(7, 2),
+        ]
+
+    elif number == 7:
+        set_main_params(level_data, 64, 1, [60, 70])
+        level_data.cells = [
+            Cell(2, 0), Cell(3, 0),
+            Cell(0, 2), Cell(2, 2, 2, _type=CellType.FORBIDDEN), Cell(5, 2),
+            Cell(0, 3), Cell(5, 3),
+            Cell(2, 5), Cell(3, 5, _type=CellType.CIRCLE_2),
+        ]
+
     return level_data

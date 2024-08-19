@@ -229,9 +229,8 @@ class Level:
         for k, cell in enumerate(v_circle.contained_cells):
             if cell.animation is None:
                 self.points -= cell.points
+                self.max_circles_count_upgrade -= cell.cell_data.bonus_circles
             cell.unselect(k)
-
-            self.max_circles_count_upgrade -= cell.cell_data.bonus_circles
 
         self.current_circles_count -= 1
 
