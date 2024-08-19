@@ -140,6 +140,20 @@ def get_level(number: int) -> LevelData:
         ]
 
     elif number == 12:
+        set_main_params(level_data, 64, 7, [250, 24000, 24240])
+        level_data.cells = [
+            Cell(0, 0, _type=CellType.MULT_5), Cell(6, 0, _type=CellType.MULT_5), Cell(12, 0, _type=CellType.MULT_5),
+            Cell(0, 1, 4), Cell(6, 1, 4), Cell(12, 1, 4),
+            Cell(19, 3, _type=CellType.MULT_2), Cell(20, 3), Cell(21, 3), Cell(22, 3), Cell(23, 3), Cell(24, 3, _type=CellType.MULT_5),
+            Cell(19, 4), Cell(20, 4, 4), Cell(24, 4),
+            Cell(19, 5), Cell(24, 5),
+            Cell(19, 6), Cell(24, 6),
+            Cell(0, 7, 4), Cell(6, 7, 4), Cell(12, 7, 4), Cell(19, 7), Cell(24, 7),
+            Cell(19, 8, _type=CellType.MULT_5), Cell(20, 8), Cell(21, 8), Cell(22, 8), Cell(23, 8), Cell(24, 8, _type=CellType.MULT_2),
+            Cell(0, 11, _type=CellType.MULT_5), Cell(6, 11, _type=CellType.MULT_5), Cell(12, 11, _type=CellType.MULT_5),
+        ]
+
+    elif number == 13:
         set_main_params(level_data, 16, 2, [63, 72])
         level_data.cells = [
             Cell(10, 0, _type=CellType.FORBIDDEN), Cell(11, 0, _type=CellType.FORBIDDEN), Cell(12, 0, _type=CellType.FORBIDDEN),
@@ -153,20 +167,6 @@ def get_level(number: int) -> LevelData:
             Cell(5, 10, _type=CellType.FORBIDDEN),
             Cell(5, 11, _type=CellType.FORBIDDEN),
             Cell(5, 12, _type=CellType.FORBIDDEN),
-        ]
-
-    elif number == 13:
-        set_main_params(level_data, 64, 7, [250, 24000, 24240])
-        level_data.cells = [
-            Cell(0, 0, _type=CellType.MULT_5), Cell(6, 0, _type=CellType.MULT_5), Cell(12, 0, _type=CellType.MULT_5),
-            Cell(0, 1, 4), Cell(6, 1, 4), Cell(12, 1, 4),
-            Cell(19, 3, _type=CellType.MULT_2), Cell(20, 3), Cell(21, 3), Cell(22, 3), Cell(23, 3), Cell(24, 3, _type=CellType.MULT_5),
-            Cell(19, 4), Cell(20, 4, 4), Cell(24, 4),
-            Cell(19, 5), Cell(24, 5),
-            Cell(19, 6), Cell(24, 6),
-            Cell(0, 7, 4), Cell(6, 7, 4), Cell(12, 7, 4), Cell(19, 7), Cell(24, 7),
-            Cell(19, 8, _type=CellType.MULT_5), Cell(20, 8), Cell(21, 8), Cell(22, 8), Cell(23, 8), Cell(24, 8, _type=CellType.MULT_2),
-            Cell(0, 11, _type=CellType.MULT_5), Cell(6, 11, _type=CellType.MULT_5), Cell(12, 11, _type=CellType.MULT_5),
         ]
 
     elif number == 14:

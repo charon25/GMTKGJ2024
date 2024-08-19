@@ -17,6 +17,7 @@ MUSICENDEVENT = pyg.constants.USEREVENT + 1
 
 # Inputs
 R_KEY = ord('r')
+N_KEY = ord('n')
 ENTER_KEY = ord('\r')
 F12_KEY = 1073741893
 
