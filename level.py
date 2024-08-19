@@ -267,6 +267,7 @@ class Level:
     def remove_circle(self, v_circle: 'ValidatedCircle'):
         self.circles.remove(v_circle)
 
+        cell_still_in_animation = 0
         for k, cell in enumerate(v_circle.contained_cells):
             if cell.animation is None:
                 self.points -= cell.points
@@ -275,9 +276,12 @@ class Level:
                     for c in cell.affected_cells:
                         if c.type in co.PACIFIED_INV_MAP:
                             c.change_type(co.PACIFIED_INV_MAP[c.type])
+            else:
+                cell_still_in_animation += 1
             cell.unselect(k)
 
         self.current_circles_count -= 1
+        self.cells_in_animation -= cell_still_in_animation
 
         SoundManager.instance().play_sound(sounds.REMOVE_CIRCLE, volume=0.5)
 
