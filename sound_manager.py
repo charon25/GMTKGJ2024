@@ -13,7 +13,6 @@ class SoundManager:
         self.sounds: dict[str, mixer.Sound] = dict()
         self.musics: dict[str, str] = dict()
         mixer.init()
-        mixer.music.set_endevent(constants.MUSICENDEVENT)
         self.options: Options = Options()
 
     @classmethod

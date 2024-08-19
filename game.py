@@ -147,6 +147,8 @@ class Game:
         textures.load_all(self.scale)
         SoundManager.instance().options = self.options
         sounds.load_sounds()
+        sounds.start_music()
+        self.options.update_music_volume()
 
         if self.is_browser:
             self.state = GameState.BROWSER_WAIT_FOR_CLICK

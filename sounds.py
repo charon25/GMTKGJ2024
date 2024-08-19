@@ -1,3 +1,5 @@
+import pygame
+
 from sound_manager import SoundManager
 
 BUTTON_CLICK = "buttonClick"
@@ -11,6 +13,8 @@ DESTROY_CIRCLE = "destroyCircle"
 START_LEVEL = "startLevel"
 END_LEVEL = "endLevel"
 BONUS_CIRCLE = "bonusCircle"
+
+MAX_MUSIC_VOLUME = 0.15
 
 
 def add_sound(filepath: str, sound_name: str):
@@ -37,3 +41,8 @@ def load_sounds():
     add_sound("resources/audio/sounds/end_level_1.ogg", END_LEVEL)
 
     add_sound("resources/audio/sounds/bonus_circle.ogg", BONUS_CIRCLE)
+
+
+def start_music():
+    pygame.mixer.music.load("resources/audio/music.mp3")
+    pygame.mixer.music.play(loops=-1)
