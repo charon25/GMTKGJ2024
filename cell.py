@@ -38,6 +38,8 @@ class Cell:
 
         self.flying_text: FlyingText | None = None
 
+        self.affected_cells: list[Cell] = []
+
     def __lt__(self, other: 'Cell'):
         return (self.y, self.x) < (other.y, other.x)
 
@@ -47,6 +49,10 @@ class Cell:
         self.texture_size = constants.TEXTURE_INDEX_FROM_SIZE[self.real_size]
         self.index = index
         self.on_select = on_select
+
+    def change_type(self, new_type: CellType):
+        self.type = new_type
+        self.cell_data = constants.CELL_DATA[self.type.value]
 
     def set_temp_rect(self, cell_size: int, x: int, y: int):
         self.temp_rect = pyg.Rect(x, y, self.size * cell_size, self.size * cell_size)
@@ -133,6 +139,9 @@ class Cell:
 
     def get_points(self):
         return constants.POINTS_FROM_SIZE[self.real_size]
+
+    def __repr__(self):
+        return f'Cell({self.x}, {self.y}, {self.type.name})'
 
 
 class FlyingText:

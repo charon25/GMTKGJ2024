@@ -75,7 +75,7 @@ HOLD_TEXT_RECT_2 = pyg.Rect(HOLD_BTN_POS[0] - OPTION_TEXT_BTN_GAP, HOLD_BTN_POS[
 # Levels
 LEVEL_COUNT = 8000
 # TODO CHANGER POUR METTRE 0
-INITIAL_LEVEL = 8
+INITIAL_LEVEL = 9
 
 LEVEL_TITLE_RECT = pyg.Rect(0, 10, WIDTH, 120)
 
@@ -186,6 +186,7 @@ CELL_DATA = [
     CellData(0, modifier_texture=2, points_multiplier=5.0),
     CellData(0, modifier_texture=3, bonus_circles=1),
     CellData(0, modifier_texture=4, bonus_circles=2),
+    CellData(0, modifier_texture=4),
 ]
 
 
@@ -198,6 +199,7 @@ class CellType(IntEnum):
     MULT_5 = 5
     CIRCLE_1 = 6
     CIRCLE_2 = 7
+    PACIFIER = 8
 
 
 TEXTURE_INDEX_FROM_SIZE: dict[int, int] = {

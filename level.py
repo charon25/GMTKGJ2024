@@ -84,6 +84,7 @@ class Level:
         self.x_offset, self.y_offset, self.width, self.height = 0, 0, 0, 0
         self.rect: pyg.Rect = None
         self.radius_inc_speed: float = 0.0
+        self.terrain: list[list[Cell]] = None
         self.__compute_terrain()
 
         self.circles: list[ValidatedCircle] = list()
@@ -109,6 +110,8 @@ class Level:
         max_x: int = 0
         min_y: int = co.HEIGHT
         max_y: int = 0
+        max_cx: int = 0
+        max_cy: int = 0
         x_center, y_center = 0, 0
         max_cell_size = 0
         for k, cell in enumerate(self.cells):
@@ -117,6 +120,8 @@ class Level:
             max_x = max(max_x, cell.rect.right)
             min_y = min(min_y, cell.rect.top)
             max_y = max(max_y, cell.rect.bottom)
+            max_cx = max(max_cx, cell.x + cell.size)
+            max_cy = max(max_cy, cell.y + cell.size)
             x_center += cell.rect.centerx
             y_center += cell.rect.centery
             max_cell_size = max(max_cell_size, cell.real_size)
@@ -127,6 +132,12 @@ class Level:
         self.height = max_y - min_y
         self.rect = pyg.Rect(self.x_offset, self.y_offset, self.width, self.height)
         self.radius_inc_speed = 1.5 * max(64, max_cell_size)
+
+        self.terrain: list[list[Cell]] = [[None for _ in range(max_cx)] for __ in range(max_cy)]
+        for cell in self.cells:
+            for cx in range(cell.x, cell.x + cell.size):
+                for cy in range(cell.y, cell.y + cell.size):
+                    self.terrain[cy][cx] = cell
 
         x_center = x_center / len(self.cells)
         y_center = y_center / len(self.cells)
@@ -156,6 +167,27 @@ class Level:
 
         self.cells_in_animation = 0
         self.countdown = 0.0
+
+    def _flood_fill(self, x0: int, y0: int) -> list[Cell]:
+        stack: list[tuple[int, int]] = list()
+        visited: set[tuple[int, int]] = set()
+        cells: list[Cell] = list()
+        stack.append((x0, y0))
+        while stack:
+            x, y = stack.pop()
+            if not (x, y) in visited:
+                cells.append(self.terrain[y][x])
+                visited.add((x, y))
+                if x > 0 and self.terrain[y][x - 1] is not None:
+                    stack.append((x - 1, y))
+                if x < len(self.terrain[0]) - 1 and self.terrain[y][x + 1] is not None:
+                    stack.append((x + 1, y))
+                if y > 0 and self.terrain[y - 1][x] is not None:
+                    stack.append((x, y - 1))
+                if y < len(self.terrain) - 1 and self.terrain[y + 1][x] is not None:
+                    stack.append((x, y + 1))
+
+        return cells
 
     # region ===== CERCLE =====
 
@@ -230,6 +262,9 @@ class Level:
             if cell.animation is None:
                 self.points -= cell.points
                 self.max_circles_count_upgrade -= cell.cell_data.bonus_circles
+                if cell.type == CellType.PACIFIER:
+                    for c in cell.affected_cells:
+                        c.change_type(CellType.FORBIDDEN)
             cell.unselect(k)
 
         self.current_circles_count -= 1
@@ -244,6 +279,11 @@ class Level:
         self.points += cell.points
         self.max_circles_count_upgrade += cell.cell_data.bonus_circles
         self.cells_in_animation -= 1
+        if cell.type == CellType.PACIFIER:
+            for c in self._flood_fill(cell.x, cell.y):
+                if c.type == CellType.FORBIDDEN:
+                    c.change_type(CellType.BASE)
+                    cell.affected_cells.append(c)
         if self.points >= self.required_points[0]:
             self.countdown = 0.4
 
