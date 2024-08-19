@@ -9,6 +9,7 @@ import utils
 from cell import Cell
 from circle import Circle
 from constants import CellType
+from levels import LevelData, get_level
 from window import Scale
 
 
@@ -16,7 +17,7 @@ class LevelManager:
     INSTANCE = None
 
     def __init__(self):
-        self.number = -1
+        self.number = co.INITIAL_LEVEL - 1
         self.current_level: Level = None
         self.in_loading_anim = False
         self.current_level_ended = False
@@ -41,28 +42,17 @@ class LevelManager:
         self.load_level(self.number - 1)
 
     def reload_current_level(self):
-        # if self.current_level.is_finished():
-        #     self.total_gold_medals -= 1
-        #     self.obtained_gold_medals -= self.current_level.got_gold_medal()
         self.load_level(self.number)
 
     def __get_level(self):
-        if self.number == 0:
-            return Level(
-                0, 64, 3, [3000, 10000, 5000000],
-                [
-                    Cell(k % 5, k // 5, _type=[CellType.BASE, CellType.MULT_2, CellType.MULT_5][k % 3]) for k in range(25)
-                ]
-            )
-
-            return Level(0, 64, 3, [2, 3, 100], [Cell(x, 0, 1) for x in range(8)]
-                         + [Cell(0, 1, 2)] + [Cell(0, 4, 1, co.CellType.FORBIDDEN)]
-                         + [Cell(5, 2, 1, co.CellType.CIRCLE_P1)]
-                         + [Cell(0, -4, 1, co.CellType.BLOCKER)]
-                         + [Cell(3, 1, 1, co.CellType.MULT_2)])
-        else:
-            return Level(1, 64, 3, [4],
-                         [Cell(1, 0), Cell(0, 1), Cell(2, 1), Cell(1, 2)])
+        level_data: LevelData = get_level(self.number)
+        return Level(
+            level_data.number,
+            level_data.cell_size,
+            level_data.max_circle_count,
+            level_data.required_points,
+            level_data.cells
+        )
 
     def load_level(self, number: int):
         self.number = number
@@ -111,7 +101,7 @@ class Level:
         self.countdown: float = 0.0
 
         self.animation = 0  # 0 : pas d'anim, 1 : loading, -1 : unloading
-        self.tutorials: list[str] = co.LEVEL_TUTORIALS[self.number]
+        self.tutorials: list[str] = co.LEVEL_TUTORIALS[self.number] if self.number < len(co.LEVEL_TUTORIALS) else list()
 
     def __compute_terrain(self):
         min_x: int = co.WIDTH
@@ -252,7 +242,7 @@ class Level:
         self.max_circles_count_upgrade += cell.cell_data.bonus_circles
         self.cells_in_animation -= 1
         if self.points >= self.required_points[0]:
-            self.countdown = 0.2
+            self.countdown = 0.4
 
     def on_mouse_move(self, x: int, y: int):
         x = x - self.x_offset

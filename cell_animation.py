@@ -3,7 +3,7 @@ import math
 
 class CellAnimation:
     def __init__(self, total: int, order: int, phases: list[int]):
-        factor = max(1.5, 15 - 3 * total)
+        factor = 15 if total < 10 else max(1.5, 15 - total / 2)
         self.frame = -factor * order
         self.phases = phases
         self.phase = 0

@@ -73,7 +73,9 @@ HOLD_TEXT_RECT_1 = pyg.Rect(HOLD_BTN_POS[0] - OPTION_TEXT_BTN_GAP, HOLD_BTN_POS[
 HOLD_TEXT_RECT_2 = pyg.Rect(HOLD_BTN_POS[0] - OPTION_TEXT_BTN_GAP, HOLD_BTN_POS[1] + 50, 0, 40)
 
 # Levels
-LEVEL_COUNT = 2
+LEVEL_COUNT = 4
+# TODO CHANGER POUR METTRE 0
+INITIAL_LEVEL = 2
 
 LEVEL_TITLE_RECT = pyg.Rect(0, 10, WIDTH, 120)
 
@@ -94,9 +96,8 @@ LEVEL_TUTORIAL_12_RECT = pyg.Rect(0, 930, WIDTH, 50)
 LEVEL_TUTORIAL_22_RECT = pyg.Rect(0, 1000, WIDTH, 50)
 
 LEVEL_TUTORIALS: list[list[str]] = [
-    ["Lorem ipsum dolor sit amet, consectetur adipiscing elit,",
-     "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"],
-    ["Excepteur sint occaecat cupidatat non proident, sunt in culpa"]
+    ["Click and hold to create and grow a new circle"],
+    ["Circle enough squares to get the required amount of points"]
 ]
 
 REMOVE_CIRCLE_TEXTURE_SIZE = 16
