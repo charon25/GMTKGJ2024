@@ -3,11 +3,13 @@ from typing import Callable
 import pygame as pyg
 
 import constants
+import sounds
 import textures
 import utils
 from cell_animation import CellAnimation, CellSelectAnimation
 from constants import CellType, CellData
 from screen_shake import SHAKER
+from sound_manager import SoundManager
 from window import Scale
 
 
@@ -117,7 +119,7 @@ class Cell:
                     SHAKER.shake(int(1 + self.points))
                 self.on_select(self)
                 self.flying_text = FlyingText(int(self.points), self.rect)
-                # todo ajouter son
+                SoundManager.instance().play_random_sound(sounds.CELL_SELECT, volume=0.5 + (self.texture_size + 1) / 10)
         else:
             anim_scale = 1.0
 

@@ -75,11 +75,14 @@ class Game:
             self.right_click(x, y)
 
     def left_click(self, x: float, y: float):
+        sound_to_play: str = ""
         if self.state == GameState.PLAYING_LEVEL:
             if co.RESTART_LEVEL_BTN_RECT.collidepoint(x, y):
                 self.restart_level()
+                sound_to_play = sounds.BUTTON_CLICK
             elif co.PREVIOUS_LEVEL_BTN_RECT.collidepoint(x, y):
                 self.start_previous_level()
+                sound_to_play = sounds.BUTTON_CLICK
             else:
                 if self.options.hold_to_grow or self.current_level.temp_circle is None:
                     self.current_level.click_on_level(int(x), int(y))
@@ -90,28 +93,38 @@ class Game:
         elif self.state == GameState.END_OF_LEVEL:
             if co.EOL_RESTART_LEVEL_BTN_RECT.collidepoint(x, y):
                 self.restart_level()
+                sound_to_play = sounds.BUTTON_CLICK
             elif co.NEXT_LEVEL_BTN_RECT.collidepoint(x, y):
                 self.start_next_level()
+                sound_to_play = sounds.BUTTON_CLICK
 
         elif self.state == GameState.MAIN_MENU:
             if co.PLAY_BTN_RECT.collidepoint(x, y):
                 LevelManager.reset()
                 self.start_next_level()
+                sound_to_play = sounds.BUTTON_CLICK
 
         elif self.state == GameState.END_OF_GAME:
             if co.EOG_RESTART_BTN_RECT.collidepoint(x, y):
                 self.open_main_menu()
+                sound_to_play = sounds.BUTTON_CLICK
 
         elif self.state == GameState.BROWSER_WAIT_FOR_CLICK:
             self.open_main_menu()
+            sound_to_play = sounds.BUTTON_CLICK
 
         if self.state != GameState.BROWSER_WAIT_FOR_CLICK and self.state != GameState.END_OF_GAME:
             if co.MUSIC_VOLUME_BTN_RECT.collidepoint(x, y):
                 self.options.cycle_music_volume()
+                sound_to_play = sounds.BUTTON_CLICK
             elif co.SFX_VOLUME_BTN_RECT.collidepoint(x, y):
                 self.options.cycle_sfx_volume()
+                sound_to_play = sounds.BUTTON_CLICK
             elif co.HOLD_BTN_RECT.collidepoint(x, y):
                 self.options.hold_to_grow = not self.options.hold_to_grow
+                sound_to_play = sounds.BUTTON_CLICK
+
+        SoundManager.instance().play_random_sound(sound_to_play)
 
     def right_click(self, x: float, y: float):
         if self.state == GameState.PLAYING_LEVEL:

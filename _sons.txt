@@ -1,0 +1,13 @@
+- Clic sur un bouton OK
+
+- Cercle qui grossit
+- Cercle validé
+- Cercle détruit par zone rouge
+- Cercle supprimé (?)
+
+- Case sélectionné (après animation) OK
+- Son powerup (?)
+
+- Anim début niveau
+- Anim fin niveau
+- Son niveau réussi

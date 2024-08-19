@@ -29,16 +29,16 @@ class SoundManager:
             self.sounds[sound_name] = []
         self.sounds[sound_name].append(sound)
 
-    def play_random_sound(self, sound_name: str) -> None:
+    def play_random_sound(self, sound_name: str, volume: float = 1.0) -> None:
         sound_candidates = self.sounds.get(sound_name, None)
 
         if sound_candidates is None:
             return
 
         sound_to_play: mixer.Sound = random.choice(sound_candidates)
-        volume = self.options.get_sfx_volume()
-        if volume > 0:
-            sound_to_play.set_volume(volume)
+        base_volume = self.options.get_sfx_volume()
+        if base_volume > 0:
+            sound_to_play.set_volume(base_volume * volume)
             sound_to_play.play()
 
     def add_music(self, music_path: str, music_name: str) -> None:
