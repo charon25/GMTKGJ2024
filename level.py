@@ -4,12 +4,14 @@ import random
 import pygame as pyg
 
 import constants as co
+import sounds
 import textures
 import utils
 from cell import Cell
 from circle import Circle
 from constants import CellType
 from levels import LevelData, get_level
+from sound_manager import SoundManager
 from window import Scale
 
 
@@ -212,7 +214,7 @@ class Level:
         self.temp_circle = Circle(x, y, 0)
         self.temp_multiplier = 1.0
 
-    def validate_temp_circle(self):
+    def validate_temp_circle(self, sound: str = sounds.VALIDATE_CIRCLE_CLICK):
         if self.temp_circle is None:
             return
 
@@ -242,6 +244,8 @@ class Level:
 
         self.current_circles_count += 1
 
+        SoundManager.instance().play_random_sound(sound)
+
     def destroy_temp_circle(self):
         if self.temp_circle is None:
             return
@@ -270,7 +274,7 @@ class Level:
 
         self.current_circles_count -= 1
 
-        # todo play sound
+        SoundManager.instance().play_random_sound(sounds.REMOVE_CIRCLE, volume=0.5)
 
     # endregion
 
@@ -333,7 +337,7 @@ class Level:
 
     def __on_cell_touch_temp_circle(self, cell: Cell):
         if cell.type == CellType.BLOCKER:
-            self.validate_temp_circle()
+            self.validate_temp_circle(sound=sounds.VALIDATE_CIRCLE_BLOCKER)
 
     def __on_cell_in_temp_circle(self, cell: Cell):
         if cell.cell_data.can_be_selected:
