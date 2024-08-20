@@ -13,6 +13,8 @@ DESTROY_CIRCLE = "destroyCircle"
 START_LEVEL = "startLevel"
 END_LEVEL = "endLevel"
 BONUS_CIRCLE = "bonusCircle"
+EOL_ANIM_CLICK = "eolAnimClick"
+EOL_EARN_MEDAL = "eolEarnMedal"
 
 MAX_MUSIC_VOLUME = 0.15
 
@@ -40,7 +42,11 @@ def load_sounds():
 
     add_sound("resources/audio/sounds/end_level_1.ogg", END_LEVEL)
 
-    add_sound("resources/audio/sounds/bonus_circle.ogg", BONUS_CIRCLE)
+    add_sound("resources/audio/sounds/bonus_circle_1.ogg", BONUS_CIRCLE)
+
+    add_sound("resources/audio/sounds/eol_anim_click_1.ogg", EOL_ANIM_CLICK)
+
+    add_sound("resources/audio/sounds/earn_medal_1.ogg", EOL_EARN_MEDAL)
 
 
 def start_music():

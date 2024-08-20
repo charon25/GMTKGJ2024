@@ -8,6 +8,7 @@ import textures
 import utils
 from bg_animation import BackgroundAnimation
 from constants import GameState
+from eol_animation import EOLAnimation
 from event_manager import EventManager
 from level import Level, LevelManager
 from options import Options
@@ -39,6 +40,7 @@ class Game:
         self.is_ended = False
 
         self.current_level: Level = None
+        self.eol_anim: EOLAnimation = None
 
         self.up_down: tuple[float, float] = (0.0, 0.0)
         self.in_out: tuple[float, float] = (0.0, 0.0)
@@ -94,6 +96,8 @@ class Game:
             elif co.NEXT_LEVEL_BTN_RECT.collidepoint(x, y):
                 self.start_next_level()
                 sound_to_play = sounds.BUTTON_CLICK
+                self.eol_anim = None
+                SoundManager.instance().stop_sound(sounds.EOL_ANIM_CLICK)
 
         elif self.state == GameState.MAIN_MENU:
             if co.PLAY_BTN_RECT.collidepoint(x, y):
@@ -191,12 +195,20 @@ class Game:
             if not LevelManager.instance().current_level_ended:
                 self.current_level.update(self.dt / 1000)
             else:
+                self.eol_anim = EOLAnimation(self.current_level, self.dt / 1000)
                 self.state = GameState.END_OF_LEVEL
+                print(self.frame)
+                SoundManager.instance().play_sound(sounds.EOL_ANIM_CLICK)
 
         self.up_down = (self.up_down[0] + self.dt / 1000, 4 * math.sin(2.5 * self.up_down[0]))
         self.in_out = (self.in_out[0] + self.dt / 1000, 1 + 0.03 * math.sin(2.5 * self.in_out[0]))
 
         textures.CELL_ANIMATOR.play_all(self.dt / 1000)
+        if self.eol_anim is not None:
+            self.eol_anim.update()
+            if self.eol_anim.is_finished():
+                print(self.frame)
+                self.eol_anim = None
         self.draw()
 
     def draw(self):
@@ -214,7 +226,8 @@ class Game:
                 excl_rect = None
             self.bg_animation.draw(game_surface, excl_rect, self.dt / 1000)
 
-            utils.draw_text(game_surface, "By charon25", 42, self.scale.to_screen_pos(*co.CREDIT_TEXT_POS), co.MEDIUM_COLOR)
+            utils.draw_text(game_surface, "By charon25", 42, self.scale.to_screen_pos(*co.CREDIT_TEXT_POS),
+                            co.MEDIUM_COLOR)
 
         if self.state == GameState.PLAYING_LEVEL:
             self.draw_game(game_surface)
@@ -287,15 +300,17 @@ class Game:
         game_surface.blit(textures.END_OF_LEVEL_TITLE,
                           self.scale.to_screen_pos(co.EOL_TITLE_POS[0], co.EOL_TITLE_POS[1] + self.up_down[1]))
 
+        points = self.eol_anim.current_points if self.eol_anim is not None else self.current_level.points
+
         utils.draw_text_and_img_centered(game_surface,
                                          textures.CELL_TEXTURES[0][1][
                                              co.TEXTURE_INDEX_FROM_SIZE[64]].get_current_sprite(),
-                                         f'{self.current_level.points:.0f}',
+                                         f'{points:.0f}',
                                          co.POINTS_TEXT_SIZE[1], self.scale.to_screen_rect(co.POINTS_TEXT_RECT), 15,
                                          co.DARK_COLOR)
 
         medal_count = len(self.current_level.required_points) - 1
-        medals = self.current_level.get_medals()
+        medals = self.eol_anim.current_medals if self.eol_anim is not None else self.current_level.get_medals()
 
         for k, (pos, medal) in enumerate(zip(co.MEDAL_POS[medal_count], medals)):
             game_surface.blit(textures.MEDALS[medal], self.scale.to_screen_pos(pos[0], pos[1] + self.up_down[1]))

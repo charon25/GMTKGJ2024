@@ -8,6 +8,8 @@ SFX :
 - [CC0] https://freesound.org/people/BirdieBronze/sounds/376237/
 - [CC0] https://freesound.org/people/qubodup/sounds/60013/
 - [CC0] https://freesound.org/people/ironcross32/sounds/582896/
+- [CC0] https://freesound.org/people/Troube/sounds/631547/
+- [CC0] https://freesound.org/people/Mateusz_Chenc/sounds/512216/
 
 Musique :
 "Neon Laser Horizon" Kevin MacLeod (incompetech.com)
