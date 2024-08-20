@@ -129,8 +129,24 @@ class Game:
             SoundManager.instance().play_sound(sound_to_play)
 
     def right_click(self, x: float, y: float):
+        sound_to_play: str = ""
         if self.state == GameState.PLAYING_LEVEL:
+            sound_to_play = sounds.REMOVE_CIRCLE if self.current_level.temp_circle is not None else ""
             self.current_level.destroy_temp_circle()
+
+        if self.state != GameState.BROWSER_WAIT_FOR_CLICK and self.state != GameState.END_OF_GAME:
+            if co.MUSIC_VOLUME_BTN_RECT.collidepoint(x, y):
+                self.options.cycle_music_volume_rev()
+                sound_to_play = sounds.BUTTON_CLICK
+            elif co.SFX_VOLUME_BTN_RECT.collidepoint(x, y):
+                self.options.cycle_sfx_volume_rev()
+                sound_to_play = sounds.BUTTON_CLICK
+            elif co.HOLD_BTN_RECT.collidepoint(x, y):
+                self.options.hold_to_grow = not self.options.hold_to_grow
+                sound_to_play = sounds.BUTTON_CLICK
+
+        if sound_to_play:
+            SoundManager.instance().play_sound(sound_to_play)
 
     def unclick(self, data: dict):
         if self.state == GameState.PLAYING_LEVEL and self.options.hold_to_grow:
