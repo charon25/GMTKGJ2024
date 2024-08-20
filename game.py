@@ -197,7 +197,6 @@ class Game:
             else:
                 self.eol_anim = EOLAnimation(self.current_level, self.dt / 1000)
                 self.state = GameState.END_OF_LEVEL
-                print(self.frame)
                 SoundManager.instance().play_sound(sounds.EOL_ANIM_CLICK)
 
         self.up_down = (self.up_down[0] + self.dt / 1000, 4 * math.sin(2.5 * self.up_down[0]))
@@ -207,7 +206,6 @@ class Game:
         if self.eol_anim is not None:
             self.eol_anim.update()
             if self.eol_anim.is_finished():
-                print(self.frame)
                 self.eol_anim = None
         self.draw()
 

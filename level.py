@@ -353,7 +353,7 @@ class Level:
 
     def __on_cell_in_temp_circle(self, cell: Cell):
         if cell.cell_data.can_be_selected:
-            cell.temp_selected = True
+            cell.temp_select()
             self.temp_selected_cells.append(cell)
             self.temp_multiplier *= cell.cell_data.points_multiplier
         else:

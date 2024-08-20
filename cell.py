@@ -6,7 +6,7 @@ import constants
 import sounds
 import textures
 import utils
-from cell_animation import CellAnimation, CellSelectAnimation
+from cell_animation import CellAnimation, CellSelectAnimation, CellTempSelectAnimation
 from constants import CellType, CellData
 from screen_shake import SHAKER
 from sound_manager import SoundManager
@@ -75,6 +75,10 @@ class Cell:
         return (self.temp_rect.right + x_offset < 0 or self.temp_rect.left + x_offset > constants.WIDTH
                 or self.temp_rect.bottom + y_offset < 0 or self.temp_rect.top + y_offset > constants.HEIGHT)
 
+    def temp_select(self):
+        self.temp_selected = True
+        self.animation = CellTempSelectAnimation()
+
     def select(self, total_selected: int, order: int):
         self.selected = True
         self.temp_selected = False
@@ -114,12 +118,14 @@ class Cell:
                 y_offset += rect.h * (1 - anim_scale) / 2
 
             if self.animation.is_finished:
+                if self.animation.get_type() == constants.SELECT_ANIMATION:
+                    if self.points > 0:
+                        SHAKER.shake(int(1 + self.points))
+                    self.on_select(self)
+                    self.flying_text = FlyingText(int(self.points), self.rect)
+                    SoundManager.instance().play_sound(sounds.CELL_SELECT, volume=0.5 + (self.texture_size + 1) / 10)
+
                 self.animation = None
-                if self.points > 0:
-                    SHAKER.shake(int(1 + self.points))
-                self.on_select(self)
-                self.flying_text = FlyingText(int(self.points), self.rect)
-                SoundManager.instance().play_sound(sounds.CELL_SELECT, volume=0.5 + (self.texture_size + 1) / 10)
         else:
             anim_scale = 1.0
 

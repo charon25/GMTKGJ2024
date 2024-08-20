@@ -1,5 +1,9 @@
 import math
 
+import constants
+import sounds
+from sound_manager import SoundManager
+
 
 class CellAnimation:
     def __init__(self, total: int, order: int, phases: list[int]):
@@ -12,6 +16,9 @@ class CellAnimation:
 
     def get_scale(self) -> float:
         pass
+
+    def get_type(self) -> int:
+        return 0
 
     def update(self, dt: float) -> None:
         if self.is_finished:
@@ -35,3 +42,21 @@ class CellSelectAnimation(CellAnimation):
         elif self.phase == 2:
             return 0.1 * self.frame - 1.2
         return 1.0
+
+    def get_type(self) -> int:
+        return constants.SELECT_ANIMATION
+
+
+class CellTempSelectAnimation(CellAnimation):
+    def __init__(self):
+        super().__init__(1, 0, [0, 20])
+
+    def get_scale(self) -> float:
+        if self.phase == 0:
+            return 1.0
+        elif self.phase == 1:
+            return 1 + math.exp(-((self.frame - 10) / 10) ** 2) / 10
+        return 1.0
+
+    def get_type(self) -> int:
+        return constants.TEMP_SELECT_ANIMATION
