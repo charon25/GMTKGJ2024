@@ -51,7 +51,7 @@ class Game:
         self.events.set_key_down_callback(self.key_down)
 
     def key_down(self, data: dict):
-        if data['key'] == co.ESC_KEY:
+        if not self.is_browser and data['key'] == co.ESC_KEY:
             self.stop()
 
         if self.state == GameState.PLAYING_LEVEL:
