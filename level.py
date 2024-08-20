@@ -25,7 +25,7 @@ class LevelManager:
         self.current_level_ended = False
         self.all_level_complete = False
 
-        self.gold_medals: dict[int, bool] = dict()
+        self.gold_medals: dict[int, bool] = {n: False for n in range(co.LEVEL_COUNT)}
 
     @classmethod
     def instance(cls) -> 'LevelManager':
