@@ -340,7 +340,7 @@ class Game:
             utils.draw_text_and_img_centered(game_surface, textures.CELL_TEXTURES[0][medal > 0][
                 co.TEXTURE_INDEX_FROM_SIZE[32]].get_current_sprite(), f'{self.current_level.required_points[k]:.0f}',
                                              co.MEDAL_TEXT_FONT_SIZE, self.scale.to_screen_rect(
-                    pyg.Rect(pos[0], co.MEDAL_TEXT_Y, co.MEDAL_WIDTH, co.MEDAL_TEXT_FONT_SIZE)), 8,
+                    pyg.Rect(pos[0], co.MEDAL_TEXT_Y + self.up_down[1], co.MEDAL_WIDTH, co.MEDAL_TEXT_FONT_SIZE)), 8,
                                              co.DARK_COLOR, bold=medal > 0)
 
         utils.blit_scaled(game_surface, textures.RESTART_LEVEL_BUTTON,
