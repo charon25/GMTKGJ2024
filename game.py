@@ -51,6 +51,9 @@ class Game:
         self.events.set_key_down_callback(self.key_down)
 
     def key_down(self, data: dict):
+        if data['key'] == co.ESC_KEY:
+            self.stop()
+
         if self.state == GameState.PLAYING_LEVEL:
             if data['key'] == co.R_KEY:
                 self.restart_level()
@@ -64,13 +67,9 @@ class Game:
         elif self.state == GameState.MAIN_MENU:
             if data['key'] == co.ENTER_KEY or data['key'] == co.SPACE_KEY:
                 self.start_next_level()
-            elif data['key'] == co.ESC_KEY:
-                self.stop()
         elif self.state == GameState.END_OF_GAME:
             if data['key'] == co.ENTER_KEY or data['key'] == co.R_KEY or data['key'] == co.SPACE_KEY:
                 self.open_main_menu()
-            elif data['key'] == co.ESC_KEY:
-                self.stop()
 
     def click(self, data: dict):
         x, y = self.scale.to_game_pos(*data['pos'])
@@ -359,6 +358,10 @@ class Game:
         game_surface.blit(textures.GMTK_LOGO, self.scale.to_screen_pos(20, 20))
         if self.is_browser:
             game_surface.blit(textures.BROWSER_TEXT, self.scale.to_screen_pos(*co.BROWSER_TEXT_POS))
+        else:
+            utils.draw_text_center(game_surface, 'Press [Esc] to quit', 45,
+                                   self.scale.to_screen_rect(co.QUIT_TEXT_RECT),
+                                   co.MEDIUM_COLOR)
 
     def draw_end_of_game(self, game_surface: pyg.Surface):
         game_surface.blit(textures.LOGO, self.scale.to_screen_pos(co.LOGO_POS[0], co.LOGO_POS[1] + self.up_down[1]))
