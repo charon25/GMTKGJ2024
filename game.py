@@ -370,6 +370,11 @@ class Game:
                                self.scale.to_screen_rect(co.EOG_TEXT3_RECT),
                                co.MEDIUM_COLOR)
 
+        if not self.is_browser:
+            utils.draw_text_center(game_surface, 'Press [Esc] to quit', 45,
+                                   self.scale.to_screen_rect(co.EOG_TEXT4_RECT),
+                                   co.MEDIUM_COLOR)
+
         game_surface.blit(textures.MEDALS[1], self.scale.to_screen_pos(co.EOG_GOLD_MEDAL_POS[0],
                                                                        co.EOG_GOLD_MEDAL_POS[1] + self.up_down[1]))
         utils.draw_text(game_surface,
