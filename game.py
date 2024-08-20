@@ -87,7 +87,7 @@ class Game:
                     self.current_level.click_on_level(int(x), int(y))
                 else:
                     self.current_level.validate_temp_circle()
-                    self.current_level.on_mouse_move(int(x), int(y))
+                    self.current_level.update_hovered_circle(int(x), int(y))
 
         elif self.state == GameState.END_OF_LEVEL:
             if co.EOL_RESTART_LEVEL_BTN_RECT.collidepoint(x, y):
@@ -136,12 +136,14 @@ class Game:
         if self.state == GameState.PLAYING_LEVEL and self.options.hold_to_grow:
             self.current_level.validate_temp_circle()
             x, y = self.scale.to_game_pos(*data['pos'])
-            self.current_level.on_mouse_move(int(x), int(y))
+            self.current_level.update_hovered_circle(int(x), int(y))
 
     def mouse_move(self, data: dict):
         if self.state == GameState.PLAYING_LEVEL:
             x, y = self.scale.to_game_pos(*data['pos'])
-            self.current_level.on_mouse_move(int(x), int(y))
+            rel_x, rel_y = data['rel']
+            self.current_level.on_mouse_move(int(x), int(y), int(rel_x * self.scale.scale),
+                                             int(rel_y * self.scale.scale))
 
     def start(self):
         pyg.mouse.set_visible(False)

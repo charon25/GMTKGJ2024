@@ -1,3 +1,4 @@
+import math
 from typing import Callable
 
 import pygame as pyg
@@ -6,7 +7,7 @@ import constants
 import sounds
 import textures
 import utils
-from cell_animation import CellAnimation, CellSelectAnimation, CellTempSelectAnimation
+from cell_animation import CellAnimation, CellSelectAnimation, CellTempSelectAnimation, CellTouchAnimation
 from constants import CellType, CellData
 from screen_shake import SHAKER
 from sound_manager import SoundManager
@@ -75,6 +76,18 @@ class Cell:
         return (self.temp_rect.right + x_offset < 0 or self.temp_rect.left + x_offset > constants.WIDTH
                 or self.temp_rect.bottom + y_offset < 0 or self.temp_rect.top + y_offset > constants.HEIGHT)
 
+    def touch(self, x: int, y: int, rel_x: int, rel_y: int):
+        if self.animation is not None:
+            return
+
+        if self.type == CellType.BLOCKER:
+            return
+
+        dir_x = self.rect.centerx - x
+        dir_y = self.rect.centery - y
+        mag = math.dist((0, 0), (dir_x, dir_y))
+        self.animation = CellTouchAnimation(dir_x / mag, dir_y / mag, max(abs(rel_x), abs(rel_y)))
+
     def temp_select(self):
         self.temp_selected = True
         self.animation = CellTempSelectAnimation()
@@ -117,8 +130,10 @@ class Cell:
                 x_offset += rect.w * (1 - anim_scale) / 2
                 y_offset += rect.h * (1 - anim_scale) / 2
 
+            anim_dx, anim_dy = self.animation.get_displacement()
+
             if self.animation.is_finished:
-                if self.animation.get_type() == constants.SELECT_ANIMATION:
+                if self.animation.get_type() == constants.CELL_SELECT_ANIMATION:
                     if self.points > 0:
                         SHAKER.shake(int(1 + self.points))
                     self.on_select(self)
@@ -128,15 +143,16 @@ class Cell:
                 self.animation = None
         else:
             anim_scale = 1.0
+            anim_dx, anim_dy = 0.0, 0.0
 
         total_scale = scale.scale * anim_scale
         surface.blit(pyg.transform.scale(self.__get_main_texture(), (rect.w * total_scale, rect.h * total_scale)),
-                     scale.to_screen_pos(rect.x + x_offset, rect.y + y_offset))
+                     scale.to_screen_pos(rect.x + x_offset + anim_dx, rect.y + y_offset + anim_dy))
 
         if self.cell_data.modifier_texture >= 0 and self.real_size in constants.VALID_MULTIPLIER_SIZES:
-            surface.blit(pyg.transform.scale(self.__get_modifier_texture(), (
-                rect.w * total_scale, rect.h * total_scale)),
-                         scale.to_screen_pos(rect.x + x_offset, rect.y + y_offset))
+            surface.blit(
+                pyg.transform.scale(self.__get_modifier_texture(), (rect.w * total_scale, rect.h * total_scale)),
+                scale.to_screen_pos(rect.x + x_offset + anim_dx, rect.y + y_offset + anim_dy))
 
         if self.flying_text is not None:
             self.flying_text.draw(surface, x_offset, y_offset, scale, dt)

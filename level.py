@@ -82,6 +82,7 @@ class Level:
         self.number = number
         self.cell_size = cell_size
         self.cells = sorted(cells)
+        self.hovered_cell: Cell | None = None
 
         self.x_offset, self.y_offset, self.width, self.height = 0, 0, 0, 0
         self.rect: pyg.Rect = None
@@ -304,10 +305,23 @@ class Level:
         if self.points >= self.required_points[0]:
             self.countdown = 0.4
 
-    def on_mouse_move(self, x: int, y: int):
+    def on_mouse_move(self, x: int, y: int, rel_x: int, rel_y: int):
         x = x - self.x_offset
         y = y - self.y_offset
 
+        cell_x, cell_y = int(x // self.cell_size), int(y // self.cell_size)
+        if 0 <= cell_x < len(self.terrain[0]) and 0 <= cell_y < len(self.terrain):
+            cell: Cell | None = self.terrain[cell_y][cell_x]
+            if cell is not None and cell is not self.hovered_cell:
+                self.hovered_cell = cell
+                cell.touch(x, y, rel_x, rel_y)
+            self.hovered_cell = cell
+        else:
+            self.hovered_cell = None
+
+        self.update_hovered_circle(x, y)
+
+    def update_hovered_circle(self, x: int, y: int):
         if not self.circumscribed_circle.contains_point(x, y):
             for v_circle in self.circles:
                 v_circle.circle.is_hovered = False

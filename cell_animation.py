@@ -6,6 +6,8 @@ from sound_manager import SoundManager
 
 
 class CellAnimation:
+    NO_DISPLACEMENT = (0, 0)
+
     def __init__(self, total: int, order: int, phases: list[int]):
         factor = 15 if total < 10 else max(1.5, 15 - total / 2)
         self.frame = -factor * order
@@ -15,7 +17,10 @@ class CellAnimation:
         self.is_finished = False
 
     def get_scale(self) -> float:
-        pass
+        return 1.0
+
+    def get_displacement(self) -> tuple[float, float]:
+        return CellAnimation.NO_DISPLACEMENT
 
     def get_type(self) -> int:
         return 0
@@ -44,7 +49,7 @@ class CellSelectAnimation(CellAnimation):
         return 1.0
 
     def get_type(self) -> int:
-        return constants.SELECT_ANIMATION
+        return constants.CELL_SELECT_ANIMATION
 
 
 class CellTempSelectAnimation(CellAnimation):
@@ -59,4 +64,23 @@ class CellTempSelectAnimation(CellAnimation):
         return 1.0
 
     def get_type(self) -> int:
-        return constants.TEMP_SELECT_ANIMATION
+        return constants.CELL_TEMP_SELECT_ANIMATION
+
+
+class CellTouchAnimation(CellAnimation):
+    def __init__(self, dir_x: float, dir_y: float, intensity: int):
+        super().__init__(1, 0, [0, 14])
+        self.dir_x = dir_x
+        self.dir_y = dir_y
+        self.intensity = min(constants.CELL_TOUCH_ANIMATION_MAX_INTENSITY, max(constants.CELL_TOUCH_ANIMATION_MIN_INTENSITY, intensity))
+
+    def get_displacement(self) -> tuple[float, float]:
+        if self.phase == 0:
+            return CellAnimation.NO_DISPLACEMENT
+        elif self.phase == 1 or self.phase == 2:
+            factor = self.intensity * math.exp(-((self.frame - 7) / 3.5) ** 2)
+            return factor * self.dir_x, factor * self.dir_y
+        return CellAnimation.NO_DISPLACEMENT
+
+    def get_type(self) -> int:
+        return constants.CELL_TOUCH_ANIMATION
