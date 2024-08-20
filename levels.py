@@ -200,7 +200,7 @@ def get_level(number: int) -> LevelData:
         ]
 
     elif number == 15:
-        set_main_params(level_data, 64, 1, [1000000, 2000000, 3_200_000])
+        set_main_params(level_data, 64, 1, 3_200_000)
         level_data.cells = [
             Cell(0, 0, _type=CellType.MULT_2), Cell(1, 0), Cell(2, 0), Cell(3, 0, _type=CellType.MULT_5),
             Cell(4, 0, _type=CellType.MULT_5), Cell(5, 0), Cell(6, 0), Cell(7, 0, _type=CellType.MULT_2),
