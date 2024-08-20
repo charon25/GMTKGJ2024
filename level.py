@@ -207,10 +207,11 @@ class Level:
                 return
 
         if self.current_circles_count >= self.max_circles_count + self.max_circles_count_upgrade:
-            SoundManager.instance().play_sound(sounds.NO_CIRCLE_LEFT)
+            SoundManager.instance().play_sound(sounds.NO_CIRCLE_LEFT, volume=0.7)
             return
 
         if not any(cell.contains_point(x, y) for cell in self.cells):
+            SoundManager.instance().play_sound(sounds.NO_CIRCLE_LEFT, volume=0.2)
             return
 
         self.temp_circle = Circle(x, y, 0)
