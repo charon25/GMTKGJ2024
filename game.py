@@ -393,6 +393,9 @@ class Game:
         self.dt = self.clock.tick(self.target_fps)
         self.events.listen()
 
-        self.loop_game()
+        try:
+            self.loop_game()
+        except Exception:
+            pass
 
         pyg.display.update()
