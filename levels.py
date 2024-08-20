@@ -102,6 +102,22 @@ def get_level(number: int) -> LevelData:
         ]
 
     elif number == 9:
+        set_main_params(level_data, 16, 1, [32, 48, 64])
+        level_data.cells = [
+            Cell(5, 0), Cell(6, 0), Cell(7, 0), Cell(8, 0), Cell(9, 0), Cell(10, 0), Cell(11, 0), Cell(12, 0),
+            Cell(1, 1, 16, _type=CellType.FORBIDDEN),
+            Cell(0, 5), Cell(17, 5),
+            Cell(0, 6), Cell(17, 6),
+            Cell(0, 7), Cell(17, 7),
+            Cell(0, 8), Cell(17, 8),
+            Cell(0, 9), Cell(17, 9),
+            Cell(0, 10), Cell(17, 10),
+            Cell(0, 11), Cell(17, 11),
+            Cell(0, 12), Cell(17, 12),
+            Cell(5, 17), Cell(6, 17), Cell(7, 17), Cell(8, 17), Cell(9, 17), Cell(10, 17), Cell(11, 17), Cell(12, 17),
+        ]
+
+    elif number == 10:
         set_main_params(level_data, 64, 2, [40, 50, 90])
         level_data.cells = [
             Cell(2, 0, _type=CellType.MULT_2),
@@ -113,7 +129,7 @@ def get_level(number: int) -> LevelData:
             Cell(2, 5, _type=CellType.FORBIDDEN),
         ]
 
-    elif number == 10:
+    elif number == 11:
         set_main_params(level_data, 32, 1, [580, 600, 720])
         level_data.cells = [
             Cell(0, 0), Cell(1, 0), Cell(14, 0), Cell(15, 0),
@@ -131,7 +147,7 @@ def get_level(number: int) -> LevelData:
             Cell(6, 12, 4, CellType.CIRCLE_2),
         ]
 
-    elif number == 11:
+    elif number == 12:
         set_main_params(level_data, 64, 2, [450, 460, 520])
         level_data.cells = [
             Cell(1, 0, _type=CellType.FORBIDDEN), Cell(4, 0, _type=CellType.FORBIDDEN),
@@ -144,7 +160,7 @@ def get_level(number: int) -> LevelData:
             Cell(5, 2, _type=CellType.FORBIDDEN), Cell(9, 2), Cell(10, 2), Cell(11, 2),
         ]
 
-    elif number == 12:
+    elif number == 13:
         set_main_params(level_data, 64, 7, [250, 24000, 24240])
         level_data.cells = [
             Cell(0, 0, _type=CellType.MULT_5), Cell(6, 0, _type=CellType.MULT_5), Cell(12, 0, _type=CellType.MULT_5),
@@ -160,30 +176,30 @@ def get_level(number: int) -> LevelData:
             Cell(0, 11, _type=CellType.MULT_5), Cell(6, 11, _type=CellType.MULT_5), Cell(12, 11, _type=CellType.MULT_5),
         ]
 
-    elif number == 13:
+    elif number == 14:
         set_main_params(level_data, 16, 1, [400, 500, 550])
         level_data.cells = [
-            Cell(25, 3, 4, CellType.PACIFIER),
-            Cell(8, 6, 2, _type=CellType.FORBIDDEN), Cell(14, 6, 2, _type=CellType.FORBIDDEN),
-            Cell(25, 7, 4, _type=CellType.FORBIDDEN),
-            Cell(10, 8, 4, CellType.CIRCLE_2),
-            Cell(25, 11, 4, _type=CellType.FORBIDDEN),
-            Cell(8, 12, 2, _type=CellType.FORBIDDEN), Cell(14, 12, 2, _type=CellType.FORBIDDEN),
-            Cell(26, 15, _type=CellType.FORBIDDEN), Cell(27, 15, _type=CellType.FORBIDDEN),
-            Cell(19, 17, 16),
-            Cell(5, 23, 4, CellType.PACIFIER), Cell(9, 23, 4, CellType.CIRCLE_1),
-            Cell(13, 23, 4, _type=CellType.FORBIDDEN), Cell(25, 23, 4, CellType.MULT_5),
-            Cell(38, 23, 4, _type=CellType.FORBIDDEN), Cell(42, 23, 4, _type=CellType.FORBIDDEN),
-            Cell(46, 23, 4, _type=CellType.FORBIDDEN), Cell(50, 23, 4, CellType.CIRCLE_2),
-            Cell(54, 23, 4, CellType.PACIFIER),
-            Cell(17, 24, _type=CellType.FORBIDDEN), Cell(37, 24, _type=CellType.FORBIDDEN),
-            Cell(17, 25, _type=CellType.FORBIDDEN), Cell(37, 25, _type=CellType.FORBIDDEN),
-            Cell(26, 34, _type=CellType.FORBIDDEN), Cell(27, 34, _type=CellType.FORBIDDEN),
-            Cell(25, 35, 4, _type=CellType.FORBIDDEN),
-            Cell(25, 39, 4, CellType.PACIFIER),
+            Cell(20, 0, 4, CellType.PACIFIER),
+            Cell(3, 3, 2, _type=CellType.FORBIDDEN), Cell(9, 3, 2, _type=CellType.FORBIDDEN),
+            Cell(20, 4, 4, _type=CellType.FORBIDDEN),
+            Cell(5, 5, 4, CellType.CIRCLE_2),
+            Cell(20, 8, 4, _type=CellType.FORBIDDEN),
+            Cell(3, 9, 2, _type=CellType.FORBIDDEN), Cell(9, 9, 2, _type=CellType.FORBIDDEN),
+            Cell(21, 12, _type=CellType.FORBIDDEN), Cell(22, 12, _type=CellType.FORBIDDEN),
+            Cell(14, 14, 16),
+            Cell(0, 20, 4, CellType.PACIFIER), Cell(4, 20, 4, CellType.CIRCLE_1),
+            Cell(8, 20, 4, _type=CellType.FORBIDDEN), Cell(20, 20, 4, CellType.MULT_5),
+            Cell(33, 20, 4, _type=CellType.FORBIDDEN), Cell(37, 20, 4, _type=CellType.FORBIDDEN),
+            Cell(41, 20, 4, _type=CellType.FORBIDDEN), Cell(45, 20, 4, CellType.CIRCLE_2),
+            Cell(49, 20, 4, CellType.PACIFIER),
+            Cell(12, 21, _type=CellType.FORBIDDEN), Cell(32, 21, _type=CellType.FORBIDDEN),
+            Cell(12, 22, _type=CellType.FORBIDDEN), Cell(32, 22, _type=CellType.FORBIDDEN),
+            Cell(21, 31, _type=CellType.FORBIDDEN), Cell(22, 31, _type=CellType.FORBIDDEN),
+            Cell(20, 32, 4, _type=CellType.FORBIDDEN),
+            Cell(20, 36, 4, CellType.PACIFIER),
         ]
 
-    elif number == 14:
+    elif number == 15:
         set_main_params(level_data, 64, 1, 3_200_000)
         level_data.cells = [
             Cell(0, 0, _type=CellType.MULT_2), Cell(1, 0), Cell(2, 0), Cell(3, 0, _type=CellType.MULT_5),
