@@ -59,11 +59,18 @@ class Game:
         elif self.state == GameState.END_OF_LEVEL:
             if data['key'] == co.R_KEY:
                 self.restart_level()
-            elif data['key'] == co.ENTER_KEY:
+            elif data['key'] == co.ENTER_KEY or data['key'] == co.SPACE_KEY:
                 self.start_next_level()
         elif self.state == GameState.MAIN_MENU:
-            if data['key'] == co.ENTER_KEY:
+            if data['key'] == co.ENTER_KEY or data['key'] == co.SPACE_KEY:
                 self.start_next_level()
+            elif data['key'] == co.ESC_KEY:
+                self.stop()
+        elif self.state == GameState.END_OF_GAME:
+            if data['key'] == co.ENTER_KEY or data['key'] == co.R_KEY or data['key'] == co.SPACE_KEY:
+                self.open_main_menu()
+            elif data['key'] == co.ESC_KEY:
+                self.stop()
 
     def click(self, data: dict):
         x, y = self.scale.to_game_pos(*data['pos'])
