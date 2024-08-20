@@ -133,7 +133,7 @@ class Cell:
             anim_dx, anim_dy = self.animation.get_displacement()
 
             if self.animation.is_finished:
-                if self.animation.get_type() == constants.CELL_SELECT_ANIMATION:
+                if self.animation.get_type() == constants.CELL_SELECT_ANIMATION and self.selected:
                     if self.points > 0:
                         SHAKER.shake(int(1 + self.points))
                     self.on_select(self)
