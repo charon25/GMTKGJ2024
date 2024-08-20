@@ -404,7 +404,7 @@ class Level:
         utils.draw_text_next_to_img(surface,
                                     textures.CIRCLE, scale.to_screen_pos(*co.CIRCLES_COUNT_POS),
                                     int(15 * scale.scale), str(circle_count),
-                                    64, co.MEDIUM_COLOR)
+                                    64, co.MEDIUM_COLOR if circle_count > 0 else co.DARK_RED_COLOR)
 
         if len(self.tutorials) == 1:
             utils.draw_text_center(surface, self.tutorials[0], 50, scale.to_screen_rect(co.LEVEL_TUTORIAL_11_RECT),
