@@ -20,7 +20,7 @@ async def main():
         game.loop()
         await asyncio.sleep(0)
 
-    game.stop()
+    Window.close()
 
 
 asyncio.run(main())

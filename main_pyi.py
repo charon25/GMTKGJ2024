@@ -17,7 +17,7 @@ def main():
     while not game.is_ended:
         game.loop()
 
-    game.stop()
+    Window.close()
 
 
 main()

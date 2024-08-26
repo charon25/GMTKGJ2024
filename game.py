@@ -182,7 +182,6 @@ class Game:
 
     def stop(self):
         self.is_ended = True
-        Window.close()
 
     def open_main_menu(self):
         self.state = GameState.MAIN_MENU
