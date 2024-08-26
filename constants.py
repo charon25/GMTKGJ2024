@@ -110,7 +110,9 @@ LEVEL_TUTORIALS: list[list[str]] = [
     ["Circles can touch but not contains red squares"],
     ["Use [R] to restart a level, and [N] to skip to the next one"],
     ["Each size gives a different amount of point"],
-    ["You can click on a circle to remove it"]
+    ["Square containing numbers will multiply", "the points of all squares in the same circle"],
+    ["You can click on a circle to remove it"],
+    ["Two circles cannot intersect"]
 ]
 
 REMOVE_CIRCLE_TEXTURE_SIZE = 16
